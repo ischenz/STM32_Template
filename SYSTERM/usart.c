@@ -5,8 +5,6 @@
 //如果使用ucos,则包括下面的头文件即可.
 RingBuff_t Uart2_RingBuff;//创建一个ringBuff的缓冲区
 RingBuff_t Uart1_RingBuff;//创建一个ringBuff的缓冲区
-uint8_t rcvUartdata[200] = {0};
-uint8_t rcvUartCount = 0,revOkFlg = 0;
 
 //加入以下代码,支持printf函数,而不需要选择use MicroLIB	  
 #if 1

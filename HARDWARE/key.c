@@ -2,8 +2,10 @@
 #include "led.h"
 #include "delay.h"  
 
+int8_t key_value = 0;
+
 //按键初始化函数
-void KEY_Init(void)
+void KEY_Init(void)//PA0与定时器2通道1冲突
 {
 	GPIO_InitTypeDef  GPIO_InitStructure;
 

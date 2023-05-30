@@ -28,4 +28,6 @@ void KEY_Init(void);	//IO初始化
 uint8_t KEY_Scan(void); 		//按键扫描函数	
 void KeyAction(void);
 
+extern int8_t key_value;
+
 #endif

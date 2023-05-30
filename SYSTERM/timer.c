@@ -47,79 +47,52 @@ void Timer1_PWM_GPIO_Init(uint16_t Psc, uint16_t Per)
 	TIM_CtrlPWMOutputs(TIM1,ENABLE);
 }
 
-//Tim2-5通用定时器
+//Tim2-5通用定时器  TIM2/TIM5位32位
+//void Init_Timer2(void)//配置为编码器模式 A0->CH1 A1->CH2 *******A0与按键冲突 TIM2用于舵机控制
+//{
+//	
+//}
 
-void Init_Timer2(void)//配置为编码器模式 A0->CH1 A1->CH2 *******A0与按键冲突
+void Init_Timer3(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA ,ENABLE);
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1;  //TIM1_CH1  TIM1_CH4
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6|GPIO_Pin_7;  //TIM3_CH1  TIM3_CH2
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 	
-	GPIO_PinAFConfig(GPIOA,GPIO_PinSource1,GPIO_AF_TIM2); //GPIOA11复用为定时器1
-	GPIO_PinAFConfig(GPIOA,GPIO_PinSource0,GPIO_AF_TIM2); 	
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource6,GPIO_AF_TIM3); 
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource7,GPIO_AF_TIM3); 	
 	
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);//APB1:42Mhz 定时器3：84Mhz/840 = 100Khz  50ms
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3,ENABLE);
 	
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
 	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInitStructure.TIM_Period = 0xffff;
 	TIM_TimeBaseInitStructure.TIM_Prescaler = 0x00;
-	TIM_TimeBaseInit(TIM2,&TIM_TimeBaseInitStructure);
+	TIM_TimeBaseInit(TIM3,&TIM_TimeBaseInitStructure);
 	
 	//编码器模式
 	TIM_ICInitTypeDef TIM_ICInitStructure;
-    TIM_EncoderInterfaceConfig(TIM2,TIM_EncoderMode_TI12,TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);//TIM_ICPolarity_Rising捕获发生在ICx的上升沿
+    TIM_EncoderInterfaceConfig(TIM3,TIM_EncoderMode_TI12,TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);//TIM_ICPolarity_Rising捕获发生在ICx的上升沿
     TIM_ICStructInit(&TIM_ICInitStructure); //将结构体中的内容缺省输入
     TIM_ICInitStructure.TIM_ICFilter = 0;//滤波器值
-    TIM_ICInit(TIM2, &TIM_ICInitStructure);  
-	
-//	TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE);
-//	
-//	NVIC_InitTypeDef NVIC_InitStructure;
-//	NVIC_InitStructure.NVIC_IRQChannel=TIM2_IRQn; 
-//	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0; 
-//	NVIC_InitStructure.NVIC_IRQChannelSubPriority=1; 
-//	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
-//	NVIC_Init(&NVIC_InitStructure);
-	
-	TIM_SetCounter(TIM2, 0);
-	TIM_Cmd(TIM2, ENABLE);
-	
-}
-
-//void TIM2_IRQHandler(void)
-//{
-//	if(TIM_GetITStatus(TIM2,TIM_IT_Update)==SET) //溢出中断
-//	{
-//		
-//	}
-//	TIM_ClearITPendingBit(TIM2,TIM_IT_Update); //清除中断标志位
-//}
-
-void Init_Timer3(void)
-{
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3,ENABLE);//APB1:42Mhz 定时器3：84Mhz/840 = 100Khz  50ms
-	
-	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;//计时
-	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseInitStructure.TIM_Period = 5000-1;
-	TIM_TimeBaseInitStructure.TIM_Prescaler = 840-1;
-	TIM_TimeBaseInit(TIM3,&TIM_TimeBaseInitStructure);
+    TIM_ICInit(TIM3, &TIM_ICInitStructure);  
 	
 	TIM_ITConfig(TIM3,TIM_IT_Update,ENABLE);
 	
 	NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel=TIM3_IRQn; 
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1; 
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0; 
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0;  
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority=1; 
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
+	
+	TIM_SetCounter(TIM3, 0);
+	TIM_Cmd(TIM3, ENABLE);
 }
 
 void TIM3_IRQHandler(void)
@@ -130,6 +103,58 @@ void TIM3_IRQHandler(void)
 	}
 	TIM_ClearITPendingBit(TIM3,TIM_IT_Update); //清除中断标志位
 }
+
+void Init_Timer4(void)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB ,ENABLE);
+	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6|GPIO_Pin_7;  //TIM4_CH1  TIM4_CH2
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	
+	GPIO_PinAFConfig(GPIOB,GPIO_PinSource6,GPIO_AF_TIM4); 
+	GPIO_PinAFConfig(GPIOB,GPIO_PinSource7,GPIO_AF_TIM4); 	
+	
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4,ENABLE);
+	
+	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
+	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_TimeBaseInitStructure.TIM_Period = 0xffff;
+	TIM_TimeBaseInitStructure.TIM_Prescaler = 0x00;
+	TIM_TimeBaseInit(TIM4,&TIM_TimeBaseInitStructure);
+	
+	//编码器模式
+	TIM_ICInitTypeDef TIM_ICInitStructure;
+    TIM_EncoderInterfaceConfig(TIM4,TIM_EncoderMode_TI12,TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);//TIM_ICPolarity_Rising捕获发生在ICx的上升沿
+    TIM_ICStructInit(&TIM_ICInitStructure); //将结构体中的内容缺省输入
+    TIM_ICInitStructure.TIM_ICFilter = 0;//滤波器值
+    TIM_ICInit(TIM4, &TIM_ICInitStructure);  
+	
+	TIM_ITConfig(TIM4,TIM_IT_Update,ENABLE);
+	
+	NVIC_InitTypeDef NVIC_InitStructure;
+	NVIC_InitStructure.NVIC_IRQChannel=TIM4_IRQn; 
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0;  
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority=1; 
+	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+	
+	TIM_SetCounter(TIM4, 0);
+	TIM_Cmd(TIM4, ENABLE);
+}
+
+void TIM4_IRQHandler(void)
+{
+	if(TIM_GetITStatus(TIM4,TIM_IT_Update)==SET) //溢出中断
+	{
+		
+	}
+	TIM_ClearITPendingBit(TIM4,TIM_IT_Update); //清除中断标志位
+}
+
 
 
 void Timer6_init(void)//基本定时器
@@ -170,7 +195,7 @@ void Timer7_init(void)//基本定时器
 	NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel=TIM7_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority=2;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority=3;
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	TIM_Cmd(TIM7, DISABLE);

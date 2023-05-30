@@ -41,7 +41,7 @@ void Ch451Key_init(void)
 	GPIO_Init(GPIOG, &GPIO_InitStructure);//初始化GPIOE2
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//使能SYSCFG时钟
 
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOG, EXTI_PinSource12);//PE2 连接到中断线2
+	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOG, EXTI_PinSource12);//PG12 连接到中断线12
 
 	EXTI_InitStructure.EXTI_Line = EXTI_Line12;
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;//中断事件

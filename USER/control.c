@@ -11,14 +11,15 @@
 #include "led.h"
 
 PID_TypeDef x_pid,y_pid;
-uint8_t RecCoorFlag = 0; 
-static uint8_t SetFlag;
-void (*mode_task)(void) = mode_0;
+uint8_t RecCoorFlag = 0; //接收成功标志
 uint8_t mode = NO_SELECT_MODE;
+//static uint8_t SetFlag;
+
+void (*mode_task)(void) = mode_0;
 
 void mode_0(void)
 {
-
+	
 }
 
 void mode_1(void)
@@ -56,7 +57,6 @@ void mode_pro_3(void)
 {
 
 }
-
 
 void set_target(int8_t target_x, int8_t target_y)
 {
@@ -98,7 +98,7 @@ void analyse(uint8_t *lable, uint8_t *load)
 		}
 		case CHANGEMODE:{
 			mode = *load;
-			SetFlag = 0;
+			//SetFlag = 0;
 			switch(mode){
 				case MODE_1:{
 					mode_task = mode_1;

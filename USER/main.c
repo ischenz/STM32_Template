@@ -21,7 +21,6 @@ int main(void)
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); 
 	delay_init(168);
 	uart_init(115200);
-	Init_Timer2();
 	LED_Init();
 	OLED_Init();
 	//KEY_Init();
