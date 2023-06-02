@@ -19,11 +19,11 @@ typedef struct
 }RingBuff_t;
 
 extern uint8_t RecCoorFlag;
-extern RingBuff_t Uart2_RingBuff;
-extern RingBuff_t Uart1_RingBuff;
+extern RingBuff_t Uart2_RingBuff,Uart1_RingBuff,Uart3_RingBuff;
 
 void uart_init(u32 bound);
 void uart2_v831_init(uint32_t bound);
+void uart3_init(uint32_t bound);
 void usart_send(USART_TypeDef* USARTx, uint8_t*data, uint8_t len);
 
 void RingBuff_Init(RingBuff_t *ringbuff);
@@ -31,6 +31,7 @@ uint8_t Write_RingBuff(RingBuff_t *ringbuff, uint8_t data);
 uint8_t Read_RingBuff(RingBuff_t *ringbuff, uint8_t *rData);
 uint8_t DataDecode(RingBuff_t *ringbuff, uint8_t *data1, uint8_t *data2);
 
+uint16_t get_distance(void);
 
 #endif
 

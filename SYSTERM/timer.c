@@ -5,6 +5,7 @@
 #include "pid.h"
 
 uint8_t timeout = 0;
+volatile int16_t coder1,coder2;
 
 void Timer1_PWM_GPIO_Init(uint16_t Psc, uint16_t Per)
 {
@@ -181,13 +182,13 @@ void Timer6_init(void)//基本定时器
 
 void Timer7_init(void)//基本定时器
 {
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7,ENABLE);//APB1:42Mhz 定时器6：84Mhz/840 = 10Khz  0.0001s/count  6s
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7,ENABLE);//APB1:42Mhz 定时器6：84Mhz/84 = 1Mhz 
 	
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;//计时
 	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseInitStructure.TIM_Period = 60000-1;
-	TIM_TimeBaseInitStructure.TIM_Prescaler = 8400-1;
+	TIM_TimeBaseInitStructure.TIM_Period = 50000-1;//10ms
+	TIM_TimeBaseInitStructure.TIM_Prescaler = 84-1;
 	TIM_TimeBaseInit(TIM7,&TIM_TimeBaseInitStructure);
 	
 	TIM_ITConfig(TIM7,TIM_IT_Update,ENABLE);
@@ -198,7 +199,7 @@ void Timer7_init(void)//基本定时器
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority=3;
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
-	TIM_Cmd(TIM7, DISABLE);
+	TIM_Cmd(TIM7, ENABLE);
 }
 
 void set_time(uint16_t time_ms)
@@ -222,11 +223,14 @@ void TIM6_DAC_IRQHandler(void)
 	TIM_ClearITPendingBit(TIM6,TIM_IT_Update); //清除中断标志位
 }
 
-void TIM7_IRQHandler(void)
+void TIM7_IRQHandler(void)//定时读取编码器值，即速度
 {
 	if(TIM_GetITStatus(TIM7,TIM_IT_Update)==SET) //溢出中断
 	{
-		
+		coder2 = (int16_t)TIM4->CNT;
+		coder1 = (int16_t)TIM3->CNT;
+		TIM3->CNT = 0;
+		TIM4->CNT = 0;
 	}
 	TIM_ClearITPendingBit(TIM7,TIM_IT_Update); //清除中断标志位
 }

@@ -1,11 +1,10 @@
 #include "sys.h"
 #include "usart.h"	
 #include "led.h"
+#include "delay.h"
 ////////////////////////////////////////////////////////////////////////////////// 	 
 //如果使用ucos,则包括下面的头文件即可.
-RingBuff_t Uart2_RingBuff;//创建一个ringBuff的缓冲区
-RingBuff_t Uart1_RingBuff;//创建一个ringBuff的缓冲区
-
+RingBuff_t Uart2_RingBuff,Uart1_RingBuff,Uart3_RingBuff;//创建一个ringBuff的缓冲区
 //加入以下代码,支持printf函数,而不需要选择use MicroLIB	  
 #if 1
 #pragma import(__use_no_semihosting)             
@@ -150,6 +149,87 @@ void USART2_IRQHandler(void)                	//串口2中断服务程序
 		}
 	} 
 } 
+
+void uart3_init(uint32_t bound){
+   //GPIO端口设置
+	GPIO_InitTypeDef GPIO_InitStructure;
+	USART_InitTypeDef USART_InitStructure;
+	NVIC_InitTypeDef NVIC_InitStructure;
+	
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE); 
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
+ 
+	//串口2对应引脚复用映射
+	GPIO_PinAFConfig(GPIOB,GPIO_PinSource10,GPIO_AF_USART3); 
+	GPIO_PinAFConfig(GPIOB,GPIO_PinSource11,GPIO_AF_USART3); 
+	
+	//USART1端口配置
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11; 
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	//速度50MHz
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //推挽复用输出
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //上拉
+	GPIO_Init(GPIOB,&GPIO_InitStructure);
+
+   //USART3 初始化设置
+	USART_InitStructure.USART_BaudRate = bound;//波特率设置
+	USART_InitStructure.USART_WordLength = USART_WordLength_8b;//字长为8位数据格式
+	USART_InitStructure.USART_StopBits = USART_StopBits_1;//一个停止位
+	USART_InitStructure.USART_Parity = USART_Parity_No;//无奇偶校验位
+	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//无硬件数据流控制
+	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;	//收发模式
+	USART_Init(USART3, &USART_InitStructure); //初始化串口
+	
+	USART_Cmd(USART3, ENABLE);  //使能串口2 
+	
+	USART_ClearFlag(USART3, USART_FLAG_TC);
+
+	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);//开启相关中断
+
+	//USART3 NVIC 配置
+	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;//串口2中断通道
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1;//抢占优先级
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority =0;		//子优先级
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
+	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化NVIC寄存器
+}
+
+void USART3_IRQHandler(void)
+{
+	uint8_t rdata;
+	if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
+	{	
+		rdata = USART_ReceiveData(USART3);
+		if(Write_RingBuff(&Uart3_RingBuff, rdata) == RINGBUFF_ERR){//缓冲区满灯亮
+			LED1=0;
+		}else{
+			LED1=1;
+		}
+	} 
+} 
+
+uint16_t get_distance(void)
+{
+	uint16_t mm = 0;
+	uint8_t cmd = 0x55;
+	static uint16_t i;
+	i++;
+	if(Uart3_RingBuff.Lenght == 2){
+		i=0;
+		uint8_t data = 0;
+		Read_RingBuff(&Uart3_RingBuff, &data);
+		mm = data;
+		Read_RingBuff(&Uart3_RingBuff, &data);
+		mm =  mm << 8 | data;
+		delay_us(1000);
+		usart_send(USART3,&cmd,1);
+	} 
+	if(i==50000 || Uart3_RingBuff.Lenght > 2){
+		RingBuff_Init(&Uart3_RingBuff);
+		usart_send(USART3,&cmd,1);
+	}
+	return mm;
+}
 
 uint8_t DataDecode(RingBuff_t *ringbuff, uint8_t *data1, uint8_t *data2)      
 {
