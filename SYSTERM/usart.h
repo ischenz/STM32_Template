@@ -6,7 +6,7 @@
 
 #define EN_USART1_RX 			1		//使能（1）/禁止（0）串口1接收
 	  	
-#define  RINGBUFF_LEN          (100)     //定义最大接收字节数
+#define  RINGBUFF_LEN          (10)     //定义最大接收字节数
 #define  RINGBUFF_OK           1     
 #define  RINGBUFF_ERR          0   
 
@@ -20,6 +20,7 @@ typedef struct
 
 extern uint8_t RecCoorFlag;
 extern RingBuff_t Uart2_RingBuff,Uart1_RingBuff,Uart3_RingBuff;
+extern uint16_t distance;
 
 void uart_init(u32 bound);
 void uart2_v831_init(uint32_t bound);

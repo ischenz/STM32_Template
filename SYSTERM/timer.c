@@ -3,9 +3,9 @@
 #include "usart.h"
 #include "oled.h"
 #include "pid.h"
+#include "motor.h"
 
 uint8_t timeout = 0;
-volatile int16_t coder1,coder2;
 
 void Timer1_PWM_GPIO_Init(uint16_t Psc, uint16_t Per)
 {
@@ -223,14 +223,15 @@ void TIM6_DAC_IRQHandler(void)
 	TIM_ClearITPendingBit(TIM6,TIM_IT_Update); //清除中断标志位
 }
 
-void TIM7_IRQHandler(void)//定时读取编码器值，即速度
+void TIM7_IRQHandler(void)//定时(10ms)读取编码器值(即速度),超声波测距
 {
 	if(TIM_GetITStatus(TIM7,TIM_IT_Update)==SET) //溢出中断
 	{
-		coder2 = (int16_t)TIM4->CNT;
-		coder1 = (int16_t)TIM3->CNT;
+		motor_r.coder_v = (int16_t)TIM4->CNT;
+		motor_l.coder_v = (int16_t)TIM3->CNT;
 		TIM3->CNT = 0;
 		TIM4->CNT = 0;
+		distance = get_distance();
 	}
 	TIM_ClearITPendingBit(TIM7,TIM_IT_Update); //清除中断标志位
 }

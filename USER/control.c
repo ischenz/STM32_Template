@@ -136,17 +136,17 @@ void analyse(uint8_t *lable, uint8_t *load)
 	}
 }
 
-void TIM1_UP_TIM10_IRQHandler(void)//5ms一次pid运算
-{
-	if(TIM_GetITStatus(TIM10,TIM_IT_Update)==SET) //溢出中断
-	{
-		if(RecCoorFlag){
-			RecCoorFlag = 0;
-			mode_task();
-			//PID_Calculate(&x_pid, kfp_x.after_kalman - 120);
-			//PID_Calculate(&y_pid, kfp_y.after_kalman - 120);
-		}
-	}
-	TIM_ClearITPendingBit(TIM10,TIM_IT_Update); //清除中断标志位	
-}
+//void TIM1_UP_TIM10_IRQHandler(void)//5ms一次pid运算
+//{
+//	if(TIM_GetITStatus(TIM10,TIM_IT_Update)==SET) //溢出中断
+//	{
+//		if(RecCoorFlag){
+//			RecCoorFlag = 0;
+//			mode_task();
+//			//PID_Calculate(&x_pid, kfp_x.after_kalman - 120);
+//			//PID_Calculate(&y_pid, kfp_y.after_kalman - 120);
+//		}
+//	}
+//	TIM_ClearITPendingBit(TIM10,TIM_IT_Update); //清除中断标志位	
+//}
 

@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////// 	 
 //如果使用ucos,则包括下面的头文件即可.
 RingBuff_t Uart2_RingBuff,Uart1_RingBuff,Uart3_RingBuff;//创建一个ringBuff的缓冲区
+uint16_t distance = 0;
 //加入以下代码,支持printf函数,而不需要选择use MicroLIB	  
 #if 1
 #pragma import(__use_no_semihosting)             
@@ -159,7 +160,6 @@ void uart3_init(uint32_t bound){
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE); 
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
  
-	//串口2对应引脚复用映射
 	GPIO_PinAFConfig(GPIOB,GPIO_PinSource10,GPIO_AF_USART3); 
 	GPIO_PinAFConfig(GPIOB,GPIO_PinSource11,GPIO_AF_USART3); 
 	
@@ -221,10 +221,10 @@ uint16_t get_distance(void)
 		mm = data;
 		Read_RingBuff(&Uart3_RingBuff, &data);
 		mm =  mm << 8 | data;
-		delay_us(1000);
+		//delay_us(1000);
 		usart_send(USART3,&cmd,1);
 	} 
-	if(i==50000 || Uart3_RingBuff.Lenght > 2){
+	if(i==100 || Uart3_RingBuff.Lenght > 2){ //一秒
 		RingBuff_Init(&Uart3_RingBuff);
 		usart_send(USART3,&cmd,1);
 	}

@@ -5,6 +5,7 @@
  202207081915	创建例程
  202305281734	改进
  202305302021	添加版本管理
+ 202306051313	移植u8g2,cJSON
 
  作者：			xc						V2.0
  ******************************************************
@@ -15,40 +16,34 @@
 #include "delay.h"
 #include "led.h"
 #include "timer.h"
+#include "motor.h"
+#include "u8g2.h"
+#include "u8g2_init.h"
 
 int main(void)
 {
-	uint8_t sentdata = 0x55;
-	uint16_t distance;
-	RingBuff_Init(&Uart3_RingBuff);
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); 
 	delay_init(168);
 	uart_init(115200);
-	uart3_init(9600);
 	LED_Init();
 	OLED_Init();
-	Init_Timer3();
-	Init_Timer4();
-	Timer7_init();
+	
+	//u8g2_init();
+	u8g2_Setup_ssd1306_128x64_noname_f(&u8g2, U8G2_R0, u8x8_byte_4wire_sw_spi, u8x8_gpio_and_delay_template);
+    u8g2_InitDisplay(&u8g2);
+    u8g2_SetPowerSave(&u8g2, 0);
+
 	//KEY_Init();
 
-	OLED_ShowString(0,0,"Hello !!!",16,1);
-	OLED_Refresh();
 	delay_ms(500);
-	OLED_Clear();
-	
 	printf("Hello world\r\n");
 	
-
-	usart_send(USART3,&sentdata,1);
+	u8g2_SetFont(&u8g2,u8g2_font_9x15B_tf);
+	u8g2_ClearBuffer(&u8g2);
+	u8g2_DrawUTF8(&u8g2,10,10,"Hello World");
+	u8g2_SendBuffer(&u8g2); 
 	while(1)
-	{	
-		//printf("coder1=%d coder2=%d\r\n", coder1, coder2);
-		distance = get_distance();
-		if(distance){
-			printf("%5d mm\r\n", distance);
-		}
-		
+	{
 		
 	}
 }
