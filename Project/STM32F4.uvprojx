@@ -419,6 +419,11 @@
               <FileType>1</FileType>
               <FilePath>..\USER\cJSON.c</FilePath>
             </File>
+            <File>
+              <FileName>datasave.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\datasave.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

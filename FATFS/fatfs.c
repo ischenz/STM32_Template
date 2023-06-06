@@ -2,12 +2,13 @@
 #include "usart.h"
 #include "delay.h"
 
-DIR dir;  
-FILINFO fileinfo;
+ 
 FATFS fs_flash,fs_sd;
-FIL fil;        /* File object */
+
 uint8_t mf_scan_files(uint8_t * path)
 {
+	DIR dir; 
+	FILINFO fileinfo;
 	FRESULT res;	  
     char *fn;   /* This function is assuming non-Unicode cfg. */
 #if _USE_LFN
@@ -32,6 +33,7 @@ uint8_t mf_scan_files(uint8_t * path)
 			printf("%s/", path);//打印路径	
 			printf("%s\r\n",  fn);//打印文件名	  
 		} 
+		printf("\r\n");
     }	  
     return res;	  
 }
@@ -39,23 +41,20 @@ uint8_t mf_scan_files(uint8_t * path)
 void fatfs_init()
 {
 	int res;
-    char line[100]; /* Line buffer */
-    FRESULT fr;     /* FatFs return code */
+	printf("Init Start.......\r\n");
 	res = f_mount(&fs_flash,"1:",1);
-	printf("res:%#X \r\n",res);
 	if(!res)//挂载外部FLASH)
 	{
 		printf("mount FLASH success!\r\n");
 	}
-	else printf("mount failure!\r\n");
+	else printf("mount FLASH failure:%d\r\n",res);
 	
 	res = f_mount(&fs_sd,"0:",1);
-	printf("res:%#X \r\n",res);
 	if(!res)//挂载外部FLASH)
 	{
 		printf("mount SD success!\r\n");
 	}
-	else printf("mount failure!\r\n");
+	else printf("mount SD failure:%d\r\n",res);
 	if(res==0X0D)//FLASH磁盘,FAT文件系统错误,重新格式化FLASH
 	{
 		printf("Flash Disk Formatting...\r\n");	//格式化FLASH
@@ -69,15 +68,15 @@ void fatfs_init()
 	}
 	
 	mf_scan_files("1:");
-	/* Open a text file */
-    fr = f_open(&fil, "1:log.txt", FA_READ); 
-    if (fr) printf("Open fail :%d\r\n",(int)fr);
-    while (f_gets(line, sizeof line, &fil)) {
-        printf("%s\r\n",line);
-    }
-	f_close(&fil);
+//	/* Open a text file */
+//    fr = f_open(&fil, "1:log.txt", FA_READ); 
+//    if (fr) printf("Open fail :%d\r\n",(int)fr);
+//    while (f_gets(line, sizeof line, &fil)) {
+//        printf("%s\r\n",line);
+//    }
+//	f_close(&fil);
 
-	printf("End.......\r\n");
+	printf("Init End.......\r\n\r\n");
 
 //	Mylog("Hello");
 //	Mylog("I am number 2\r\n");
@@ -86,6 +85,7 @@ void fatfs_init()
 
 UINT* Mylog(const char* log)
 {
+	FIL fil;        /* File object */
 	FRESULT fr;     /* FatFs return code */
 	UINT* bw;
 	fr = f_open(&fil, "1:log.txt", FA_WRITE|FA_OPEN_APPEND); 

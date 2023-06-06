@@ -44,7 +44,7 @@ int16_t PID_Calculate(PID_TypeDef *PID,float CurrentValue)
 	
     PID->Err =  PID->Target - CurrentValue;
     PID->PID_out = PID->Kp * PID->Err 										/*比例*/
-				 + PID->Ki * PID->Integral  									/*积分*/
+				 + PID->Ki * PID->Integral  								/*积分*/
 			     + PID->Kd * (PID->Err - PID->LastErr);						/*微分*/
 	
 	/*积分限幅*/
@@ -69,9 +69,9 @@ int16_t PID_Calculate_Inc(PID_TypeDef *PID,float CurrentValue)
 	float increment_val;
     PID->Err =  PID->Target - CurrentValue;
 	
-    increment_val =  PID->Kp * (PID->Err - PID->LastErr) 										/*比例*/
-				   + PID->Ki *  PID->Err  									/*积分*/
-			       + PID->Kd * (PID->Err - 2*PID->LastErr + PID->PenultErr);						/*微分*/
+    increment_val =  PID->Kp * (PID->Err - PID->LastErr) 						/*比例*/
+				   + PID->Ki *  PID->Err  										/*积分*/
+			       + PID->Kd * (PID->Err - 2*PID->LastErr + PID->PenultErr);	/*微分*/
 
 	PID->PID_out += increment_val;
 	
