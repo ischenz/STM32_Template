@@ -57,13 +57,14 @@ void fatfs_init()
 	else printf("mount SD failure:%d\r\n",res);
 	if(res==0X0D)//FLASH磁盘,FAT文件系统错误,重新格式化FLASH
 	{
+		BYTE work[1024];
 		printf("Flash Disk Formatting...\r\n");	//格式化FLASH
-		res=f_mkfs("1:", 0, NULL,4096);//格式化FLASH,1,盘符;1,不需要引导区,8个扇区为1个簇
+		res=f_mkfs("1:", 0, work,sizeof work);//格式化FLASH,1,盘符;1,不需要引导区,8个扇区为1个簇
 		if(res==0)
 		{
 			f_setlabel((const TCHAR *)"1:ALIENTEK");	//设置Flash磁盘的名字为：ALIENTEK
 			printf("Flash Disk Format Finish \r\n");	//格式化完成
-		}else printf("Flash Disk Format Error \r\n");	//格式化失败
+		}else printf("Flash Disk Format Error: %d\r\n",res);	//格式化失败
 		delay_ms(1000);
 	}
 	

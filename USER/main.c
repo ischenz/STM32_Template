@@ -8,7 +8,7 @@
  202306051313	移植u8g2,cJSON
  202306061142	在spiflash中存取pid参数
 
- 作者：			xc						V2.0
+ 作者：			ischenz						V2.0
  ******************************************************
  */
 #include "oled.h"
@@ -31,7 +31,7 @@ int main(void)
 	uart_init(115200);
 	LED_Init();
 	fatfs_init();
-	wrire("l_pid",140.2547, 3450.16575, 3253.6450);
+	write_pid("l_pid",140.2547, 3450.16575, 3253.6450);
 	read_pid("l_pid",&p,&i,&d);
 	printf("p=%4.2f   i=%4.2f   d=%4.2f\r\n",p,i,d);
 	

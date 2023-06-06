@@ -25,6 +25,7 @@
 
 #define CMD				0xff
 #define DATA			0x80
+#define SETPID			0x81
 
 #define STOP			0xbb
 #define START			0xaa
@@ -35,6 +36,13 @@
 #define P_B 			0x81
 #define P_C 			0x82
 #define P_D 			0x83
+
+#define P_ADD01 		0x01
+#define I_ADD01 		0x02
+#define D_ADD01 		0x03
+#define P_SUB01 		0x11
+#define I_SUB01 		0x12
+#define D_SUB01 		0x13
 
 void mode_test(void);
 void mode_0(void);

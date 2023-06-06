@@ -38,7 +38,7 @@ void read_pid(const char *pid, double *p, double *i, double *d)
 }
 
 //–¥»Î
-void wrire(const char *pid, double p, double i, double d)
+void write_pid(const char *pid, double p, double i, double d)
 {
 	char buffer[50],filename[12];
 	sprintf(filename, "1:%s", pid);

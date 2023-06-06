@@ -133,8 +133,19 @@ void analyse(uint8_t *lable, uint8_t *load)
 			start();
 			break;
 		}
-	}
-}
+		case SETPID:{
+			switch(*load){
+				case P_ADD01: break;
+				case I_ADD01: break;
+				case D_ADD01: break;
+				case P_SUB01: break;
+				case I_SUB01: break;
+				case D_SUB01: break;
+			}        
+			break;   
+		}            
+	}                
+}                    
 
 //void TIM1_UP_TIM10_IRQHandler(void)//5ms“ª¥Œpid‘ÀÀ„
 //{

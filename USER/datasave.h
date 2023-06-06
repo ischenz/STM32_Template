@@ -4,7 +4,7 @@
 #include "sys.h"
 
 void read_pid(const char *pid, double *p, double *i, double *d);
-void wrire(const char *pid, double p, double i, double d);
+void write_pid(const char *pid, double p, double i, double d);
 
 #endif
 
