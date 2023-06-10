@@ -6,7 +6,7 @@
 
 #define EN_USART1_RX 			1		//使能（1）/禁止（0）串口1接收
 	  	
-#define  RINGBUFF_LEN          (10)     //定义最大接收字节数
+#define  RINGBUFF_LEN          (100)     //定义最大接收字节数
 #define  RINGBUFF_OK           1     
 #define  RINGBUFF_ERR          0   
 

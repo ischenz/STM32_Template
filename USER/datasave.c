@@ -37,6 +37,20 @@ void read_pid(const char *pid, double *p, double *i, double *d)
 	f_close(&fil);
 }
 
+void read_json_pid(const char *str, const char *pid, double *p, double *i, double *d)
+{
+	cJSON *cjson,*l_pid,*pid_item;
+	const char *buffer = str;
+	cjson = cJSON_Parse(buffer);
+	l_pid = cJSON_GetObjectItem(cjson, pid);
+	pid_item = cJSON_GetArrayItem(l_pid, 0);
+	*p = pid_item->valuedouble;
+	pid_item = cJSON_GetArrayItem(l_pid, 1);
+	*i = pid_item->valuedouble;
+	pid_item = cJSON_GetArrayItem(l_pid, 2);
+	*d = pid_item->valuedouble;
+}
+
 //–¥»Î
 void write_pid(const char *pid, double p, double i, double d)
 {
