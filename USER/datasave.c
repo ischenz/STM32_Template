@@ -4,7 +4,7 @@
 #include "usart.h"
 
 //∂¡»°
-void read_pid(const char *pid, double *p, double *i, double *d)
+void read_pid_from_spiflash(const char *pid, double *p, double *i, double *d)
 {
 	cJSON *cjson,*l_pid,*pid_item;
 	char filename[12];
@@ -49,10 +49,12 @@ void read_json_pid(const char *str, const char *pid, double *p, double *i, doubl
 	*i = pid_item->valuedouble;
 	pid_item = cJSON_GetArrayItem(l_pid, 2);
 	*d = pid_item->valuedouble;
+	cJSON_Delete(cjson);
+	
 }
 
 //–¥»Î
-void write_pid(const char *pid, double p, double i, double d)
+void write_pid_to_spiflash(const char *pid, double p, double i, double d)
 {
 	char buffer[50],filename[12];
 	sprintf(filename, "1:%s", pid);

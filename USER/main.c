@@ -33,7 +33,7 @@ int main(void)
 	char showstr[50];
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); 
 	delay_init(168);
-	uart_init(115200);
+	uart_init(9600);
 	LED_Init();
 	RingBuff_Init(&Uart1_RingBuff);
 //	fatfs_init();
@@ -63,7 +63,7 @@ int main(void)
 			}else if(readbuff == '}' && reading == 1){
 				reading = 0;
 				str[j++] = readbuff;  
-				str[j] = '\0';
+				str[j++] = '\0';
 				ok = 1;
 			}else if(reading == 1){
 				str[j++] = readbuff;
@@ -74,7 +74,8 @@ int main(void)
 			}
 		}
 		if(ok){
-			printf("%s\r\n", str);
+			ok = 0;
+			printf("%s \r\n", str);
 			u8g2_ClearBuffer(&u8g2);
 			read_json_pid(str, "pid", &p, &i, &d);
 			sprintf(showstr, "P:%5.2f",p);
