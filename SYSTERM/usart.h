@@ -31,6 +31,7 @@ void RingBuff_Init(RingBuff_t *ringbuff);
 uint8_t Write_RingBuff(RingBuff_t *ringbuff, uint8_t data);
 uint8_t Read_RingBuff(RingBuff_t *ringbuff, uint8_t *rData);
 uint8_t DataDecode(RingBuff_t *ringbuff, uint8_t *data1, uint8_t *data2);
+int8_t receiveJson(RingBuff_t *ringbuff, char *str);
 
 uint16_t get_distance(void);
 

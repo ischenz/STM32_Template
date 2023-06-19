@@ -35,6 +35,7 @@ void read_pid_from_spiflash(const char *pid, double *p, double *i, double *d)
 	pid_item = cJSON_GetArrayItem(l_pid, 2);
 	*d = pid_item->valuedouble;
 	f_close(&fil);
+	cJSON_Delete(cjson);
 }
 
 void read_json_pid(const char *str, const char *pid, double *p, double *i, double *d)
@@ -50,17 +51,16 @@ void read_json_pid(const char *str, const char *pid, double *p, double *i, doubl
 	pid_item = cJSON_GetArrayItem(l_pid, 2);
 	*d = pid_item->valuedouble;
 	cJSON_Delete(cjson);
-	
 }
 
 //–¥»Î
 void write_pid_to_spiflash(const char *pid, double p, double i, double d)
 {
-	char buffer[50],filename[12];
+	char buffer[80],filename[12];
 	sprintf(filename, "1:%s", pid);
 	sprintf(buffer,"{\"%s\":[%f,%f,%f]}", pid, p, i, d);
 	
-	UINT bw;         /* File read/write count */
+	UINT bw;        /* File read/write count */
 	FIL fil;        /* File object */
 	FRESULT fr;     /* FatFs return code */
 	printf("Create file: %s\r\n", filename);
@@ -77,6 +77,12 @@ void write_pid_to_spiflash(const char *pid, double p, double i, double d)
 		printf("Write err: %d\r\n",fr);
 	}
 	
-	f_close(&fil);
+	fr = f_close(&fil);
+	if(!fr){
+		printf("Close OK\r\n");
+	} else {
+		printf("Close err: %d\r\n",fr);
+	}
+	
 }
 

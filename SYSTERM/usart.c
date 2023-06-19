@@ -267,6 +267,31 @@ uint8_t DataDecode(RingBuff_t *ringbuff, uint8_t *data1, uint8_t *data2)
 	}
 	return ret;	
 } 
+/* ½ÓÊÕjson×Ö·û´® */
+int8_t receiveJson(RingBuff_t *ringbuff, char *str)
+{
+	static uint8_t reading,j;
+	uint8_t readbuff,ok = 0;
+	if(Read_RingBuff(&Uart1_RingBuff,&readbuff) == RINGBUFF_OK){
+		if(readbuff == '{'){
+			reading = 1;
+			str[j++] = readbuff;
+			ok = 0;
+		}else if(readbuff == '}' && reading == 1){
+			reading = 0;
+			str[j++] = readbuff;  
+			str[j++] = '\0';
+			ok = 1;
+		}else if(reading == 1){
+			str[j++] = readbuff;
+		}else {
+			j = 0;
+			reading = 0;
+			ok = 0;
+		}
+	}
+	return ok;
+}
 
 void usart_send(USART_TypeDef* USARTx, uint8_t*data, uint8_t len)
 {
