@@ -38,19 +38,26 @@ void read_pid_from_spiflash(const char *pid, double *p, double *i, double *d)
 	cJSON_Delete(cjson);
 }
 
-void read_json_pid(const char *str, const char *pid, double *p, double *i, double *d)
+int8_t read_json_pid(const char *str, const char *pid, double *p, double *i, double *d)
 {
-	cJSON *cjson,*l_pid,*pid_item;
+	int8_t ret = 0;
+	cJSON *cjson,*cj_pid,*pid_item;
 	const char *buffer = str;
 	cjson = cJSON_Parse(buffer);
-	l_pid = cJSON_GetObjectItem(cjson, pid);
-	pid_item = cJSON_GetArrayItem(l_pid, 0);
-	*p = pid_item->valuedouble;
-	pid_item = cJSON_GetArrayItem(l_pid, 1);
-	*i = pid_item->valuedouble;
-	pid_item = cJSON_GetArrayItem(l_pid, 2);
-	*d = pid_item->valuedouble;
+	cj_pid = cJSON_GetObjectItem(cjson, pid);
+	if(strcmp(cj_pid->string, pid) == 0){
+		ret = 0;
+		pid_item = cJSON_GetArrayItem(cj_pid, 0);
+		*p = pid_item->valuedouble;
+		pid_item = cJSON_GetArrayItem(cj_pid, 1);
+		*i = pid_item->valuedouble;
+		pid_item = cJSON_GetArrayItem(cj_pid, 2);
+		*d = pid_item->valuedouble;
+	} else {
+		ret = 1;
+	}
 	cJSON_Delete(cjson);
+	return ret;
 }
 
 //–¥»Î

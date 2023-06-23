@@ -28,7 +28,7 @@ char str[100] = {0};
 
 int main(void)
 {
-	double p,i,d;
+	double l_p,l_i,l_d,r_p,r_i,r_d;
 	float f;
 	char showstr[50];
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); 
@@ -42,7 +42,8 @@ int main(void)
 	KEY_Init();//weak不能使用 与定时器通道冲突
 	RingBuff_Init(&Uart1_RingBuff);
 	fatfs_init();
-	read_pid_from_spiflash("L_PID", &p, &i, &d);
+	read_pid_from_spiflash("L_PID", &l_p, &l_i, &l_d);
+	read_pid_from_spiflash("R_PID", &r_p, &r_i, &r_d);
 	
 //	write_pid("l_pid",140.2547, 3450.16575, 3253.6450);
 //	read_pid("l_pid",&p,&i,&d);
@@ -55,11 +56,11 @@ int main(void)
 	u8g2_SetFont(&u8g2,u8g2_font_12x6LED_tf);
 
 	u8g2_ClearBuffer(&u8g2);
-	sprintf(showstr, "P:%5.2f",p);
+	sprintf(showstr, "L_P:%5.2f  R_P:%5.2f",l_p, r_p);
 	u8g2_DrawStr(&u8g2, 0, 25, showstr);
-	sprintf(showstr, "I:%5.2f ",i);
+	sprintf(showstr, "L_I:%5.2f  R_I:%5.2f",l_i, r_i);
 	u8g2_DrawStr(&u8g2, 0, 40, showstr);
-	sprintf(showstr, "D:%5.2f",d);
+	sprintf(showstr, "L_D:%5.2f  R_D:%5.2f",l_d, r_d);
 	u8g2_DrawStr(&u8g2, 0, 55, showstr);
 	u8g2_SendBuffer(&u8g2);
 	
@@ -75,14 +76,19 @@ int main(void)
 			printf("Rec:\r\n%s \r\n", str);
 			u8g2_ClearBuffer(&u8g2);
 			
-			read_json_pid(str, "L_PID", &p, &i, &d);
-			write_pid_to_spiflash("L_PID", p, i, d);
-			
-			sprintf(showstr, "P:%5.2f",p);
+			if(read_json_pid(str, "L_PID", &l_p, &l_i, &l_d) == 0){
+				write_pid_to_spiflash("L_PID", l_p, l_i, l_d);
+			}else if(read_json_pid(str, "R_PID", &r_p, &r_i, &r_d) == 0){
+				write_pid_to_spiflash("R_PID", r_p, r_i, r_d);
+			}else{
+				u8g2_DrawStr(&u8g2, 0, 25, "Not this PID");
+				u8g2_SendBuffer(&u8g2);
+			}
+			sprintf(showstr, "L_P:%5.2f  R_P:%5.2f",l_p, r_p);
 			u8g2_DrawStr(&u8g2, 0, 25, showstr);
-			sprintf(showstr, "I:%5.2f ",i);
+			sprintf(showstr, "L_I:%5.2f  R_I:%5.2f",l_i, r_i);
 			u8g2_DrawStr(&u8g2, 0, 40, showstr);
-			sprintf(showstr, "D:%5.2f",d);
+			sprintf(showstr, "L_D:%5.2f  R_D:%5.2f",l_d, r_d);
 			u8g2_DrawStr(&u8g2, 0, 55, showstr);
 			u8g2_SendBuffer(&u8g2);
 		}
