@@ -639,6 +639,11 @@
               <FileType>1</FileType>
               <FilePath>..\SYSTERM\timer.c</FilePath>
             </File>
+            <File>
+              <FileName>stmflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SYSTERM\stmflash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -2,6 +2,7 @@
 #include "cJSON.h"
 #include "fatfs.h"
 #include "usart.h"
+#include "stmflash.h"
 
 //∂¡»°
 void read_pid_from_spiflash(const char *pid, double *p, double *i, double *d)
@@ -60,7 +61,6 @@ int8_t read_json_pid(const char *str, const char *pid, double *p, double *i, dou
 	return ret;
 }
 
-//–¥»Î
 void write_pid_to_spiflash(const char *pid, double p, double i, double d)
 {
 	char buffer[80],filename[12];
@@ -90,6 +90,32 @@ void write_pid_to_spiflash(const char *pid, double p, double i, double d)
 	} else {
 		printf("Close err: %d\r\n",fr);
 	}
-	
 }
 
+void pid_flash_root_init(uint32_t addr)
+{
+	uint32_t writebuff = 0xffffffff;
+	for(uint16_t i=0;i<128*1024/4;i++){
+		STMFLASH_Write(addr, &writebuff, 1);
+	}	
+}
+
+void write_pid_to_flash(uint32_t addr, const char *pid, double p, double i, double d)
+{
+	char buffer[80] = {0};
+	char byte_size = sizeof(buffer);
+	char size = byte_size/4+((byte_size%4)?1:0);
+	sprintf(buffer,"{\"%s\":[%f,%f,%f]}", pid, p, i, d);
+	STMFLASH_Write(addr, (uint32_t *)buffer, size);
+}
+
+void read_pid_from_flash(uint32_t addr, const char *pid, double *p, double *i, double *d)
+{
+	char readbuff[80] = {0};
+	STMFLASH_Read(addr,(uint32_t *)readbuff,sizeof(readbuff)/4);
+	if(read_json_pid(readbuff, pid, p, i, d) == 0){
+		//printf("read pid json ok\r\n");
+	}else{
+		printf("read pid json err\r\n");
+	}
+}

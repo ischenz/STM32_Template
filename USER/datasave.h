@@ -3,9 +3,15 @@
 
 #include "sys.h"
 
+#define L_PID_FLASH_ADDR	(ADDR_FLASH_SECTOR_11)
+#define R_PID_FLASH_ADDR	(ADDR_FLASH_SECTOR_11 + 1024)
+
 void read_pid_from_spiflash(const char *pid, double *p, double *i, double *d);
 void write_pid_to_spiflash(const char *pid, double p, double i, double d);
 int8_t read_json_pid(const char *str, const char *pid, double *p, double *i, double *d);
+void pid_flash_root_init(uint32_t addr);
+void write_pid_to_flash(uint32_t addr, const char *pid, double p, double i, double d);
+void read_pid_from_flash(uint32_t addr, const char *pid, double *p, double *i, double *d);
 
 #endif
 
