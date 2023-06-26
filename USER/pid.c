@@ -33,7 +33,7 @@ void PID_param_init(PID_TypeDef *pid)
  * @param       CurrentValue：当前测量值
  * @retval      期望输出值
  */
-int16_t PID_Calculate(PID_TypeDef *PID,float CurrentValue)
+float PID_Calculate(PID_TypeDef *PID,float CurrentValue)
 {
 	PID->Integral += PID->Err;
 	/*积分分离*/
@@ -64,7 +64,7 @@ int16_t PID_Calculate(PID_TypeDef *PID,float CurrentValue)
  * @param       CurrentValue：当前测量值
  * @retval      期望输出值
  */
-int16_t PID_Calculate_Inc(PID_TypeDef *PID,float CurrentValue)
+float PID_Calculate_Inc(PID_TypeDef *PID,float CurrentValue)
 {
 	float increment_val;
     PID->Err =  PID->Target - CurrentValue;
@@ -124,7 +124,7 @@ void TIM1_UP_TIM10_IRQHandler(void)//10ms一次pid运算
 /**
   * @brief  获取目标值
   * @param  无
-	*	@note 	无
+  *	@note 	无
   * @retval 目标值
   */
 float get_pid_target(PID_TypeDef *pid)

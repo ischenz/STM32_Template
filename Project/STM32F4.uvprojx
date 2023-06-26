@@ -585,11 +585,6 @@
               <FilePath>..\HARDWARE\MPU6050\eMPL\inv_mpu.c</FilePath>
             </File>
             <File>
-              <FileName>ch451key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\ch451key.c</FilePath>
-            </File>
-            <File>
               <FileName>inv_mpu_dmp_motion_driver.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\MPU6050\eMPL\inv_mpu_dmp_motion_driver.c</FilePath>
@@ -603,6 +598,16 @@
               <FileName>motor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>ch451key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\ch451key.c</FilePath>
+            </File>
+            <File>
+              <FileName>tm1650key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\tm1650key.c</FilePath>
             </File>
           </Files>
         </Group>

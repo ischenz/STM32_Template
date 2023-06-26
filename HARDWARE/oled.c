@@ -9,28 +9,28 @@ u8 OLED_GRAM[144][8];
 void OLED_ColorTurn(u8 i)
 {
 	if(i==0)
-		{
-			OLED_WR_Byte(0xA6,OLED_CMD);//正常显示
-		}
+	{
+		OLED_WR_Byte(0xA6,OLED_CMD);//正常显示
+	}
 	if(i==1)
-		{
-			OLED_WR_Byte(0xA7,OLED_CMD);//反色显示
-		}
+	{
+		OLED_WR_Byte(0xA7,OLED_CMD);//反色显示
+	}
 }
 
 //屏幕旋转180度
 void OLED_DisplayTurn(u8 i)
 {
 	if(i==0)
-		{
-			OLED_WR_Byte(0xC8,OLED_CMD);//正常显示
-			OLED_WR_Byte(0xA1,OLED_CMD);
-		}
+	{
+		OLED_WR_Byte(0xC8,OLED_CMD);//正常显示
+		OLED_WR_Byte(0xA1,OLED_CMD);
+	}
 	if(i==1)
-		{
-			OLED_WR_Byte(0xC0,OLED_CMD);//反转显示
-			OLED_WR_Byte(0xA0,OLED_CMD);
-		}
+	{
+		OLED_WR_Byte(0xC0,OLED_CMD);//反转显示
+		OLED_WR_Byte(0xA0,OLED_CMD);
+	}
 }
 
 void OLED_WR_Byte(u8 dat,u8 cmd)
@@ -90,10 +90,10 @@ void OLED_Clear(void)
 	u8 i,n;
 	for(i=0;i<8;i++)
 	{
-	   for(n=0;n<128;n++)
-			{
-			 OLED_GRAM[n][i]=0;//清除所有数据
-			}
+	    for(n=0;n<128;n++)
+		{
+			OLED_GRAM[n][i]=0;//清除所有数据
+		}
   }
 	OLED_Refresh();//更新显示
 }
@@ -292,12 +292,12 @@ void OLED_ShowSNum(u8 x,u8 y,int num,u8 len,u8 size1,u8 mode)
 			if(temp==0)
 			{
 				OLED_ShowChar(x+(size1/2+m)*t,y,'0',size1,mode);
-      }
+			}
 			else 
 			{
 			  OLED_ShowChar(x+(size1/2+m)*t,y,temp+'0',size1,mode);
 			}
-  }
+	}
 }
 
 //显示带一位小数的数字

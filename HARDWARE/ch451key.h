@@ -3,7 +3,8 @@
 
 #include "sys.h"
 
-extern uint8_t Ch451Key_Num,Flag_Ch45KeyRead;
+extern uint8_t Matrix_Key_Num;
+extern  uint8_t Flag_KeyRead;
 
 #define Ch451KEY_LOAD_Set() GPIO_SetBits(GPIOG,GPIO_Pin_9);
 #define CH451KEY_LOAD_Clr() GPIO_ResetBits(GPIOG,GPIO_Pin_9)
@@ -34,6 +35,6 @@ void Ch451Key_init(void);
 void ch451_write(uint16_t command);
 void Get_ch451_value(int *value);
 
-int8_t InputValue(float *value);
+int8_t Get_float_value_from_keys(float *value);
 
 #endif

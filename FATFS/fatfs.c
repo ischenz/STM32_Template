@@ -41,7 +41,7 @@ uint8_t mf_scan_files(uint8_t * path)
 void fatfs_init()
 {
 	int res;
-	printf("Init Start.......\r\n");
+	printf("Fatfs Init Start.......\r\n");
 	res = f_mount(&fs_flash,"1:",1);
 	if(!res)//π“‘ÿÕ‚≤øFLASH)
 	{
@@ -77,7 +77,7 @@ void fatfs_init()
 //    }
 //	f_close(&fil);
 
-	printf("Init End.......\r\n\r\n");
+	printf("Fatfs Init End.......\r\n\r\n");
 
 //	Mylog("Hello");
 //	Mylog("I am number 2\r\n");

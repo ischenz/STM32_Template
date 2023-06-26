@@ -24,6 +24,7 @@
 #include "datasave.h"
 #include "ch451key.h"
 #include "stmflash.h"
+#include "tm1650key.h"
 
 char str[100] = {0};
 
@@ -34,11 +35,13 @@ int main(void)
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); 
 	delay_init(168);
 	uart_init(9600);
-	Ch451Key_init();
+	//Ch451Key_init();
 	LED_Init();
 	KEY_Init();//weak不能使用 与定时器通道冲突
+	TM1650_key_Init();
+
 	RingBuff_Init(&Uart1_RingBuff);
-	fatfs_init();
+//	fatfs_init();
 //	read_pid_from_spiflash("L_PID", &l_p, &l_i, &l_d);
 //	read_pid_from_spiflash("R_PID", &r_p, &r_i, &r_d);
 	
@@ -61,7 +64,7 @@ int main(void)
 	u8g2_DrawStr(&u8g2, 0, 55, showstr);
 	u8g2_SendBuffer(&u8g2);
 	
-	printf("hello chen\r\n");
+	printf("Hello Chen!!!\r\n");
 	
 	while(1)
 	{

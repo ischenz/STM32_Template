@@ -14,7 +14,7 @@ typedef struct{
 	float PenultErr;
     float Integral;//»ý·ÖºÍ
     float Target;
-	int16_t PID_out;
+	float PID_out;
 	
 	int8_t KP_polarity;
 	int8_t KI_polarity;
@@ -22,8 +22,8 @@ typedef struct{
 }PID_TypeDef;
 
 
-int16_t PID_Calculate(PID_TypeDef *PID,float CurrentValue);
-int16_t PID_Calculate_Inc(PID_TypeDef *PID,float CurrentValue);
+float PID_Calculate(PID_TypeDef *PID,float CurrentValue);
+float PID_Calculate_Inc(PID_TypeDef *PID,float CurrentValue);
 void set_pid_target(PID_TypeDef *pid, float target);
 float get_pid_target(PID_TypeDef *pid);
 void set_p_i_d(PID_TypeDef *pid, float p, float i, float d);

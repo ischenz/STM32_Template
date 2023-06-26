@@ -2,6 +2,8 @@
 #include "oled.h"
 #include "delay.h"
 #include "math.h"
+#include "tm1650key.h"
+#include "usart.h"
 /************
 64 65 66 67
 72 73 74 75
@@ -9,7 +11,8 @@
 88 89 90 91
 ************/
 
-uint8_t Ch451Key_Num = 99 ,Flag_Ch45KeyRead = 0;
+uint8_t Matrix_Key_Num = 99 ;
+uint8_t Flag_KeyRead = 0;
 
 void Ch451Key_init(void)
 {
@@ -90,17 +93,17 @@ void Get_ch451_value(int *value)
 		OLED_ShowString(0,10,"End with a '*' key",8,1);
 		OLED_Refresh();
 		while(1){
-		  if(Flag_Ch45KeyRead == 1){
-				Flag_Ch45KeyRead = 0;
-				if(Ch451Key_Num == 13) break;//'*' == 13
-			    if(Ch451Key_Num > 10){
+		  if(Flag_KeyRead == 1){
+				Flag_KeyRead = 0;
+				if(Matrix_Key_Num == 13) break;//'*' == 13
+			    if(Matrix_Key_Num > 10){
 					OLED_ShowString(0,30,"Err",8,1);
 					OLED_Refresh();
 					delay_ms(2000);
 					break;
 				}
-				num[i++] = Ch451Key_Num;
-				OLED_ShowNum(i*6,20,Ch451Key_Num,1,8,1);
+				num[i++] = Matrix_Key_Num;
+				OLED_ShowNum(i*6,20,Matrix_Key_Num,1,8,1);
 				OLED_Refresh();
 			}				
 		}
@@ -108,20 +111,18 @@ void Get_ch451_value(int *value)
 		for(j=0;j<i;j++){//		                    5		 4	 	 3		   2		1
 			*value=*value*10+num[j];// 1 2 3 4 5  a[4]*1 + a[3]*10 + a[2]*100 + a[1]*1000 + a[0]*10000
 		}//						                   10^0		 10^1	 10^2		  10^3		10^4
-		//printf("num:%d\r\n",ch451_value);
 	}
-	/*到此处已得到数据 保存在“ch451_value”中 */
 	else{
-		if(Flag_Ch45KeyRead == 1){
-			Flag_Ch45KeyRead = 0;
-			if(Ch451Key_Num==10){
+		if(Flag_KeyRead == 1){
+			Flag_KeyRead = 0;
+			if(Matrix_Key_Num==10){
 					Flag_SetAngle = 1;
 			}
 		}
 	}
 }
 
-int8_t InputValue(float *value)
+int8_t Get_float_value_from_keys(float *value)
 {
 	static uint8_t InputFlag, frstInFlag, i;
 	static uint8_t num[10] = {0};
@@ -135,12 +136,11 @@ int8_t InputValue(float *value)
 		OLED_ShowString(0,10,"End with a '*' key",8,1);
 		OLED_Refresh();
 	}
-	if(InputFlag == 0){
-		if(Flag_Ch45KeyRead == 1){
-			Flag_Ch45KeyRead = 0;
-			
-			if(Ch451Key_Num >= 10){
-				if(Ch451Key_Num == 13)//*  输入结束
+	if(InputFlag == 0){//输入中标志
+		if(Flag_KeyRead == 1){
+			Flag_KeyRead = 0;
+			if(Matrix_Key_Num >= 10){
+				if(Matrix_Key_Num == 13)//*  输入结束
 				{
 					InputFlag = 1;
 					if(intNum == 0){//没有小数
@@ -160,7 +160,7 @@ int8_t InputValue(float *value)
 					*value = input;
 					
 					return 1;
-				}else if(Ch451Key_Num == 14){//.
+				}else if(Matrix_Key_Num == 14){//.
 					intNum = i;
 					num[i++] = '.';
 					OLED_ShowChar(i*6,20,num[i-1],8,1);
@@ -170,14 +170,14 @@ int8_t InputValue(float *value)
 					return 0;
 				}
 			}
-			num[i++] = Ch451Key_Num;
-			OLED_ShowNum(i*6,20,Ch451Key_Num,1,8,1);
+			num[i++] = Matrix_Key_Num;
+			OLED_ShowNum(i*6,20,Matrix_Key_Num,1,8,1);
 			OLED_Refresh();
 		}
-	}
-	if(Flag_Ch45KeyRead == 1){
-		Flag_Ch45KeyRead = 0;
-		if(Ch451Key_Num == 10){
+	}else
+	if(Flag_KeyRead == 1){
+		Flag_KeyRead = 0;
+		if(Matrix_Key_Num == 10){
 			InputFlag = frstInFlag = i = 0;
 		}
 	}
@@ -188,23 +188,23 @@ int8_t GetValueFromKeyvalue(uint8_t keyvalue)
 {
 	int8_t keynum = -1;
 	switch(keyvalue){
-		case KeyNum0 :return 1 ;
-		case KeyNum1 :return 2 ;
-		case KeyNum2 :return 3 ;
-		case KeyNum3 :return 10;
-		case KeyNum4 :return 4 ;
-		case KeyNum5 :return 5 ;
-		case KeyNum6 :return 6 ;
-		case KeyNum7 :return 11;
-		case KeyNum8 :return 7 ;
-		case KeyNum9 :return 8 ;
-		case KeyNum10:return 9 ;
-		case KeyNum11:return 12;
-		case KeyNum12:return 13;//*
-		case KeyNum13:return 0 ;
-		case KeyNum14:return 14;//.
-		case KeyNum15:return 15;//OK
-		default      :return -1;
+		case KeyNum0 :keynum = 1 ;break;
+		case KeyNum1 :keynum = 2 ;break;
+		case KeyNum2 :keynum = 3 ;break;
+		case KeyNum3 :keynum = 10;break;
+		case KeyNum4 :keynum = 4 ;break;
+		case KeyNum5 :keynum = 5 ;break;
+		case KeyNum6 :keynum = 6 ;break;
+		case KeyNum7 :keynum = 11;break;
+		case KeyNum8 :keynum = 7 ;break;
+		case KeyNum9 :keynum = 8 ;break;
+		case KeyNum10:keynum = 9 ;break;
+		case KeyNum11:keynum = 12;break;
+		case KeyNum12:keynum = 13;break;//*
+		case KeyNum13:keynum = 0 ;break;
+		case KeyNum14:keynum = 14;break;//.
+		case KeyNum15:keynum = 15;break;//OK
+		default      :keynum = -1;
 	}
 	return keynum;
 }
@@ -234,10 +234,16 @@ void EXTI15_10_IRQHandler(void)
 				Ch451KEY_DCLK_Clr();
 				Ch451KEY_DCLK_Set();
 		}
-		Ch451Key_Num = keyvalue;
-		Ch451Key_Num = GetValueFromKeyvalue(keyvalue);
-		Flag_Ch45KeyRead = 1;
+		//Matrix_Key_Num = keyvalue;
+		Matrix_Key_Num = GetValueFromKeyvalue(keyvalue);
+		Flag_KeyRead = 1;
+		EXTI_ClearITPendingBit(EXTI_Line12);//清除中断标志位
 	}
-	EXTI_ClearITPendingBit(EXTI_Line12);//清除中断标志位
+	if(PGin(11)==0)//二级判定
+	{
+		Matrix_Key_Num=TM1650_Gte_KEY();
+		Flag_KeyRead = 1;
+		EXTI_ClearITPendingBit(EXTI_Line11);//清除中断标志位
+	}
 }
 
