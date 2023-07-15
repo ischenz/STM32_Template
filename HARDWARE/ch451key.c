@@ -158,7 +158,7 @@ int8_t Get_float_value_from_keys(float *value)
 						}
 					}
 					*value = input;
-					
+					InputFlag = frstInFlag = i = 0;
 					return 1;
 				}else if(Matrix_Key_Num == 14){//.
 					intNum = i;
@@ -174,13 +174,13 @@ int8_t Get_float_value_from_keys(float *value)
 			OLED_ShowNum(i*6,20,Matrix_Key_Num,1,8,1);
 			OLED_Refresh();
 		}
-	}else
-	if(Flag_KeyRead == 1){
-		Flag_KeyRead = 0;
-		if(Matrix_Key_Num == 10){
-			InputFlag = frstInFlag = i = 0;
-		}
-	}
+	}//else
+//	if(Flag_KeyRead == 1){
+//		Flag_KeyRead = 0;
+//		if(Matrix_Key_Num == 10){
+//			InputFlag = frstInFlag = i = 0;
+//		}
+//	}
 	return 0;
 }
 

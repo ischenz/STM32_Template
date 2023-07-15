@@ -424,6 +424,11 @@
               <FileType>1</FileType>
               <FilePath>..\USER\datasave.c</FilePath>
             </File>
+            <File>
+              <FileName>sw_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\sw_i2c.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -608,6 +613,16 @@
               <FileName>tm1650key.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\tm1650key.c</FilePath>
+            </File>
+            <File>
+              <FileName>multi_button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\multi_button.c</FilePath>
+            </File>
+            <File>
+              <FileName>Laser_ranging.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\Laser_ranging.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -28,6 +28,21 @@ void KEY_Init(void);	//IO初始化
 uint8_t KEY_Scan(void); 		//按键扫描函数	
 void KeyAction(void);
 
+void BTN1_PRESS_DOWN_Handler(void* btn);
+void BTN1_PRESS_UP_Handler(void* btn);
+void BTN1_PRESS_REPEAT_Handler(void* btn);
+void BTN1_SINGLE_Click_Handler(void* btn);
+void BTN1_DOUBLE_Click_Handler(void* btn);
+void BTN1_LONG_PRESS_START_Handler(void* btn);
+void BTN1_LONG_PRESS_HOLD_Handler(void* btn);
+
+void BTN2_PRESS_DOWN_Handler(void* btn);
+void BTN2_PRESS_UP_Handler(void* btn);
+void BTN2_PRESS_REPEAT_Handler(void* btn);
+void BTN2_SINGLE_Click_Handler(void* btn);
+void BTN2_DOUBLE_Click_Handler(void* btn);
+void BTN2_LONG_PRESS_START_Handler(void* btn);
+void BTN2_LONG_PRESS_HOLD_Handler(void* btn);
 extern int8_t key_value;
 
 #endif

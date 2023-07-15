@@ -3,6 +3,14 @@
 
 u8g2_t u8g2;
 
+/*
+	u8g2_init();
+	u8g2_Setup_ssd1306_128x64_noname_f(&u8g2, U8G2_R0, u8x8_byte_4wire_sw_spi, u8x8_gpio_and_delay_template);
+    u8g2_InitDisplay(&u8g2);
+    u8g2_SetPowerSave(&u8g2, 0);
+	u8g2_SetFont(&u8g2,u8g2_font_12x6LED_tf);
+*/
+
 void u8g2_init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -47,11 +55,11 @@ uint8_t u8x8_gpio_and_delay_template(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int,
             break;							// arg_int=1: delay by 5us, arg_int = 4: delay by 1.25us
         case U8X8_MSG_GPIO_D0:				// D0 or SPI clock pin: Output level in arg_int
             //case U8X8_MSG_GPIO_SPI_CLOCK:
-            GPIO_WriteBit(GPIOD,GPIO_Pin_8,arg_int);
+            GPIO_WriteBit(GPIOD,GPIO_Pin_8,(BitAction)arg_int);
             break;
         case U8X8_MSG_GPIO_D1:				// D1 or SPI data pin: Output level in arg_int
             //case U8X8_MSG_GPIO_SPI_DATA:
-            GPIO_WriteBit(GPIOE,GPIO_Pin_14,arg_int);
+            GPIO_WriteBit(GPIOE,GPIO_Pin_14,(BitAction)arg_int);
             break;
         case U8X8_MSG_GPIO_D2:				// D2 pin: Output level in arg_int
             break;
@@ -68,13 +76,13 @@ uint8_t u8x8_gpio_and_delay_template(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int,
         case U8X8_MSG_GPIO_E:				// E/WR pin: Output level in arg_int
             break;
         case U8X8_MSG_GPIO_CS:				// CS (chip select) pin: Output level in arg_int
-            GPIO_WriteBit(GPIOE,GPIO_Pin_8,arg_int);
+            GPIO_WriteBit(GPIOE,GPIO_Pin_8,(BitAction)arg_int);
             break;
         case U8X8_MSG_GPIO_DC:				// DC (data/cmd, A0, register select) pin: Output level in arg_int
-            GPIO_WriteBit(GPIOE,GPIO_Pin_10,arg_int);
+            GPIO_WriteBit(GPIOE,GPIO_Pin_10,(BitAction)arg_int);
             break;
         case U8X8_MSG_GPIO_RESET:			// Reset pin: Output level in arg_int
-            GPIO_WriteBit(GPIOE,GPIO_Pin_12,arg_int);
+            GPIO_WriteBit(GPIOE,GPIO_Pin_12,(BitAction)arg_int);
             break;
         case U8X8_MSG_GPIO_CS1:				// CS1 (chip select) pin: Output level in arg_int
             break;

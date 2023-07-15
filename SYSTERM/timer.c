@@ -4,6 +4,8 @@
 #include "oled.h"
 #include "pid.h"
 #include "motor.h"
+#include "multi_button.h"
+#include "delay.h"
 
 uint8_t timeout = 0;
 
@@ -187,7 +189,7 @@ void Timer7_init(void)//基本定时器
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;//计时
 	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseInitStructure.TIM_Period = 50000-1;//10ms
+	TIM_TimeBaseInitStructure.TIM_Period = 10000-1;//10ms
 	TIM_TimeBaseInitStructure.TIM_Prescaler = 84-1;
 	TIM_TimeBaseInit(TIM7,&TIM_TimeBaseInitStructure);
 	
@@ -200,6 +202,28 @@ void Timer7_init(void)//基本定时器
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	TIM_Cmd(TIM7, ENABLE);
+}
+/*定时器9—14通用定时器*/
+void Timer9_init(void)//基本定时器
+{
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM9,ENABLE);//APB2:84Mhz 定时器9：168Mhz/168 = 1Mhz 
+	
+	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;//计时
+	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_TimeBaseInitStructure.TIM_Period = 5000-1;//5ms
+	TIM_TimeBaseInitStructure.TIM_Prescaler = 168-1;
+	TIM_TimeBaseInit(TIM9,&TIM_TimeBaseInitStructure);
+	
+	TIM_ITConfig(TIM9,TIM_IT_Update,ENABLE);
+	
+	NVIC_InitTypeDef NVIC_InitStructure;
+	NVIC_InitStructure.NVIC_IRQChannel=TIM1_BRK_TIM9_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority=3;
+	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+	TIM_Cmd(TIM9, ENABLE);
 }
 
 void set_time(uint16_t time_ms)
@@ -236,3 +260,11 @@ void TIM7_IRQHandler(void)//定时(10ms)读取编码器值(即速度),超声波测距
 	TIM_ClearITPendingBit(TIM7,TIM_IT_Update); //清除中断标志位
 }
 
+void TIM1_BRK_TIM9_IRQHandler(void)//5ms
+{
+	if(TIM_GetITStatus(TIM9,TIM_IT_Update)==SET) //溢出中断
+	{
+		button_ticks();
+	}
+	TIM_ClearITPendingBit(TIM9,TIM_IT_Update); //清除中断标志位
+}
