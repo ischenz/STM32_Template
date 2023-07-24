@@ -7,8 +7,26 @@ u8g2_t u8g2;
 	u8g2_init();
 	u8g2_Setup_ssd1306_128x64_noname_f(&u8g2, U8G2_R0, u8x8_byte_4wire_sw_spi, u8x8_gpio_and_delay_template);
     u8g2_InitDisplay(&u8g2);
+    u8g2_ClearBuffer(&u8g2);    
     u8g2_SetPowerSave(&u8g2, 0);
 	u8g2_SetFont(&u8g2,u8g2_font_12x6LED_tf);
+    u8g2_SetFont(&u8g2,u8g2_font_12x6LED_tf);
+    u8g2_DrawStr(&u8g2, 0, 12, "Hello");
+    u8g2_SetFont(&u8g2, u8g2_font_wqy12_t_gb2312);
+    u8g2_DrawUTF8(&u8g2, 0, 40, "ÄãºÃ");
+    u8g2_SendBuffer(&u8g2);
+    
+    <purpose>	Description
+        t	Transparent font, Do not use a background color.
+        h	All glyphs have common height.
+        m	All glyphs have common height and width (monospace).
+        8	All glyphs fit into a 8x8 pixel box.
+    <char set>	Description
+        f	The font includes up to 256 glyphs.
+        r	Only glyphs on the range of the ASCII codes 32 to 127 are included in the font.
+        u	Only glyphs on the range of the ASCII codes 32 to 95 (uppercase chars) are included in the font.
+        n	Only numbers and extra glyphs for writing date and time strings are included in the font.
+        ...	Other custom character list.
 */
 
 void u8g2_init(void)

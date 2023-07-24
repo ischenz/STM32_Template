@@ -180,14 +180,14 @@ void uart3_init(uint32_t bound){
 	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;	//收发模式
 	USART_Init(USART3, &USART_InitStructure); //初始化串口
 	
-	USART_Cmd(USART3, ENABLE);  //使能串口2 
+	USART_Cmd(USART3, ENABLE);  //使能串口3 
 	
 	USART_ClearFlag(USART3, USART_FLAG_TC);
 
 	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);//开启相关中断
 
 	//USART3 NVIC 配置
-	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;//串口2中断通道
+	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;//串口3中断通道
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1;//抢占优先级
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority =0;		//子优先级
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
@@ -207,29 +207,6 @@ void USART3_IRQHandler(void)
 		}
 	} 
 } 
-
-uint16_t get_distance(void)
-{
-	uint16_t mm = 0;
-	uint8_t cmd = 0x55;
-	static uint16_t i;
-	i++;
-	if(Uart3_RingBuff.Lenght == 2){
-		i=0;
-		uint8_t data = 0;
-		Read_RingBuff(&Uart3_RingBuff, &data);
-		mm = data;
-		Read_RingBuff(&Uart3_RingBuff, &data);
-		mm =  mm << 8 | data;
-		//delay_us(1000);
-		usart_send(USART3,&cmd,1);
-	} 
-	if(i==100 || Uart3_RingBuff.Lenght > 2){ //一秒
-		RingBuff_Init(&Uart3_RingBuff);
-		usart_send(USART3,&cmd,1);
-	}
-	return mm;
-}
 
 uint8_t DataDecode(RingBuff_t *ringbuff, uint8_t *data1, uint8_t *data2)      
 {

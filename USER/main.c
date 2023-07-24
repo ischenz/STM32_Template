@@ -25,8 +25,10 @@
 #include "ch451key.h"
 #include "stmflash.h"
 #include "tm1650key.h"
-#include "Laser_ranging.h"
-
+#include "mpu6050.h"
+#include "inv_mpu.h"
+#include "LCD_1in47.h"
+#include "GUI_Paint.h"
 
 int main(void)
 {
@@ -37,6 +39,9 @@ int main(void)
 	LED_Init();
 	KEY_Init();//weak不能使用 与定时器通道冲突
 	OLED_Init();
+    LCD_1IN47_Module_Init();
+    Paint_DrawString_EN(0, 10, "Hello World", &Font24, WHITE, RED);
+    Paint_DrawFloatNum(0, 40, 12.999354, 7, &Font24, WHITE, BLUE);
 	printf("Hello Chen!!!\r\n");
 	while(1)
 	{
@@ -74,8 +79,9 @@ int main(void)
 		}	
 #endif
 		heartbeat++;
-		if(heartbeat%1000000 == 0){
+		if(heartbeat%10 == 0){
 			LED1 = !LED1;
+            OLED_ShowChar(0, 0, 'c', 12, 1);
 			OLED_Refresh();
 		}
 	}

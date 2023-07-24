@@ -255,7 +255,7 @@ void TIM7_IRQHandler(void)//定时(10ms)读取编码器值(即速度),超声波测距
 		motor_l.coder_v = (int16_t)TIM3->CNT;
 		TIM3->CNT = 0;
 		TIM4->CNT = 0;
-		distance = get_distance();
+		//distance = get_distance();
 	}
 	TIM_ClearITPendingBit(TIM7,TIM_IT_Update); //清除中断标志位
 }

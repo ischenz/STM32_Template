@@ -4,6 +4,8 @@
 #include "multi_button.h"
 #include "timer.h"
 #include "usart.h"
+#include "gw_grayscale_sensor.h"
+
 
 int8_t key_value = 0;
 enum Button_IDs {
@@ -77,7 +79,7 @@ void BTN1_PRESS_UP_Handler(void* btn)
 }
 void BTN1_PRESS_REPEAT_Handler(void* btn)
 {
-	struct Button* button = (Button*)btn;
+	//struct Button* button = (Button*)btn;
 }
 
 void BTN1_SINGLE_Click_Handler(void* btn)
@@ -103,7 +105,7 @@ void BTN2_PRESS_UP_Handler(void* btn)
 }
 void BTN2_PRESS_REPEAT_Handler(void* btn)
 {
-	struct Button* button = (Button*)btn;
+	//struct Button* button = (Button*)btn;
 }
 
 void BTN2_SINGLE_Click_Handler(void* btn)

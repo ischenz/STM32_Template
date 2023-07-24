@@ -1,6 +1,11 @@
 #ifndef __MPU6050_H
 #define __MPU6050_H
-#include "mpuiic.h"   												  	  
+
+#ifdef __MPUIIC_
+#include "mpuiic.h"   	
+#else
+#include "sw_i2c.h"
+#endif
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK MiniSTM32F103开发板 
@@ -92,24 +97,25 @@
 //#define MPU_READ    0XD1
 //#define MPU_WRITE   0XD0
 
+extern float Pitch, Roll, Yaw;
 
 void DMP_Init(void);
-u8 MPU_Init(void); 								//初始化MPU6050
-u8 MPU_Write_Len(u8 addr,u8 reg,u8 len,u8 *buf);//IIC连续写
-u8 MPU_Read_Len(u8 addr,u8 reg,u8 len,u8 *buf); //IIC连续读 
-u8 MPU_Write_Byte(u8 reg,u8 data);				//IIC写一个字节
-u8 MPU_Read_Byte(u8 reg);						//IIC读一个字节
+uint8_t MPU_Init(void); 								//初始化MPU6050
+uint8_t MPU_Write_Len(uint8_t addr,uint8_t reg,uint8_t len,uint8_t *buf);//IIC连续写
+uint8_t MPU_Read_Len(uint8_t addr,uint8_t reg,uint8_t len,uint8_t *buf); //IIC连续读 
+uint8_t MPU_Write_Byte(uint8_t reg,uint8_t data);				//IIC写一个字节
+uint8_t MPU_Read_Byte(uint8_t reg);						//IIC读一个字节
 
-u8 MPU_Set_Gyro_Fsr(u8 fsr);
-u8 MPU_Set_Accel_Fsr(u8 fsr);
-u8 MPU_Set_LPF(u16 lpf);
-u8 MPU_Set_Rate(u16 rate);
-u8 MPU_Set_Fifo(u8 sens);
+uint8_t MPU_Set_Gyro_Fsr(uint8_t fsr);
+uint8_t MPU_Set_Accel_Fsr(uint8_t fsr);
+uint8_t MPU_Set_LPF(uint16_t lpf);
+uint8_t MPU_Set_Rate(uint16_t rate);
+uint8_t MPU_Set_Fifo(uint8_t sens);
 
 
 short MPU_Get_Temperature(void);
-u8 MPU_Get_Gyroscope(short *gx,short *gy,short *gz);
-u8 MPU_Get_Accelerometer(short *ax,short *ay,short *az);
+uint8_t MPU_Get_Gyroscope(short *gx,short *gy,short *gz);
+uint8_t MPU_Get_Accelerometer(short *ax,short *ay,short *az);
 
 #endif
 

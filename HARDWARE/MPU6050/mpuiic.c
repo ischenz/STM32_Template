@@ -1,4 +1,5 @@
 #include "mpuiic.h"
+#include "sw_i2c.h"
 #include "delay.h"
 
 //MPU IIC 延时函数
@@ -9,7 +10,8 @@ void MPU_IIC_Delay(void)
 
 //初始化IIC
 void MPU_IIC_Init(void)
-{			
+{		
+#if 0	
 	GPIO_InitTypeDef  GPIO_InitStructure;
 
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE);//先使能外设IO PORTB时钟 
@@ -21,7 +23,19 @@ void MPU_IIC_Init(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 //IO口速度为50MHz
 	GPIO_Init(GPIOA, &GPIO_InitStructure);					 //根据设定参数初始化GPIO 
 
-	GPIO_SetBits(GPIOA,GPIO_Pin_1|GPIO_Pin_0);				
+	GPIO_SetBits(GPIOA,GPIO_Pin_1|GPIO_Pin_0);	
+#endif
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	
+	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
+	GPIO_InitStructure.GPIO_Pin = SW_I2C1_PIN_SCL | SW_I2C1_PIN_SDA;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	
+	GPIO_SetBits(GPIOA, SW_I2C1_PIN_SCL | SW_I2C1_PIN_SDA);	
  
 }
 //产生IIC起始信号

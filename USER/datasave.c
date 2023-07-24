@@ -5,29 +5,29 @@
 #include "stmflash.h"
 
 /***********************************************
-	while(1)
-	{
-		if(receiveJson(&Uart1_RingBuff, str)){
-			printf("Rec:\r\n%s \r\n", str);
-			u8g2_ClearBuffer(&u8g2);
-			
-			if(read_json_pid(str, "L_PID", &l_p, &l_i, &l_d) == 0 || read_json_pid(str, "R_PID", &r_p, &r_i, &r_d) == 0){
-				pid_flash_root_init(ADDR_FLASH_SECTOR_11);//使用扇区11,先擦除flash，后一次性写入全部pid参数
-				write_pid_to_flash(L_PID_FLASH_ADDR, "L_PID", l_p, l_i, l_d);
-				write_pid_to_flash(R_PID_FLASH_ADDR, "R_PID", r_p, r_i, r_d);
-			}else{
-				u8g2_DrawStr(&u8g2, 0, 25, "Not this PID");
-				u8g2_SendBuffer(&u8g2);
-			}
-			sprintf(showstr, "L_P:%5.2f  R_P:%5.2f",l_p, r_p);
-			u8g2_DrawStr(&u8g2, 0, 25, showstr);
-			sprintf(showstr, "L_I:%5.2f  R_I:%5.2f",l_i, r_i);
-			u8g2_DrawStr(&u8g2, 0, 40, showstr);
-			sprintf(showstr, "L_D:%5.2f  R_D:%5.2f",l_d, r_d);
-			u8g2_DrawStr(&u8g2, 0, 55, showstr);
+while(1)
+{
+	if(receiveJson(&Uart1_RingBuff, str)){
+		printf("Rec:\r\n%s \r\n", str);
+		u8g2_ClearBuffer(&u8g2);
+		
+		if(read_json_pid(str, "L_PID", &l_p, &l_i, &l_d) == 0 || read_json_pid(str, "R_PID", &r_p, &r_i, &r_d) == 0){
+			pid_flash_root_init(ADDR_FLASH_SECTOR_11);//使用扇区11,先擦除flash，后一次性写入全部pid参数
+			write_pid_to_flash(L_PID_FLASH_ADDR, "L_PID", l_p, l_i, l_d);
+			write_pid_to_flash(R_PID_FLASH_ADDR, "R_PID", r_p, r_i, r_d);
+		}else{
+			u8g2_DrawStr(&u8g2, 0, 25, "Not this PID");
 			u8g2_SendBuffer(&u8g2);
-		}	
-	}
+		}
+		sprintf(showstr, "L_P:%5.2f  R_P:%5.2f",l_p, r_p);
+		u8g2_DrawStr(&u8g2, 0, 25, showstr);
+		sprintf(showstr, "L_I:%5.2f  R_I:%5.2f",l_i, r_i);
+		u8g2_DrawStr(&u8g2, 0, 40, showstr);
+		sprintf(showstr, "L_D:%5.2f  R_D:%5.2f",l_d, r_d);
+		u8g2_DrawStr(&u8g2, 0, 55, showstr);
+		u8g2_SendBuffer(&u8g2);
+	}	
+}
 ************************************************/
 
 

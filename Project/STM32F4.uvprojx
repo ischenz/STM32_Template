@@ -187,6 +187,7 @@
             <RvdsVP>2</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <RvdsCdeCp>0</RvdsCdeCp>
+            <nBranchProt>0</nBranchProt>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -340,7 +341,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\FWLIB\inc;..\HARDWARE;..\USER;..\SYSTERM;..\CORE;..\FATFS;..\HARDWARE\MPU6050;..\HARDWARE\MPU6050\eMPL;..\u8g2_csrc</IncludePath>
+              <IncludePath>..\FWLIB\inc;..\HARDWARE;..\USER;..\SYSTERM;..\CORE;..\FATFS;..\HARDWARE\MPU6050;..\HARDWARE\MPU6050\eMPL;..\u8g2_csrc;..\HARDWARE\st7789</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -583,6 +584,57 @@
               <FileName>mpuiic.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\MPU6050\mpuiic.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>2</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>1</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>inv_mpu.c</FileName>
@@ -620,9 +672,9 @@
               <FilePath>..\HARDWARE\multi_button.c</FilePath>
             </File>
             <File>
-              <FileName>Laser_ranging.c</FileName>
+              <FileName>gw_grayscale_sensor.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\HARDWARE\Laser_ranging.c</FilePath>
+              <FilePath>..\HARDWARE\gw_grayscale_sensor.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -948,6 +1000,61 @@
               <FileName>ffunicode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\FATFS\ffunicode.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>st7789</GroupName>
+          <Files>
+            <File>
+              <FileName>font8.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\st7789\font8.c</FilePath>
+            </File>
+            <File>
+              <FileName>font12.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\st7789\font12.c</FilePath>
+            </File>
+            <File>
+              <FileName>font12CN.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\st7789\font12CN.c</FilePath>
+            </File>
+            <File>
+              <FileName>font16.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\st7789\font16.c</FilePath>
+            </File>
+            <File>
+              <FileName>font20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\st7789\font20.c</FilePath>
+            </File>
+            <File>
+              <FileName>font24.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\st7789\font24.c</FilePath>
+            </File>
+            <File>
+              <FileName>font24CN.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\st7789\font24CN.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUI_Paint.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\st7789\GUI_Paint.c</FilePath>
+            </File>
+            <File>
+              <FileName>image.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\st7789\image.c</FilePath>
+            </File>
+            <File>
+              <FileName>LCD_1in47.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\st7789\LCD_1in47.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -11,13 +11,30 @@
 
 #include <stdint.h>
 
+#define ACK  0x0 // acknowledge (SDA LOW)
+#define NACK 0x1 // not acknowledge (SDA HIGH)
+
+#define LOW  0x0
+#define HIGH 0x1
+
+#define I2C_READ  0x1
+#define I2C_WRITE 0x0
+
+#define SW_I2C1_PIN_SCL GPIO_Pin_8
+#define SW_I2C1_PIN_SDA GPIO_Pin_7
+
+#define SDA_IN()  {GPIOC->MODER&=~(3<<(7*2));GPIOC->MODER|=0<<7*2;}	//PC7输入模式
+#define SDA_OUT() {GPIOC->MODER&=~(3<<(7*2));GPIOC->MODER|=1<<7*2;} //PC7输出模式
+
+#define IIC_DELAY() delay_us(5);
+
 typedef struct {
 	void (*sda_out)(uint8_t bit, void *user_data);
 	uint8_t (*sda_in)(void *user_data);
 	void (*scl_out)(uint8_t bit, void *user_data);
 	void *user_data;
 } sw_i2c_interface_t;
-
+extern sw_i2c_interface_t i2c_interface;
 /**
  * @brief 从IIC总线上的设备读取多个字节
  * @param i2c_interface
@@ -60,5 +77,11 @@ int8_t sw_i2c_mem_read(sw_i2c_interface_t *i2c_interface, uint8_t dev_addr, uint
  * @return 0:成功, 1:错误
  */
 int8_t sw_i2c_mem_write(sw_i2c_interface_t *i2c_interface, uint8_t dev_addr, uint8_t mem_addr, const uint8_t *data, uint8_t data_length);
+
+void sw_i2c_init(void);
+void sda_out(uint8_t bit, void *user_data);
+uint8_t sda_in(void *user_data);
+void scl_out(uint8_t bit, void *user_data);
+uint8_t i2c_scan(sw_i2c_interface_t *i2c_interface, uint8_t *scan_addr);
 
 #endif //SW_I2C_H_GUARD
