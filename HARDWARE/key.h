@@ -4,13 +4,13 @@
 //////////////////////////////////////////////////////////////////////////////////	 
 
 
-/*ÏÂÃæµÄ·½Ê½ÊÇÍ¨¹ıÖ±½Ó²Ù×÷¿âº¯Êı·½Ê½¶ÁÈ¡IO*/
+/*ä¸‹é¢çš„æ–¹å¼æ˜¯é€šè¿‡ç›´æ¥æ“ä½œåº“å‡½æ•°æ–¹å¼è¯»å–IO*/
 #define KEY0 		GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_4) //PE4
 #define WK_UP 		GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_0)	//PA0
 #define KEY1 		GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_3)	//PE3 
 #define KEY2 		GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_2) //PE2
 
-/*ÏÂÃæ·½Ê½ÊÇÍ¨¹ıÎ»´ø²Ù×÷·½Ê½¶ÁÈ¡IO*/
+/*ä¸‹é¢æ–¹å¼æ˜¯é€šè¿‡ä½å¸¦æ“ä½œæ–¹å¼è¯»å–IO*/
 /*
 #define KEY0 		PEin(4)   	//PE4
 #define KEY1 		PEin(3)		//PE3 
@@ -19,13 +19,13 @@
 */
 
 
-#define KEY0_PRES 	1	//KEY0°´ÏÂ
-#define KEY1_PRES	2	//KEY1°´ÏÂ
-#define KEY2_PRES	3	//KEY2°´ÏÂ
-#define WKUP_PRES   4	//KEY_UP°´ÏÂ(¼´WK_UP)
+#define KEY0_PRES 	1	//KEY0æŒ‰ä¸‹
+#define KEY1_PRES	2	//KEY1æŒ‰ä¸‹
+#define KEY2_PRES	3	//KEY2æŒ‰ä¸‹
+#define WKUP_PRES   4	//KEY_UPæŒ‰ä¸‹(å³WK_UP)
 
-void KEY_Init(void);	//IO³õÊ¼»¯
-uint8_t KEY_Scan(void); 		//°´¼üÉ¨Ãèº¯Êı	
+void KEY_Init(void);	//IOåˆå§‹åŒ–
+uint8_t KEY_Scan(void); 		//æŒ‰é”®æ‰«æå‡½æ•°	
 void KeyAction(void);
 
 void BTN1_PRESS_DOWN_Handler(void* btn);

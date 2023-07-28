@@ -6,10 +6,6 @@
 ServTyp Xserv = {1500,1800,1200,1500};
 ServTyp Yserv = {1500,1800,1200,1500};//1490
 
-//ServTyp Xserv = {1500,1490+60,1490-120,1500};
-//ServTyp Yserv = {1500,1490+100,1490-120,1500};//1490
-
-
 void servo_ctr(ServTyp *servo, int PidInput)
 {
 	uint16_t CompSet = servo->MIDPWM + PidInput;
@@ -57,7 +53,7 @@ void servo_ctr(ServTyp *servo, int PidInput)
 
 void servo_init(void)
 {
-	GPIO_InitTypeDef GPIO_InitStructure;
+GPIO_InitTypeDef GPIO_InitStructure;
 	/* Enable GPIO clock */
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 
@@ -103,7 +99,7 @@ void servo_init(void)
 	TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);
 	TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);
 	
-	TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE);
+	TIM_ITConfig(TIM2,TIM_IT_Update,DISABLE);
 	
 	NVIC_InitTypeDef NVIC_InitStruct;
 	NVIC_InitStruct.NVIC_IRQChannel = TIM2_IRQn;
@@ -116,13 +112,14 @@ void servo_init(void)
 	TIM_Cmd(TIM2, ENABLE);
 }
 
-
-//void TIM2_IRQHandler(void)
-//{
-//	if(TIM_GetITStatus(TIM2,TIM_IT_Update)==SET) //“Á≥ˆ÷–∂œ
-//	{
-//		servo_ctr(&Xserv, x_pid.PID_out);
-//		servo_ctr(&Yserv, y_pid.PID_out);
-//	}
-//	TIM_ClearITPendingBit(TIM2,TIM_IT_Update); //«Â≥˝÷–∂œ±Í÷æŒª
-//}
+/*  
+ *  void TIM2_IRQHandler(void)
+ *  {
+ *  	if(TIM_GetITStatus(TIM2,TIM_IT_Update)==SET) //Ê∫¢Âá∫‰∏≠Êñ≠
+ *  	{
+ *  		servo_ctr(&Xserv, x_pid.PID_out);
+ *  		servo_ctr(&Yserv, y_pid.PID_out);
+ *  	}
+ *  	TIM_ClearITPendingBit(TIM2,TIM_IT_Update); //Ê∏ÖÈô§‰∏≠Êñ≠Ê†áÂøó‰Ωç
+ *  }
+ */

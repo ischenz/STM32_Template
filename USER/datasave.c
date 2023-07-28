@@ -12,7 +12,7 @@ while(1)
 		u8g2_ClearBuffer(&u8g2);
 		
 		if(read_json_pid(str, "L_PID", &l_p, &l_i, &l_d) == 0 || read_json_pid(str, "R_PID", &r_p, &r_i, &r_d) == 0){
-			pid_flash_root_init(ADDR_FLASH_SECTOR_11);//使用扇区11,先擦除flash，后一次性写入全部pid参数
+			pid_flash_root_init(ADDR_FLASH_SECTOR_11);//浣跨敤鎵囧尯11,鍏堟摝闄lash锛屽悗涓�娆℃�у啓鍏ュ叏閮╬id鍙傛暟
 			write_pid_to_flash(L_PID_FLASH_ADDR, "L_PID", l_p, l_i, l_d);
 			write_pid_to_flash(R_PID_FLASH_ADDR, "R_PID", r_p, r_i, r_d);
 		}else{
@@ -31,40 +31,40 @@ while(1)
 ************************************************/
 
 
-//读取
-void read_pid_from_spiflash(const char *pid, double *p, double *i, double *d)
-{
-	cJSON *cjson,*l_pid,*pid_item;
-	char filename[12];
-	BYTE buffer[100];
-	UINT br;         /* File read/write count */
-	FIL fil;        /* File object */
-	FRESULT fr;     /* FatFs return code */
-	sprintf(filename, "1:%s", pid);
-	printf("Read file:%s\r\n",filename);
-	fr = f_open(&fil, filename, FA_READ | FA_OPEN_EXISTING); 
-	if(fr)	{
-		printf("Open fail :%d\r\n",(int)fr);
-	}
-	
-	fr = f_read(&fil, buffer, sizeof buffer, &br);
-	printf("Read sixe %d:\r\n",br);
-	for(int i=0;i<br;i++){
-		printf("%c",buffer[i]);
-	}
-	printf("\r\n");
-	
-	cjson = cJSON_Parse((char*)buffer);
-	l_pid = cJSON_GetObjectItem(cjson, pid);
-	pid_item = cJSON_GetArrayItem(l_pid, 0);
-	*p = pid_item->valuedouble;
-	pid_item = cJSON_GetArrayItem(l_pid, 1);
-	*i = pid_item->valuedouble;
-	pid_item = cJSON_GetArrayItem(l_pid, 2);
-	*d = pid_item->valuedouble;
-	f_close(&fil);
-	cJSON_Delete(cjson);
-}
+//璇诲彇
+//void read_pid_from_spiflash(const char *pid, double *p, double *i, double *d)
+//{
+//	cJSON *cjson,*l_pid,*pid_item;
+//	char filename[12];
+//	BYTE buffer[100];
+//	UINT br;         /* File read/write count */
+//	FIL fil;        /* File object */
+//	FRESULT fr;     /* FatFs return code */
+//	sprintf(filename, "1:%s", pid);
+//	printf("Read file:%s\r\n",filename);
+//	fr = f_open(&fil, filename, FA_READ | FA_OPEN_EXISTING); 
+//	if(fr)	{
+//		printf("Open fail :%d\r\n",(int)fr);
+//	}
+//	
+//	fr = f_read(&fil, buffer, sizeof buffer, &br);
+//	printf("Read sixe %d:\r\n",br);
+//	for(int i=0;i<br;i++){
+//		printf("%c",buffer[i]);
+//	}
+//	printf("\r\n");
+//	
+//	cjson = cJSON_Parse((char*)buffer);
+//	l_pid = cJSON_GetObjectItem(cjson, pid);
+//	pid_item = cJSON_GetArrayItem(l_pid, 0);
+//	*p = pid_item->valuedouble;
+//	pid_item = cJSON_GetArrayItem(l_pid, 1);
+//	*i = pid_item->valuedouble;
+//	pid_item = cJSON_GetArrayItem(l_pid, 2);
+//	*d = pid_item->valuedouble;
+//	f_close(&fil);
+//	cJSON_Delete(cjson);
+//}
 
 int8_t read_json_pid(const char *str, const char *pid, double *p, double *i, double *d)
 {
@@ -88,36 +88,36 @@ int8_t read_json_pid(const char *str, const char *pid, double *p, double *i, dou
 	return ret;
 }
 
-void write_pid_to_spiflash(const char *pid, double p, double i, double d)
-{
-	char buffer[80],filename[12];
-	sprintf(filename, "1:%s", pid);
-	sprintf(buffer,"{\"%s\":[%f,%f,%f]}", pid, p, i, d);
-	
-	UINT bw;        /* File read/write count */
-	FIL fil;        /* File object */
-	FRESULT fr;     /* FatFs return code */
-	printf("Create file: %s\r\n", filename);
-	fr = f_open(&fil, filename, FA_WRITE | FA_CREATE_ALWAYS); 
-	if(fr)	{
-		printf("Open fail :%d\r\n",(int)fr);
-	}
-	mf_scan_files("1:");
-	
-	fr = f_write(&fil, buffer, strlen(buffer), &bw);           /* Write it to the destination file */
-	if(!fr){
-		printf("Write string: %s\r\n",buffer);
-	} else {
-		printf("Write err: %d\r\n",fr);
-	}
-	
-	fr = f_close(&fil);
-	if(!fr){
-		printf("Close OK\r\n");
-	} else {
-		printf("Close err: %d\r\n",fr);
-	}
-}
+//void write_pid_to_spiflash(const char *pid, double p, double i, double d)
+//{
+//	char buffer[80],filename[12];
+//	sprintf(filename, "1:%s", pid);
+//	sprintf(buffer,"{\"%s\":[%f,%f,%f]}", pid, p, i, d);
+//	
+//	UINT bw;        /* File read/write count */
+//	FIL fil;        /* File object */
+//	FRESULT fr;     /* FatFs return code */
+//	printf("Create file: %s\r\n", filename);
+//	fr = f_open(&fil, filename, FA_WRITE | FA_CREATE_ALWAYS); 
+//	if(fr)	{
+//		printf("Open fail :%d\r\n",(int)fr);
+//	}
+//	mf_scan_files("1:");
+//	
+//	fr = f_write(&fil, buffer, strlen(buffer), &bw);           /* Write it to the destination file */
+//	if(!fr){
+//		printf("Write string: %s\r\n",buffer);
+//	} else {
+//		printf("Write err: %d\r\n",fr);
+//	}
+//	
+//	fr = f_close(&fil);
+//	if(!fr){
+//		printf("Close OK\r\n");
+//	} else {
+//		printf("Close err: %d\r\n",fr);
+//	}
+//}
 
 void pid_flash_root_init(uint32_t addr)
 {
@@ -141,8 +141,8 @@ void read_pid_from_flash(uint32_t addr, const char *pid, double *p, double *i, d
 	char readbuff[80] = {0};
 	STMFLASH_Read(addr,(uint32_t *)readbuff,sizeof(readbuff)/4);
 	if(read_json_pid(readbuff, pid, p, i, d) == 0){
-		//printf("read pid json ok\r\n");
+		printf("Read from flash OK!\r\n\t%s: P=%f, I=%f, D=%f\r\n", pid, *p, *i, *d);
 	}else{
-		printf("read pid json err\r\n");
+		printf("Read pid json err\r\n");
 	}
 }

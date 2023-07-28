@@ -13,7 +13,7 @@ u8g2_t u8g2;
     u8g2_SetFont(&u8g2,u8g2_font_12x6LED_tf);
     u8g2_DrawStr(&u8g2, 0, 12, "Hello");
     u8g2_SetFont(&u8g2, u8g2_font_wqy12_t_gb2312);
-    u8g2_DrawUTF8(&u8g2, 0, 40, "ÄãºÃ");
+    u8g2_DrawUTF8(&u8g2, 0, 40, "ä½ å¥½");
     u8g2_SendBuffer(&u8g2);
     
     <purpose>	Description
@@ -32,24 +32,24 @@ u8g2_t u8g2;
 void u8g2_init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD|RCC_AHB1Periph_GPIOE,ENABLE);//Ê¹ÄÜPORTE,PORTDÊ±ÖÓ
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD|RCC_AHB1Periph_GPIOE,ENABLE);//ä½¿èƒ½PORTE,PORTDæ—¶é’Ÿ
 
-	//GPIO³õÊ¼»¯ÉèÖÃ
+	//GPIOåˆå§‹åŒ–è®¾ç½®
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10|GPIO_Pin_8;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//ÆÕÍ¨Êä³öÄ£Ê½
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//ÍÆÍìÊä³ö
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//æ™®é€šè¾“å‡ºæ¨¡å¼
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//æ¨æŒ½è¾“å‡º
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//ÉÏÀ­
-	GPIO_Init(GPIOD, &GPIO_InitStructure);//³õÊ¼»¯
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//ä¸Šæ‹‰
+	GPIO_Init(GPIOD, &GPIO_InitStructure);//åˆå§‹åŒ–
 	GPIO_SetBits(GPIOD,GPIO_Pin_10);
 
-	//GPIO³õÊ¼»¯ÉèÖÃ
+	//GPIOåˆå§‹åŒ–è®¾ç½®
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8|GPIO_Pin_10|GPIO_Pin_12|GPIO_Pin_14;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//ÆÕÍ¨Êä³öÄ£Ê½
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//ÍÆÍìÊä³ö
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//æ™®é€šè¾“å‡ºæ¨¡å¼
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//æ¨æŒ½è¾“å‡º
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//ÉÏÀ­
-	GPIO_Init(GPIOE, &GPIO_InitStructure);//³õÊ¼»¯
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//ä¸Šæ‹‰
+	GPIO_Init(GPIOE, &GPIO_InitStructure);//åˆå§‹åŒ–
 }
 
 uint8_t u8x8_gpio_and_delay_template(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)

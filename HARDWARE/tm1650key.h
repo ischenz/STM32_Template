@@ -3,23 +3,23 @@
 
 #include "sys.h"
 								 
-//IO·½ÏòÉèÖÃ
-#define TM1650_SDA_IN()  {GPIOG->MODER&=~(3<<(10*2));GPIOG->MODER|=0<<10*2;}	//PG10ÊäÈëÄ£Ê½
-#define TM1650_SDA_OUT() {GPIOG->MODER&=~(3<<(10*2));GPIOG->MODER|=1<<10*2;} 	//PG10Êä³öÄ£Ê½
-//IO²Ù×÷º¯Êý	 
+//IOæ–¹å‘è®¾ç½®
+#define TM1650_SDA_IN()  {GPIOG->MODER&=~(3<<(10*2));GPIOG->MODER|=0<<10*2;}	//PG10è¾“å…¥æ¨¡å¼
+#define TM1650_SDA_OUT() {GPIOG->MODER&=~(3<<(10*2));GPIOG->MODER|=1<<10*2;} 	//PG10è¾“å‡ºæ¨¡å¼
+//IOæ“ä½œå‡½æ•°	 
 #define TM1650_IIC_SCL    PGout(9) //SCL
 #define TM1650_IIC_SDA    PGout(10) //SDA	 
-#define TM1650_READ_SDA   PGin(10)  //ÊäÈëSDA 
+#define TM1650_READ_SDA   PGin(10)  //è¾“å…¥SDA 
 
-//IICËùÓÐ²Ù×÷º¯Êý
-void TM1650_IIC_Init(void);               		//³õÊ¼»¯IICµÄIO¿Ú				 
-void TM1650_IIC_Start(void);					//·¢ËÍIIC¿ªÊ¼ÐÅºÅ
-void TM1650_IIC_Stop(void);	  					//·¢ËÍIICÍ£Ö¹ÐÅºÅ
-void TM1650_IIC_Send_Byte(uint8_t txd);			//IIC·¢ËÍÒ»¸ö×Ö½Ú
-uint8_t TM1650_IIC_Read_Byte(uint8_t ack);		//IIC¶ÁÈ¡Ò»¸ö×Ö½Ú
-uint8_t TM1650_IIC_Wait_Ack(void); 				//IICµÈ´ýACKÐÅºÅ
-void TM1650_IIC_Ack(void);						//IIC·¢ËÍACKÐÅºÅ
-void TM1650_IIC_NAck(void);						//IIC²»·¢ËÍACKÐÅºÅ
+//IICæ‰€æœ‰æ“ä½œå‡½æ•°
+void TM1650_IIC_Init(void);               		//åˆå§‹åŒ–IICçš„IOå£				 
+void TM1650_IIC_Start(void);					//å‘é€IICå¼€å§‹ä¿¡å·
+void TM1650_IIC_Stop(void);	  					//å‘é€IICåœæ­¢ä¿¡å·
+void TM1650_IIC_Send_Byte(uint8_t txd);			//IICå‘é€ä¸€ä¸ªå­—èŠ‚
+uint8_t TM1650_IIC_Read_Byte(uint8_t ack);		//IICè¯»å–ä¸€ä¸ªå­—èŠ‚
+uint8_t TM1650_IIC_Wait_Ack(void); 				//IICç­‰å¾…ACKä¿¡å·
+void TM1650_IIC_Ack(void);						//IICå‘é€ACKä¿¡å·
+void TM1650_IIC_NAck(void);						//IICä¸å‘é€ACKä¿¡å·
 void TM1650_EXTI_Init(void);
 void TM1650_key_Init(void);
 void TM1650_Init(void);

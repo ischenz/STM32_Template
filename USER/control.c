@@ -11,7 +11,7 @@
 #include "led.h"
 
 PID_TypeDef x_pid,y_pid;
-uint8_t RecCoorFlag = 0; //½ÓÊÕ³É¹¦±êÖ¾
+uint8_t RecCoorFlag = 0; //æ¥æ”¶æˆåŠŸæ ‡å¿—
 uint8_t mode = NO_SELECT_MODE;
 //static uint8_t SetFlag;
 
@@ -66,9 +66,7 @@ void set_target(int8_t target_x, int8_t target_y)
 
 void stop(void)
 {
-	TIM_Cmd(TIM10, DISABLE);//¹Ø±ÕPID¼ÆËã
-	servo_ctr(&Xserv, Xserv.MIDPWM);//0-2000
-	servo_ctr(&Yserv, Yserv.MIDPWM);
+
 }
 
 void start(void)
@@ -147,9 +145,9 @@ void analyse(uint8_t *lable, uint8_t *load)
 	}                
 }                    
 
-//void TIM1_UP_TIM10_IRQHandler(void)//5msÒ»´ÎpidÔËËã
+//void TIM1_UP_TIM10_IRQHandler(void)//5msä¸€æ¬¡pidè¿ç®—
 //{
-//	if(TIM_GetITStatus(TIM10,TIM_IT_Update)==SET) //Òç³öÖĞ¶Ï
+//	if(TIM_GetITStatus(TIM10,TIM_IT_Update)==SET) //æº¢å‡ºä¸­æ–­
 //	{
 //		if(RecCoorFlag){
 //			RecCoorFlag = 0;
@@ -158,6 +156,6 @@ void analyse(uint8_t *lable, uint8_t *load)
 //			//PID_Calculate(&y_pid, kfp_y.after_kalman - 120);
 //		}
 //	}
-//	TIM_ClearITPendingBit(TIM10,TIM_IT_Update); //Çå³ıÖĞ¶Ï±êÖ¾Î»	
+//	TIM_ClearITPendingBit(TIM10,TIM_IT_Update); //æ¸…é™¤ä¸­æ–­æ ‡å¿—ä½	
 //}
 

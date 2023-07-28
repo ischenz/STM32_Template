@@ -4,18 +4,18 @@
 
 uint8_t tm1650_key=99;
 
-//³õÊ¼»¯IIC
+//åˆå§‹åŒ–IIC
 void TM1650_IIC_Init(void)
 {			
 	GPIO_InitTypeDef  GPIO_InitStructure;
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);//Ê¹ÄÜGPIOBÊ±ÖÓ
-	//GPIOG9,G10³õÊ¼»¯ÉèÖÃ
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);//ä½¿èƒ½GPIOBæ—¶é’Ÿ
+	//GPIOG9,G10åˆå§‹åŒ–è®¾ç½®
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_10;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//ÆÕÍ¨Êä³öÄ£Ê½
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//ÍÆÍìÊä³ö
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//æ™®é€šè¾“å‡ºæ¨¡å¼
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//æ¨æŒ½è¾“å‡º
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//ÉÏÀ­
-	GPIO_Init(GPIOG, &GPIO_InitStructure);//³õÊ¼»¯
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//ä¸Šæ‹‰
+	GPIO_Init(GPIOG, &GPIO_InitStructure);//åˆå§‹åŒ–
 
 	TM1650_IIC_SCL=1;
 	TM1650_IIC_SDA=1;
@@ -27,55 +27,55 @@ void TM1650_EXTI_Init(void)
 	EXTI_InitTypeDef EXTI_InitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
 	
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//Ê¹ÄÜSYSCFGÊ±ÖÓ
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//ä½¿èƒ½SYSCFGæ—¶é’Ÿ
 	
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//ÆÕÍ¨ÊäÈëÄ£Ê½	 
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//æ™®é€šè¾“å…¥æ¨¡å¼	 
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;//ÉÏÀ­
-	GPIO_Init(GPIOG, &GPIO_InitStructure);//³õÊ¼»¯GPIOE2
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;//ä¸Šæ‹‰
+	GPIO_Init(GPIOG, &GPIO_InitStructure);//åˆå§‹åŒ–GPIOE2
 
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOG, EXTI_PinSource11);//PG11 Á¬½Óµ½ÖĞ¶ÏÏß11
+	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOG, EXTI_PinSource11);//PG11 è¿æ¥åˆ°ä¸­æ–­çº¿11
 
 	EXTI_InitStructure.EXTI_Line = EXTI_Line11;
-	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;//ÖĞ¶ÏÊÂ¼ş
-	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; //ÏÂ½µÑØ´¥·¢
-	EXTI_InitStructure.EXTI_LineCmd = ENABLE;//ÖĞ¶ÏÏßÊ¹ÄÜ
-	EXTI_Init(&EXTI_InitStructure);//ÅäÖÃ
+	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;//ä¸­æ–­äº‹ä»¶
+	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; //ä¸‹é™æ²¿è§¦å‘
+	EXTI_InitStructure.EXTI_LineCmd = ENABLE;//ä¸­æ–­çº¿ä½¿èƒ½
+	EXTI_Init(&EXTI_InitStructure);//é…ç½®
 
-	//Íâ²¿ÖĞ¶Ï
-	NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;//Íâ²¿ÖĞ¶Ï2
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;//ÇÀÕ¼ÓÅÏÈ¼¶3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;//×ÓÓÅÏÈ¼¶2
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;//Ê¹ÄÜÍâ²¿ÖĞ¶ÏÍ¨µÀ
-	NVIC_Init(&NVIC_InitStructure);//ÅäÖÃ
+	//å¤–éƒ¨ä¸­æ–­
+	NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;//å¤–éƒ¨ä¸­æ–­2
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;//æŠ¢å ä¼˜å…ˆçº§3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;//å­ä¼˜å…ˆçº§2
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;//ä½¿èƒ½å¤–éƒ¨ä¸­æ–­é€šé“
+	NVIC_Init(&NVIC_InitStructure);//é…ç½®
 }
 
 void TM1650_IIC_Start(void)
 {
-	TM1650_SDA_OUT();     //sdaÏßÊä³ö
+	TM1650_SDA_OUT();     //sdaçº¿è¾“å‡º
 	TM1650_IIC_SDA=1;	  	  
 	TM1650_IIC_SCL=1;
 	delay_us(4);
  	TM1650_IIC_SDA=0;//START:when CLK is high,DATA change form high to low 
 	delay_us(4);
-	TM1650_IIC_SCL=0;//Ç¯×¡I2C×ÜÏß£¬×¼±¸·¢ËÍ»ò½ÓÊÕÊı¾İ 
+	TM1650_IIC_SCL=0;//é’³ä½I2Cæ€»çº¿ï¼Œå‡†å¤‡å‘é€æˆ–æ¥æ”¶æ•°æ® 
 }
 
 void TM1650_IIC_Stop(void)
 {
-	TM1650_SDA_OUT();//sdaÏßÊä³ö
+	TM1650_SDA_OUT();//sdaçº¿è¾“å‡º
 	TM1650_IIC_SCL=0;
 	TM1650_IIC_SDA=0;//STOP:when CLK is high DATA change form low to high
  	delay_us(4);
 	TM1650_IIC_SCL=1; 
-	TM1650_IIC_SDA=1;//·¢ËÍI2C×ÜÏß½áÊøĞÅºÅ
+	TM1650_IIC_SDA=1;//å‘é€I2Cæ€»çº¿ç»“æŸä¿¡å·
 	delay_us(4);					   	
 }
 
 uint8_t TM1650_IIC_Wait_Ack(void)
 {
 	u8 ucErrTime=0;
-	TM1650_SDA_IN();      //SDAÉèÖÃÎªÊäÈë  
+	TM1650_SDA_IN();      //SDAè®¾ç½®ä¸ºè¾“å…¥  
 	TM1650_IIC_SDA=1;delay_us(1);	   
 	TM1650_IIC_SCL=1;delay_us(1);	 
 	while(TM1650_READ_SDA)
@@ -87,7 +87,7 @@ uint8_t TM1650_IIC_Wait_Ack(void)
 			return 1;
 		}
 	}
-	TM1650_IIC_SCL=0;//Ê±ÖÓÊä³ö0 	   
+	TM1650_IIC_SCL=0;//æ—¶é’Ÿè¾“å‡º0 	   
 	return 0;  
 }
 
@@ -117,7 +117,7 @@ void TM1650_IIC_Send_Byte(uint8_t txd)
 {
 	uint8_t t;   
 	TM1650_SDA_OUT(); 	    
-	TM1650_IIC_SCL=0;//À­µÍÊ±ÖÓ¿ªÊ¼Êı¾İ´«Êä
+	TM1650_IIC_SCL=0;//æ‹‰ä½æ—¶é’Ÿå¼€å§‹æ•°æ®ä¼ è¾“
 	for(t=0;t<8;t++)
 	{              
 		TM1650_IIC_SDA=(txd&0x80)>>7;
@@ -133,7 +133,7 @@ void TM1650_IIC_Send_Byte(uint8_t txd)
 uint8_t TM1650_IIC_Read_Byte(uint8_t ack)
 {
 	uint8_t i,receive=0;
-	TM1650_SDA_IN();//SDAÉèÖÃÎªÊäÈë
+	TM1650_SDA_IN();//SDAè®¾ç½®ä¸ºè¾“å…¥
 	for(i=0;i<8;i++ )
 	{
 		TM1650_IIC_SCL=0; 
@@ -144,9 +144,9 @@ uint8_t TM1650_IIC_Read_Byte(uint8_t ack)
 		delay_us(4); 
 	}					 
    if(!ack)
-       TM1650_IIC_NAck();//·¢ËÍnACK
+       TM1650_IIC_NAck();//å‘é€nACK
    else
-       TM1650_IIC_Ack(); //·¢ËÍACK   
+       TM1650_IIC_Ack(); //å‘é€ACK   
    return receive;
 }
 
@@ -154,7 +154,7 @@ uint8_t TM1650_Read_KEY(void)
 {
 	uint8_t temp;
 	TM1650_IIC_Start();
-	TM1650_IIC_Send_Byte(0x49);//·¢ËÍ¶Á°´¼üÖ¸Áî
+	TM1650_IIC_Send_Byte(0x49);//å‘é€è¯»æŒ‰é”®æŒ‡ä»¤
 	TM1650_IIC_Wait_Ack();
 	temp=TM1650_IIC_Read_Byte(0);
 	TM1650_IIC_Wait_Ack();
@@ -162,7 +162,7 @@ uint8_t TM1650_Read_KEY(void)
 	return temp;
 }
 
-/****·µ»Ø-1 ´íÎó****/
+/****è¿”å›-1 é”™è¯¯****/
 int8_t TM1650_Gte_KEY(void)
 {	
 	uint8_t key;
@@ -195,9 +195,9 @@ int8_t TM1650_Gte_KEY(void)
 void TM1650_Init(void)
 {
 	TM1650_IIC_Start();
-	TM1650_IIC_Send_Byte(0x48);//·¢ËÍ¹¤×÷Ä£Ê½ÅäÖÃÖ¸Áî
+	TM1650_IIC_Send_Byte(0x48);//å‘é€å·¥ä½œæ¨¡å¼é…ç½®æŒ‡ä»¤
 	TM1650_IIC_Wait_Ack();
-	TM1650_IIC_Send_Byte(0x19);//·¢ËÍ¼üÉ¨Ä£Ê½´úÂë0x19
+	TM1650_IIC_Send_Byte(0x19);//å‘é€é”®æ‰«æ¨¡å¼ä»£ç 0x19
 	TM1650_IIC_Wait_Ack();
 	TM1650_IIC_Stop();
 }

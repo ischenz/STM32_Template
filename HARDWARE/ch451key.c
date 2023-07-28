@@ -23,7 +23,7 @@ void Ch451Key_init(void)
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG,ENABLE);
 
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9|GPIO_Pin_10|GPIO_Pin_11; 
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;       //ÍÆÍìÊä³ö
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;       //æ¨æŒ½è¾“å‡º
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
@@ -35,33 +35,33 @@ void Ch451Key_init(void)
 
 	ch451_write(0x0403);
 
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//ÆÕÍ¨ÊäÈëÄ£Ê½	 
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//æ™®é€šè¾“å…¥æ¨¡å¼	 
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;//ÉÏÀ­
-	GPIO_Init(GPIOG, &GPIO_InitStructure);//³õÊ¼»¯GPIOE2
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//Ê¹ÄÜSYSCFGÊ±ÖÓ
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;//ä¸Šæ‹‰
+	GPIO_Init(GPIOG, &GPIO_InitStructure);//åˆå§‹åŒ–GPIOE2
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//ä½¿èƒ½SYSCFGæ—¶é’Ÿ
 
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOG, EXTI_PinSource12);//PG12 Á¬½Óµ½ÖĞ¶ÏÏß12
+	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOG, EXTI_PinSource12);//PG12 è¿æ¥åˆ°ä¸­æ–­çº¿12
 
 	EXTI_InitStructure.EXTI_Line = EXTI_Line12;
-	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;//ÖĞ¶ÏÊÂ¼ş
-	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; //ÏÂ½µÑØ´¥·¢
-	EXTI_InitStructure.EXTI_LineCmd = ENABLE;//ÖĞ¶ÏÏßÊ¹ÄÜ
-	EXTI_Init(&EXTI_InitStructure);//ÅäÖÃ
+	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;//ä¸­æ–­äº‹ä»¶
+	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; //ä¸‹é™æ²¿è§¦å‘
+	EXTI_InitStructure.EXTI_LineCmd = ENABLE;//ä¸­æ–­çº¿ä½¿èƒ½
+	EXTI_Init(&EXTI_InitStructure);//é…ç½®
 
-	//Íâ²¿ÖĞ¶Ï
-	NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;//Íâ²¿ÖĞ¶Ï2
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;//ÇÀÕ¼ÓÅÏÈ¼¶3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;//×ÓÓÅÏÈ¼¶2
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;//Ê¹ÄÜÍâ²¿ÖĞ¶ÏÍ¨µÀ
-	NVIC_Init(&NVIC_InitStructure);//ÅäÖÃ
+	//å¤–éƒ¨ä¸­æ–­
+	NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;//å¤–éƒ¨ä¸­æ–­2
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;//æŠ¢å ä¼˜å…ˆçº§3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;//å­ä¼˜å…ˆçº§2
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;//ä½¿èƒ½å¤–éƒ¨ä¸­æ–­é€šé“
+	NVIC_Init(&NVIC_InitStructure);//é…ç½®
 }
 
 void ch451_write(uint16_t command)
 {
   uint8_t i;
-  CH451KEY_LOAD_Clr();                                  //ÃüÁî¿ªÊ¼       
-  for(i=0;i<12;i++){                             //ËÍÈë12Î»Êı¾İ£¬µÍÎ»ÔÚÇ°
+  CH451KEY_LOAD_Clr();                                  //å‘½ä»¤å¼€å§‹       
+  for(i=0;i<12;i++){                             //é€å…¥12ä½æ•°æ®ï¼Œä½ä½åœ¨å‰
 		if(command&0x0001){
 			Ch451KEY_DIN_Set();
 		}
@@ -70,9 +70,9 @@ void ch451_write(uint16_t command)
     }				
 		Ch451KEY_DCLK_Clr();
 		command>>=1;
-		Ch451KEY_DCLK_Set();                             //ÉÏÉıÑØÓĞĞ§
+		Ch451KEY_DCLK_Set();                             //ä¸Šå‡æ²¿æœ‰æ•ˆ
   }
-  Ch451KEY_LOAD_Set();                                 //¼ÓÔØÊı¾İ
+  Ch451KEY_LOAD_Set();                                 //åŠ è½½æ•°æ®
 }
 
 
@@ -136,23 +136,23 @@ int8_t Get_float_value_from_keys(float *value)
 		OLED_ShowString(0,10,"End with a '*' key",8,1);
 		OLED_Refresh();
 	}
-	if(InputFlag == 0){//ÊäÈëÖĞ±êÖ¾
+	if(InputFlag == 0){//è¾“å…¥ä¸­æ ‡å¿—
 		if(Flag_KeyRead == 1){
 			Flag_KeyRead = 0;
 			if(Matrix_Key_Num >= 10){
-				if(Matrix_Key_Num == 13)//*  ÊäÈë½áÊø
+				if(Matrix_Key_Num == 13)//*  è¾“å…¥ç»“æŸ
 				{
 					InputFlag = 1;
-					if(intNum == 0){//Ã»ÓĞĞ¡Êı
+					if(intNum == 0){//æ²¡æœ‰å°æ•°
 						for(j = 0;j < i; j++){
 							input += pow(10, i-j-1)*num[j];
 						}
-					}else{//ÓĞĞ¡Êı
-						/* ÕûÊı²¿·Ö */
+					}else{//æœ‰å°æ•°
+						/* æ•´æ•°éƒ¨åˆ† */
 						for(j = 0;j < intNum; j++){
 							input += pow(10, intNum-j-1)*num[j];
 						}
-						/* Ğ¡Êı²¿·Ö */
+						/* å°æ•°éƒ¨åˆ† */
 						for(j = intNum+1; j < i; j++){
 							input += pow(10, -(j-intNum))*num[j];
 						}
@@ -211,7 +211,7 @@ int8_t GetValueFromKeyvalue(uint8_t keyvalue)
 
 void EXTI15_10_IRQHandler(void)
 {
-	if(PGin(12)==0)//¶ş¼¶ÅĞ¶¨
+	if(PGin(12)==0)//äºŒçº§åˆ¤å®š
 	{
 		uint8_t i,keyvalue = 0;
 		uint8_t command = 0x07;
@@ -237,13 +237,13 @@ void EXTI15_10_IRQHandler(void)
 		//Matrix_Key_Num = keyvalue;
 		Matrix_Key_Num = GetValueFromKeyvalue(keyvalue);
 		Flag_KeyRead = 1;
-		EXTI_ClearITPendingBit(EXTI_Line12);//Çå³ıÖĞ¶Ï±êÖ¾Î»
+		EXTI_ClearITPendingBit(EXTI_Line12);//æ¸…é™¤ä¸­æ–­æ ‡å¿—ä½
 	}
-	if(PGin(11)==0)//¶ş¼¶ÅĞ¶¨
+	if(PGin(11)==0)//äºŒçº§åˆ¤å®š
 	{
 		Matrix_Key_Num=TM1650_Gte_KEY();
 		Flag_KeyRead = 1;
-		EXTI_ClearITPendingBit(EXTI_Line11);//Çå³ıÖĞ¶Ï±êÖ¾Î»
+		EXTI_ClearITPendingBit(EXTI_Line11);//æ¸…é™¤ä¸­æ–­æ ‡å¿—ä½
 	}
 }
 

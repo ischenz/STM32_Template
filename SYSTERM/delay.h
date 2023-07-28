@@ -1,26 +1,26 @@
 /**
  ****************************************************************************************************
  * @file        delay.h
- * @author      ÕıµãÔ­×ÓÍÅ¶Ó(ALIENTEK)
+ * @author      æ­£ç‚¹åŸå­å›¢é˜Ÿ(ALIENTEK)
  * @version     V1.1
  * @date        2022-11-26
- * @brief       Ê¹ÓÃSysTickµÄÆÕÍ¨¼ÆÊıÄ£Ê½¶ÔÑÓ³Ù½øĞĞ¹ÜÀí(Ö§³Öucosii)
- *              Ìá¹©delay_init³õÊ¼»¯º¯Êı£¬ delay_usºÍdelay_msµÈÑÓÊ±º¯Êı
- * @license     Copyright (c) 2022-2032, ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾
+ * @brief       ä½¿ç”¨SysTickçš„æ™®é€šè®¡æ•°æ¨¡å¼å¯¹å»¶è¿Ÿè¿›è¡Œç®¡ç†(æ”¯æŒucosii)
+ *              æä¾›delay_initåˆå§‹åŒ–å‡½æ•°ï¼Œ delay_uså’Œdelay_msç­‰å»¶æ—¶å‡½æ•°
+ * @license     Copyright (c) 2022-2032, å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸
  ****************************************************************************************************
  * @attention
  *
- * ÊµÑéÆ½Ì¨:ÕıµãÔ­×Ó STM32F407¿ª·¢°å
- * ÔÚÏßÊÓÆµ:www.yuanzige.com
- * ¼¼ÊõÂÛÌ³:www.openedv.com
- * ¹«Ë¾ÍøÖ·:www.alientek.com
- * ¹ºÂòµØÖ·:openedv.taobao.com
+ * å®éªŒå¹³å°:æ­£ç‚¹åŸå­ STM32F407å¼€å‘æ¿
+ * åœ¨çº¿è§†é¢‘:www.yuanzige.com
+ * æŠ€æœ¯è®ºå›:www.openedv.com
+ * å…¬å¸ç½‘å€:www.alientek.com
+ * è´­ä¹°åœ°å€:openedv.taobao.com
  *
- * ĞŞ¸ÄËµÃ÷
+ * ä¿®æ”¹è¯´æ˜
  * V1.0 20211230
- * µÚÒ»´Î·¢²¼
+ * ç¬¬ä¸€æ¬¡å‘å¸ƒ
  * V1.1 20221126
- * ĞŞ¸ÄSysTick_HandlerÔÚÖ§³ÖOSÊ±±àÒë±¨´íµÄbug
+ * ä¿®æ”¹SysTick_Handleråœ¨æ”¯æŒOSæ—¶ç¼–è¯‘æŠ¥é”™çš„bug
  *
  ****************************************************************************************************
  */
@@ -31,9 +31,9 @@
 #include "sys.h"
 
 
-void delay_init(uint16_t sysclk);   /* ³õÊ¼»¯ÑÓ³Ùº¯Êı */
-void delay_ms(uint16_t nms);        /* ÑÓÊ±nms */
-void delay_us(uint32_t nus);        /* ÑÓÊ±nus */
+void delay_init(uint16_t sysclk);   /* åˆå§‹åŒ–å»¶è¿Ÿå‡½æ•° */
+void delay_ms(uint16_t nms);        /* å»¶æ—¶nms */
+void delay_us(uint32_t nus);        /* å»¶æ—¶nus */
 
 #endif
 

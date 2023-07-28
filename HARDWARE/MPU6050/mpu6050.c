@@ -7,15 +7,15 @@
 
 float Pitch, Roll, Yaw;
 
-// º¯Êý¹¦ÄÜ£º³õÊ¼»¯DMP²¢ÏÔÊ¾´íÎóÔ­Òò
+// å‡½æ•°åŠŸèƒ½ï¼šåˆå§‹åŒ–DMPå¹¶æ˜¾ç¤ºé”™è¯¯åŽŸå› 
 void DMP_Init(void)
 {
-	uint8_t i=1,dmp_error;//¼ÇÂ¼dmp´íÎóÔ­Òò
+	uint8_t i=1,dmp_error;//è®°å½•dmpé”™è¯¯åŽŸå› 
 	OLED_ShowString(0,10,"DMP ing...",8,1);
-	OLED_ShowString(0,20,"Attempts:",8,1); //³¢ÊÔ´ÎÊý
-	OLED_ShowString(0,30,"Error:",8,1);    //´íÎóÔ­Òò
+	OLED_ShowString(0,20,"Attempts:",8,1); //å°è¯•æ¬¡æ•°
+	OLED_ShowString(0,30,"Error:",8,1);    //é”™è¯¯åŽŸå› 
 	OLED_Refresh();
-	while(1)//DMP³õÊ¼»¯
+	while(1)//DMPåˆå§‹åŒ–
 	{
         dmp_error = mpu_dmp_init();
         if(dmp_error == 0){
@@ -29,32 +29,32 @@ void DMP_Init(void)
 	OLED_ShowString(60,10,"OK!",8,1);
 	OLED_Refresh();
 	delay_ms(1000);
-	OLED_Clear(); //ÇåÆÁ
+	OLED_Clear(); //æ¸…å±
 }
 
-//³õÊ¼»¯MPU6050
-//·µ»ØÖµ:0,³É¹¦
-//ÆäËû,´íÎó´úÂë
+//åˆå§‹åŒ–MPU6050
+//è¿”å›žå€¼:0,æˆåŠŸ
+//å…¶ä»–,é”™è¯¯ä»£ç 
 uint8_t MPU_Init(void)
 { 
 	uint8_t res; 
-	//MPU_IIC_Init();//³õÊ¼»¯IIC×ÜÏß
-	MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X80);	//¸´Î»MPU6050
+	//MPU_IIC_Init();//åˆå§‹åŒ–IICæ€»çº¿
+	MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X80);	//å¤ä½MPU6050
 	delay_ms(100);
-	MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X00);	//»½ÐÑMPU6050 
-	MPU_Set_Gyro_Fsr(3);					//ÍÓÂÝÒÇ´«¸ÐÆ÷,¡À2000dps
-	MPU_Set_Accel_Fsr(0);					//¼ÓËÙ¶È´«¸ÐÆ÷,¡À2g
-	MPU_Set_Rate(50);						//ÉèÖÃ²ÉÑùÂÊ50Hz
-	MPU_Write_Byte(MPU_INT_EN_REG,0X00);	//¹Ø±ÕËùÓÐÖÐ¶Ï
-	MPU_Write_Byte(MPU_USER_CTRL_REG,0X00);	//I2CÖ÷Ä£Ê½¹Ø±Õ
-	MPU_Write_Byte(MPU_FIFO_EN_REG,0X00);	//¹Ø±ÕFIFO
-	MPU_Write_Byte(MPU_INTBP_CFG_REG,0X80);	//INTÒý½ÅµÍµçÆ½ÓÐÐ§
+	MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X00);	//å”¤é†’MPU6050 
+	MPU_Set_Gyro_Fsr(3);					//é™€èžºä»ªä¼ æ„Ÿå™¨,Â±2000dps
+	MPU_Set_Accel_Fsr(0);					//åŠ é€Ÿåº¦ä¼ æ„Ÿå™¨,Â±2g
+	MPU_Set_Rate(50);						//è®¾ç½®é‡‡æ ·çŽ‡50Hz
+	MPU_Write_Byte(MPU_INT_EN_REG,0X00);	//å…³é—­æ‰€æœ‰ä¸­æ–­
+	MPU_Write_Byte(MPU_USER_CTRL_REG,0X00);	//I2Cä¸»æ¨¡å¼å…³é—­
+	MPU_Write_Byte(MPU_FIFO_EN_REG,0X00);	//å…³é—­FIFO
+	MPU_Write_Byte(MPU_INTBP_CFG_REG,0X80);	//INTå¼•è„šä½Žç”µå¹³æœ‰æ•ˆ
 	res=MPU_Read_Byte(MPU_DEVICE_ID_REG); 
-	if(res==MPU_ADDR)//Æ÷¼þIDÕýÈ·
+	if(res==MPU_ADDR)//å™¨ä»¶IDæ­£ç¡®
 	{
-		MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X01);	//ÉèÖÃCLKSEL,PLL XÖáÎª²Î¿¼
-		MPU_Write_Byte(MPU_PWR_MGMT2_REG,0X00);	//¼ÓËÙ¶ÈÓëÍÓÂÝÒÇ¶¼¹¤×÷
-		MPU_Set_Rate(50);						//ÉèÖÃ²ÉÑùÂÊÎª50Hz
+		MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X01);	//è®¾ç½®CLKSEL,PLL Xè½´ä¸ºå‚è€ƒ
+		MPU_Write_Byte(MPU_PWR_MGMT2_REG,0X00);	//åŠ é€Ÿåº¦ä¸Žé™€èžºä»ªéƒ½å·¥ä½œ
+		MPU_Set_Rate(50);						//è®¾ç½®é‡‡æ ·çŽ‡ä¸º50Hz
  	}
 	else 
 	{
@@ -67,26 +67,26 @@ uint8_t MPU_Init(void)
 	OLED_Refresh();	
 	return 0;
 }
-//ÉèÖÃMPU6050ÍÓÂÝÒÇ´«¸ÐÆ÷ÂúÁ¿³Ì·¶Î§
-//fsr:0,¡À250dps;1,¡À500dps;2,¡À1000dps;3,¡À2000dps
-//·µ»ØÖµ:0,ÉèÖÃ³É¹¦
-//    ÆäËû,ÉèÖÃÊ§°Ü 
+//è®¾ç½®MPU6050é™€èžºä»ªä¼ æ„Ÿå™¨æ»¡é‡ç¨‹èŒƒå›´
+//fsr:0,Â±250dps;1,Â±500dps;2,Â±1000dps;3,Â±2000dps
+//è¿”å›žå€¼:0,è®¾ç½®æˆåŠŸ
+//    å…¶ä»–,è®¾ç½®å¤±è´¥ 
 uint8_t MPU_Set_Gyro_Fsr(uint8_t fsr)
 {
-	return MPU_Write_Byte(MPU_GYRO_CFG_REG,fsr<<3);//ÉèÖÃÍÓÂÝÒÇÂúÁ¿³Ì·¶Î§  
+	return MPU_Write_Byte(MPU_GYRO_CFG_REG,fsr<<3);//è®¾ç½®é™€èžºä»ªæ»¡é‡ç¨‹èŒƒå›´  
 }
-//ÉèÖÃMPU6050¼ÓËÙ¶È´«¸ÐÆ÷ÂúÁ¿³Ì·¶Î§
-//fsr:0,¡À2g;1,¡À4g;2,¡À8g;3,¡À16g
-//·µ»ØÖµ:0,ÉèÖÃ³É¹¦
-//    ÆäËû,ÉèÖÃÊ§°Ü 
+//è®¾ç½®MPU6050åŠ é€Ÿåº¦ä¼ æ„Ÿå™¨æ»¡é‡ç¨‹èŒƒå›´
+//fsr:0,Â±2g;1,Â±4g;2,Â±8g;3,Â±16g
+//è¿”å›žå€¼:0,è®¾ç½®æˆåŠŸ
+//    å…¶ä»–,è®¾ç½®å¤±è´¥ 
 uint8_t MPU_Set_Accel_Fsr(uint8_t fsr)
 {
-	return MPU_Write_Byte(MPU_ACCEL_CFG_REG,fsr<<3);//ÉèÖÃ¼ÓËÙ¶È´«¸ÐÆ÷ÂúÁ¿³Ì·¶Î§  
+	return MPU_Write_Byte(MPU_ACCEL_CFG_REG,fsr<<3);//è®¾ç½®åŠ é€Ÿåº¦ä¼ æ„Ÿå™¨æ»¡é‡ç¨‹èŒƒå›´  
 }
-//ÉèÖÃMPU6050µÄÊý×ÖµÍÍ¨ÂË²¨Æ÷
-//lpf:Êý×ÖµÍÍ¨ÂË²¨ÆµÂÊ(Hz)
-//·µ»ØÖµ:0,ÉèÖÃ³É¹¦
-//    ÆäËû,ÉèÖÃÊ§°Ü 
+//è®¾ç½®MPU6050çš„æ•°å­—ä½Žé€šæ»¤æ³¢å™¨
+//lpf:æ•°å­—ä½Žé€šæ»¤æ³¢é¢‘çŽ‡(Hz)
+//è¿”å›žå€¼:0,è®¾ç½®æˆåŠŸ
+//    å…¶ä»–,è®¾ç½®å¤±è´¥ 
 uint8_t MPU_Set_LPF(uint16_t lpf)
 {
 	uint8_t data=0;
@@ -96,24 +96,24 @@ uint8_t MPU_Set_LPF(uint16_t lpf)
 	else if(lpf>=20)data=4;
 	else if(lpf>=10)data=5;
 	else data=6; 
-	return MPU_Write_Byte(MPU_CFG_REG,data);//ÉèÖÃÊý×ÖµÍÍ¨ÂË²¨Æ÷  
+	return MPU_Write_Byte(MPU_CFG_REG,data);//è®¾ç½®æ•°å­—ä½Žé€šæ»¤æ³¢å™¨  
 }
-//ÉèÖÃMPU6050µÄ²ÉÑùÂÊ(¼Ù¶¨Fs=1KHz)
+//è®¾ç½®MPU6050çš„é‡‡æ ·çŽ‡(å‡å®šFs=1KHz)
 //rate:4~1000(Hz)
-//·µ»ØÖµ:0,ÉèÖÃ³É¹¦
-//    ÆäËû,ÉèÖÃÊ§°Ü 
+//è¿”å›žå€¼:0,è®¾ç½®æˆåŠŸ
+//    å…¶ä»–,è®¾ç½®å¤±è´¥ 
 uint8_t MPU_Set_Rate(uint16_t rate)
 {
 	uint8_t data;
 	if(rate>1000)rate=1000;
 	if(rate<4)rate=4;
 	data=1000/rate-1;
-	data=MPU_Write_Byte(MPU_SAMPLE_RATE_REG,data);	//ÉèÖÃÊý×ÖµÍÍ¨ÂË²¨Æ÷
- 	return MPU_Set_LPF(rate/2);	//×Ô¶¯ÉèÖÃLPFÎª²ÉÑùÂÊµÄÒ»°ë
+	data=MPU_Write_Byte(MPU_SAMPLE_RATE_REG,data);	//è®¾ç½®æ•°å­—ä½Žé€šæ»¤æ³¢å™¨
+ 	return MPU_Set_LPF(rate/2);	//è‡ªåŠ¨è®¾ç½®LPFä¸ºé‡‡æ ·çŽ‡çš„ä¸€åŠ
 }
 
-//µÃµ½ÎÂ¶ÈÖµ
-//·µ»ØÖµ:ÎÂ¶ÈÖµ(À©´óÁË100±¶)
+//å¾—åˆ°æ¸©åº¦å€¼
+//è¿”å›žå€¼:æ¸©åº¦å€¼(æ‰©å¤§äº†100å€)
 short MPU_Get_Temperature(void)
 {
     uint8_t buf[2]; 
@@ -124,10 +124,10 @@ short MPU_Get_Temperature(void)
     temp=36.53+((double)raw)/340;  
     return temp*100;;
 }
-//µÃµ½ÍÓÂÝÒÇÖµ(Ô­Ê¼Öµ)
-//gx,gy,gz:ÍÓÂÝÒÇx,y,zÖáµÄÔ­Ê¼¶ÁÊý(´ø·ûºÅ)
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,´íÎó´úÂë
+//å¾—åˆ°é™€èžºä»ªå€¼(åŽŸå§‹å€¼)
+//gx,gy,gz:é™€èžºä»ªx,y,zè½´çš„åŽŸå§‹è¯»æ•°(å¸¦ç¬¦å·)
+//è¿”å›žå€¼:0,æˆåŠŸ
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 uint8_t MPU_Get_Gyroscope(short *gx,short *gy,short *gz)
 {
     uint8_t buf[6],res;  
@@ -140,10 +140,10 @@ uint8_t MPU_Get_Gyroscope(short *gx,short *gy,short *gz)
 	} 	
     return res;;
 }
-//µÃµ½¼ÓËÙ¶ÈÖµ(Ô­Ê¼Öµ)
-//gx,gy,gz:ÍÓÂÝÒÇx,y,zÖáµÄÔ­Ê¼¶ÁÊý(´ø·ûºÅ)
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,´íÎó´úÂë
+//å¾—åˆ°åŠ é€Ÿåº¦å€¼(åŽŸå§‹å€¼)
+//gx,gy,gz:é™€èžºä»ªx,y,zè½´çš„åŽŸå§‹è¯»æ•°(å¸¦ç¬¦å·)
+//è¿”å›žå€¼:0,æˆåŠŸ
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 uint8_t MPU_Get_Accelerometer(short *ax,short *ay,short *az)
 {
     uint8_t buf[6],res;  
@@ -158,29 +158,29 @@ uint8_t MPU_Get_Accelerometer(short *ax,short *ay,short *az)
 }
 
 #ifdef __MPUIIC_
-//IICÁ¬ÐøÐ´
-//addr:Æ÷¼þµØÖ· 
-//reg:¼Ä´æÆ÷µØÖ·
-//len:Ð´Èë³¤¶È
-//buf:Êý¾ÝÇø
-//·µ»ØÖµ:0,Õý³£
-//    ÆäËû,´íÎó´úÂë
+//IICè¿žç»­å†™
+//addr:å™¨ä»¶åœ°å€ 
+//reg:å¯„å­˜å™¨åœ°å€
+//len:å†™å…¥é•¿åº¦
+//buf:æ•°æ®åŒº
+//è¿”å›žå€¼:0,æ­£å¸¸
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 uint8_t MPU_Write_Len(uint8_t addr,uint8_t reg,uint8_t len,uint8_t *buf)
 {
 	uint8_t i; 
     MPU_IIC_Start(); 
-	MPU_IIC_Send_Byte((addr<<1)|0);//·¢ËÍÆ÷¼þµØÖ·+Ð´ÃüÁî	
-	if(MPU_IIC_Wait_Ack())	//µÈ´ýÓ¦´ð
+	MPU_IIC_Send_Byte((addr<<1)|0);//å‘é€å™¨ä»¶åœ°å€+å†™å‘½ä»¤	
+	if(MPU_IIC_Wait_Ack())	//ç­‰å¾…åº”ç­”
 	{
 		MPU_IIC_Stop();		 
 		return 1;		
 	}
-    MPU_IIC_Send_Byte(reg);	//Ð´¼Ä´æÆ÷µØÖ·
-    MPU_IIC_Wait_Ack();		//µÈ´ýÓ¦´ð
+    MPU_IIC_Send_Byte(reg);	//å†™å¯„å­˜å™¨åœ°å€
+    MPU_IIC_Wait_Ack();		//ç­‰å¾…åº”ç­”
 	for(i=0;i<len;i++)
 	{
-		MPU_IIC_Send_Byte(buf[i]);	//·¢ËÍÊý¾Ý
-		if(MPU_IIC_Wait_Ack())		//µÈ´ýACK
+		MPU_IIC_Send_Byte(buf[i]);	//å‘é€æ•°æ®
+		if(MPU_IIC_Wait_Ack())		//ç­‰å¾…ACK
 		{
 			MPU_IIC_Stop();	 
 			return 1;		 
@@ -189,55 +189,55 @@ uint8_t MPU_Write_Len(uint8_t addr,uint8_t reg,uint8_t len,uint8_t *buf)
     MPU_IIC_Stop();	 
 	return 0;	
 } 
-//IICÁ¬Ðø¶Á
-//addr:Æ÷¼þµØÖ·
-//reg:Òª¶ÁÈ¡µÄ¼Ä´æÆ÷µØÖ·
-//len:Òª¶ÁÈ¡µÄ³¤¶È
-//buf:¶ÁÈ¡µ½µÄÊý¾Ý´æ´¢Çø
-//·µ»ØÖµ:0,Õý³£
-//    ÆäËû,´íÎó´úÂë
+//IICè¿žç»­è¯»
+//addr:å™¨ä»¶åœ°å€
+//reg:è¦è¯»å–çš„å¯„å­˜å™¨åœ°å€
+//len:è¦è¯»å–çš„é•¿åº¦
+//buf:è¯»å–åˆ°çš„æ•°æ®å­˜å‚¨åŒº
+//è¿”å›žå€¼:0,æ­£å¸¸
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 uint8_t MPU_Read_Len(uint8_t addr,uint8_t reg,uint8_t len,uint8_t *buf)
 { 
  	MPU_IIC_Start(); 
-	MPU_IIC_Send_Byte((addr<<1)|0);//·¢ËÍÆ÷¼þµØÖ·+Ð´ÃüÁî	
-	if(MPU_IIC_Wait_Ack())	//µÈ´ýÓ¦´ð
+	MPU_IIC_Send_Byte((addr<<1)|0);//å‘é€å™¨ä»¶åœ°å€+å†™å‘½ä»¤	
+	if(MPU_IIC_Wait_Ack())	//ç­‰å¾…åº”ç­”
 	{
 		MPU_IIC_Stop();		 
 		return 1;		
 	}
-    MPU_IIC_Send_Byte(reg);	//Ð´¼Ä´æÆ÷µØÖ·
-    MPU_IIC_Wait_Ack();		//µÈ´ýÓ¦´ð
+    MPU_IIC_Send_Byte(reg);	//å†™å¯„å­˜å™¨åœ°å€
+    MPU_IIC_Wait_Ack();		//ç­‰å¾…åº”ç­”
     MPU_IIC_Start();
-	MPU_IIC_Send_Byte((addr<<1)|1);//·¢ËÍÆ÷¼þµØÖ·+¶ÁÃüÁî	
-    MPU_IIC_Wait_Ack();		//µÈ´ýÓ¦´ð 
+	MPU_IIC_Send_Byte((addr<<1)|1);//å‘é€å™¨ä»¶åœ°å€+è¯»å‘½ä»¤	
+    MPU_IIC_Wait_Ack();		//ç­‰å¾…åº”ç­” 
 	while(len)
 	{
-		if(len==1)*buf=MPU_IIC_Read_Byte(0);//¶ÁÊý¾Ý,·¢ËÍnACK 
-		else *buf=MPU_IIC_Read_Byte(1);		//¶ÁÊý¾Ý,·¢ËÍACK  
+		if(len==1)*buf=MPU_IIC_Read_Byte(0);//è¯»æ•°æ®,å‘é€nACK 
+		else *buf=MPU_IIC_Read_Byte(1);		//è¯»æ•°æ®,å‘é€ACK  
 		len--;
 		buf++; 
 	}    
-    MPU_IIC_Stop();	//²úÉúÒ»¸öÍ£Ö¹Ìõ¼þ 
+    MPU_IIC_Stop();	//äº§ç”Ÿä¸€ä¸ªåœæ­¢æ¡ä»¶ 
 	return 0;	
 }
-//IICÐ´Ò»¸ö×Ö½Ú 
-//reg:¼Ä´æÆ÷µØÖ·
-//data:Êý¾Ý
-//·µ»ØÖµ:0,Õý³£
-//    ÆäËû,´íÎó´úÂë
+//IICå†™ä¸€ä¸ªå­—èŠ‚ 
+//reg:å¯„å­˜å™¨åœ°å€
+//data:æ•°æ®
+//è¿”å›žå€¼:0,æ­£å¸¸
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 uint8_t MPU_Write_Byte(uint8_t reg,uint8_t data) 				 
 { 
     MPU_IIC_Start(); 
-	MPU_IIC_Send_Byte((MPU_ADDR<<1)|0);//·¢ËÍÆ÷¼þµØÖ·+Ð´ÃüÁî	
-	if(MPU_IIC_Wait_Ack())	//µÈ´ýÓ¦´ð
+	MPU_IIC_Send_Byte((MPU_ADDR<<1)|0);//å‘é€å™¨ä»¶åœ°å€+å†™å‘½ä»¤	
+	if(MPU_IIC_Wait_Ack())	//ç­‰å¾…åº”ç­”
 	{
 		MPU_IIC_Stop();		 
 		return 1;		
 	}
-    MPU_IIC_Send_Byte(reg);	//Ð´¼Ä´æÆ÷µØÖ·
-    MPU_IIC_Wait_Ack();		//µÈ´ýÓ¦´ð 
-	MPU_IIC_Send_Byte(data);//·¢ËÍÊý¾Ý
-	if(MPU_IIC_Wait_Ack())	//µÈ´ýACK
+    MPU_IIC_Send_Byte(reg);	//å†™å¯„å­˜å™¨åœ°å€
+    MPU_IIC_Wait_Ack();		//ç­‰å¾…åº”ç­” 
+	MPU_IIC_Send_Byte(data);//å‘é€æ•°æ®
+	if(MPU_IIC_Wait_Ack())	//ç­‰å¾…ACK
 	{
 		MPU_IIC_Stop();	 
 		return 1;		 
@@ -245,65 +245,65 @@ uint8_t MPU_Write_Byte(uint8_t reg,uint8_t data)
     MPU_IIC_Stop();	 
 	return 0;
 }
-//IIC¶ÁÒ»¸ö×Ö½Ú 
-//reg:¼Ä´æÆ÷µØÖ· 
-//·µ»ØÖµ:¶Áµ½µÄÊý¾Ý
+//IICè¯»ä¸€ä¸ªå­—èŠ‚ 
+//reg:å¯„å­˜å™¨åœ°å€ 
+//è¿”å›žå€¼:è¯»åˆ°çš„æ•°æ®
 uint8_t MPU_Read_Byte(uint8_t reg)
 {
 	uint8_t res;
     MPU_IIC_Start(); 
-	MPU_IIC_Send_Byte((MPU_ADDR<<1)|0);//·¢ËÍÆ÷¼þµØÖ·+Ð´ÃüÁî	
-	MPU_IIC_Wait_Ack();		//µÈ´ýÓ¦´ð 
-    MPU_IIC_Send_Byte(reg);	//Ð´¼Ä´æÆ÷µØÖ·
-    MPU_IIC_Wait_Ack();		//µÈ´ýÓ¦´ð
+	MPU_IIC_Send_Byte((MPU_ADDR<<1)|0);//å‘é€å™¨ä»¶åœ°å€+å†™å‘½ä»¤	
+	MPU_IIC_Wait_Ack();		//ç­‰å¾…åº”ç­” 
+    MPU_IIC_Send_Byte(reg);	//å†™å¯„å­˜å™¨åœ°å€
+    MPU_IIC_Wait_Ack();		//ç­‰å¾…åº”ç­”
     MPU_IIC_Start();
-	MPU_IIC_Send_Byte((MPU_ADDR<<1)|1);//·¢ËÍÆ÷¼þµØÖ·+¶ÁÃüÁî	
-    MPU_IIC_Wait_Ack();		//µÈ´ýÓ¦´ð 
-	res=MPU_IIC_Read_Byte(0);//¶ÁÈ¡Êý¾Ý,·¢ËÍnACK 
-    MPU_IIC_Stop();			//²úÉúÒ»¸öÍ£Ö¹Ìõ¼þ 
+	MPU_IIC_Send_Byte((MPU_ADDR<<1)|1);//å‘é€å™¨ä»¶åœ°å€+è¯»å‘½ä»¤	
+    MPU_IIC_Wait_Ack();		//ç­‰å¾…åº”ç­” 
+	res=MPU_IIC_Read_Byte(0);//è¯»å–æ•°æ®,å‘é€nACK 
+    MPU_IIC_Stop();			//äº§ç”Ÿä¸€ä¸ªåœæ­¢æ¡ä»¶ 
 	return res;		
 }
 #else
-//IICÁ¬ÐøÐ´
-//addr:Æ÷¼þµØÖ· 
-//reg:¼Ä´æÆ÷µØÖ·
-//len:Ð´Èë³¤¶È
-//buf:Êý¾ÝÇø
-//·µ»ØÖµ:0,Õý³£
-//    ÆäËû,´íÎó´úÂë
+//IICè¿žç»­å†™
+//addr:å™¨ä»¶åœ°å€ 
+//reg:å¯„å­˜å™¨åœ°å€
+//len:å†™å…¥é•¿åº¦
+//buf:æ•°æ®åŒº
+//è¿”å›žå€¼:0,æ­£å¸¸
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 uint8_t MPU_Write_Len(uint8_t addr,uint8_t reg,uint8_t len,uint8_t *buf)
 {
 	uint8_t ret; 	
     ret = sw_i2c_mem_write(&i2c_interface, addr<<1, reg, buf, len);
     return ret; 
 } 
-//IICÁ¬Ðø¶Á
-//addr:Æ÷¼þµØÖ·
-//reg:Òª¶ÁÈ¡µÄ¼Ä´æÆ÷µØÖ·
-//len:Òª¶ÁÈ¡µÄ³¤¶È
-//buf:¶ÁÈ¡µ½µÄÊý¾Ý´æ´¢Çø
-//·µ»ØÖµ:0,Õý³£
-//    ÆäËû,´íÎó´úÂë
+//IICè¿žç»­è¯»
+//addr:å™¨ä»¶åœ°å€
+//reg:è¦è¯»å–çš„å¯„å­˜å™¨åœ°å€
+//len:è¦è¯»å–çš„é•¿åº¦
+//buf:è¯»å–åˆ°çš„æ•°æ®å­˜å‚¨åŒº
+//è¿”å›žå€¼:0,æ­£å¸¸
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 uint8_t MPU_Read_Len(uint8_t addr,uint8_t reg,uint8_t len,uint8_t *buf)
 { 
     uint8_t ret; 
  	ret = sw_i2c_mem_read(&i2c_interface, addr<<1, reg, buf, len);
 	return ret;	
 }
-//IICÐ´Ò»¸ö×Ö½Ú 
-//reg:¼Ä´æÆ÷µØÖ·
-//data:Êý¾Ý
-//·µ»ØÖµ:0,Õý³£
-//    ÆäËû,´íÎó´úÂë
+//IICå†™ä¸€ä¸ªå­—èŠ‚ 
+//reg:å¯„å­˜å™¨åœ°å€
+//data:æ•°æ®
+//è¿”å›žå€¼:0,æ­£å¸¸
+//å…¶ä»–,é”™è¯¯ä»£ç 
 uint8_t MPU_Write_Byte(uint8_t reg,uint8_t data) 				 
 { 
     int ret;
     sw_i2c_mem_write(&i2c_interface, MPU_ADDR<<1, reg, &data, 1);
 	return ret;
 }
-//IIC¶ÁÒ»¸ö×Ö½Ú 
-//reg:¼Ä´æÆ÷µØÖ· 
-//·µ»ØÖµ:¶Áµ½µÄÊý¾Ý
+//IICè¯»ä¸€ä¸ªå­—èŠ‚ 
+//reg:å¯„å­˜å™¨åœ°å€ 
+//è¿”å›žå€¼:è¯»åˆ°çš„æ•°æ®
 uint8_t MPU_Read_Byte(uint8_t reg)
 {
 	uint8_t res;

@@ -20,7 +20,7 @@ static uint8_t recv_buf[PROT_FRAME_LEN_RECV];
 void pid_tool_send_param(PID_TypeDef *pid ,uint8_t ch)
 {
     float pid_temp[3] = {pid->ProportionConstant, pid->IntegralConstant, pid->DerivativeConstant};	
-    set_computer_value(SEND_P_I_D_CMD, ch, pid_temp, 3);     // ¸øÍ¨µÀ 1 ·¢ËÍ P I D Öµ
+    set_computer_value(SEND_P_I_D_CMD, ch, pid_temp, 3);     // ç»™é€šé“ 1 å‘é€ P I D å€¼
 
     pid_temp[0] = pid->ProportionConstant;
     pid_temp[1] = pid->IntegralConstant;
@@ -28,10 +28,10 @@ void pid_tool_send_param(PID_TypeDef *pid ,uint8_t ch)
 }
 
 /**
-  * @brief ¼ÆËãĞ£ÑéºÍ
-  * @param ptr£ºĞèÒª¼ÆËãµÄÊı¾İ
-  * @param len£ºĞèÒª¼ÆËãµÄ³¤¶È
-  * @retval Ğ£ÑéºÍ
+  * @brief è®¡ç®—æ ¡éªŒå’Œ
+  * @param ptrï¼šéœ€è¦è®¡ç®—çš„æ•°æ®
+  * @param lenï¼šéœ€è¦è®¡ç®—çš„é•¿åº¦
+  * @retval æ ¡éªŒå’Œ
   */
 uint8_t check_sum(uint8_t init, uint8_t *ptr, uint8_t len )
 {
@@ -47,10 +47,10 @@ uint8_t check_sum(uint8_t init, uint8_t *ptr, uint8_t len )
 }
 
 /**
- * @brief   µÃµ½Ö¡ÀàĞÍ£¨Ö¡ÃüÁî£©
- * @param   *frame:  Êı¾İÖ¡
- * @param   head_oft: Ö¡Í·µÄÆ«ÒÆÎ»ÖÃ
- * @return  Ö¡³¤¶È.
+ * @brief   å¾—åˆ°å¸§ç±»å‹ï¼ˆå¸§å‘½ä»¤ï¼‰
+ * @param   *frame:  æ•°æ®å¸§
+ * @param   head_oft: å¸§å¤´çš„åç§»ä½ç½®
+ * @return  å¸§é•¿åº¦.
  */
 static uint8_t get_frame_type(uint8_t *frame, uint16_t head_oft)
 {
@@ -58,25 +58,25 @@ static uint8_t get_frame_type(uint8_t *frame, uint16_t head_oft)
 }
 
 /**
- * @brief   µÃµ½Ö¡³¤¶È
- * @param   *buf:  Êı¾İ»º³åÇø.
- * @param   head_oft: Ö¡Í·µÄÆ«ÒÆÎ»ÖÃ
- * @return  Ö¡³¤¶È.
+ * @brief   å¾—åˆ°å¸§é•¿åº¦
+ * @param   *buf:  æ•°æ®ç¼“å†²åŒº.
+ * @param   head_oft: å¸§å¤´çš„åç§»ä½ç½®
+ * @return  å¸§é•¿åº¦.
  */
 static uint16_t get_frame_len(uint8_t *frame, uint16_t head_oft)
 {
     return ((frame[(head_oft + LEN_INDEX_VAL + 0) % PROT_FRAME_LEN_RECV] <<  0) |
             (frame[(head_oft + LEN_INDEX_VAL + 1) % PROT_FRAME_LEN_RECV] <<  8) |
             (frame[(head_oft + LEN_INDEX_VAL + 2) % PROT_FRAME_LEN_RECV] << 16) |
-            (frame[(head_oft + LEN_INDEX_VAL + 3) % PROT_FRAME_LEN_RECV] << 24));    // ºÏ³ÉÖ¡³¤¶È
+            (frame[(head_oft + LEN_INDEX_VAL + 3) % PROT_FRAME_LEN_RECV] << 24));    // åˆæˆå¸§é•¿åº¦
 }
 
 /**
- * @brief   »ñÈ¡ crc-16 Ğ£ÑéÖµ
- * @param   *frame:  Êı¾İ»º³åÇø.
- * @param   head_oft: Ö¡Í·µÄÆ«ÒÆÎ»ÖÃ
- * @param   head_oft: Ö¡³¤
- * @return  Ö¡³¤¶È.
+ * @brief   è·å– crc-16 æ ¡éªŒå€¼
+ * @param   *frame:  æ•°æ®ç¼“å†²åŒº.
+ * @param   head_oft: å¸§å¤´çš„åç§»ä½ç½®
+ * @param   head_oft: å¸§é•¿
+ * @return  å¸§é•¿åº¦.
  */
 static uint8_t get_frame_checksum(uint8_t *frame, uint16_t head_oft, uint16_t frame_len)
 {
@@ -84,12 +84,12 @@ static uint8_t get_frame_checksum(uint8_t *frame, uint16_t head_oft, uint16_t fr
 }
 
 /**
- * @brief   ²éÕÒÖ¡Í·
- * @param   *buf:  Êı¾İ»º³åÇø.
- * @param   ring_buf_len: »º³åÇø´óĞ¡
- * @param   start: ÆğÊ¼Î»ÖÃ
- * @param   len: ĞèÒª²éÕÒµÄ³¤¶È
- * @return  -1£ºÃ»ÓĞÕÒµ½Ö¡Í·£¬ÆäËûÖµ£ºÖ¡Í·µÄÎ»ÖÃ.
+ * @brief   æŸ¥æ‰¾å¸§å¤´
+ * @param   *buf:  æ•°æ®ç¼“å†²åŒº.
+ * @param   ring_buf_len: ç¼“å†²åŒºå¤§å°
+ * @param   start: èµ·å§‹ä½ç½®
+ * @param   len: éœ€è¦æŸ¥æ‰¾çš„é•¿åº¦
+ * @return  -1ï¼šæ²¡æœ‰æ‰¾åˆ°å¸§å¤´ï¼Œå…¶ä»–å€¼ï¼šå¸§å¤´çš„ä½ç½®.
  */
 static int32_t recvbuf_find_header(uint8_t *buf, uint16_t ring_buf_len, uint16_t start, uint16_t len)
 {
@@ -109,12 +109,12 @@ static int32_t recvbuf_find_header(uint8_t *buf, uint16_t ring_buf_len, uint16_t
 }
 
 /**
- * @brief   ¼ÆËãÎª½âÎöµÄÊı¾İ³¤¶È
- * @param   *buf:  Êı¾İ»º³åÇø.
- * @param   ring_buf_len: »º³åÇø´óĞ¡
- * @param   start: ÆğÊ¼Î»ÖÃ
- * @param   end: ½áÊøÎ»ÖÃ
- * @return  Îª½âÎöµÄÊı¾İ³¤¶È
+ * @brief   è®¡ç®—ä¸ºè§£æçš„æ•°æ®é•¿åº¦
+ * @param   *buf:  æ•°æ®ç¼“å†²åŒº.
+ * @param   ring_buf_len: ç¼“å†²åŒºå¤§å°
+ * @param   start: èµ·å§‹ä½ç½®
+ * @param   end: ç»“æŸä½ç½®
+ * @return  ä¸ºè§£æçš„æ•°æ®é•¿åº¦
  */
 static int32_t recvbuf_get_len_to_parse(uint16_t frame_len, uint16_t ring_buf_len,uint16_t start, uint16_t end)
 {
@@ -132,34 +132,34 @@ static int32_t recvbuf_get_len_to_parse(uint16_t frame_len, uint16_t ring_buf_le
 }
 
 /**
- * @brief   ½ÓÊÕÊı¾İĞ´Èë»º³åÇø
- * @param   *buf:  Êı¾İ»º³åÇø.
- * @param   ring_buf_len: »º³åÇø´óĞ¡
- * @param   w_oft: Ğ´Æ«ÒÆ
- * @param   *data: ĞèÒªĞ´ÈëµÄÊı¾İ
- * @param   *data_len: ĞèÒªĞ´ÈëÊı¾İµÄ³¤¶È
+ * @brief   æ¥æ”¶æ•°æ®å†™å…¥ç¼“å†²åŒº
+ * @param   *buf:  æ•°æ®ç¼“å†²åŒº.
+ * @param   ring_buf_len: ç¼“å†²åŒºå¤§å°
+ * @param   w_oft: å†™åç§»
+ * @param   *data: éœ€è¦å†™å…¥çš„æ•°æ®
+ * @param   *data_len: éœ€è¦å†™å…¥æ•°æ®çš„é•¿åº¦
  * @return  void.
  */
 static void recvbuf_put_data(uint8_t *buf, uint16_t ring_buf_len, uint16_t w_oft,
         uint8_t *data, uint16_t data_len)
 {
-    if ((w_oft + data_len) > ring_buf_len)               // ³¬¹ı»º³åÇøÎ²
+    if ((w_oft + data_len) > ring_buf_len)               // è¶…è¿‡ç¼“å†²åŒºå°¾
     {
-        uint16_t data_len_part = ring_buf_len - w_oft;     // »º³åÇøÊ£Óà³¤¶È
+        uint16_t data_len_part = ring_buf_len - w_oft;     // ç¼“å†²åŒºå‰©ä½™é•¿åº¦
 
-        /* Êı¾İ·ÖÁ½¶ÎĞ´Èë»º³åÇø*/
-        memcpy(buf + w_oft, data, data_len_part);                         // Ğ´Èë»º³åÇøÎ²
-        memcpy(buf, data + data_len_part, data_len - data_len_part);      // Ğ´Èë»º³åÇøÍ·
+        /* æ•°æ®åˆ†ä¸¤æ®µå†™å…¥ç¼“å†²åŒº*/
+        memcpy(buf + w_oft, data, data_len_part);                         // å†™å…¥ç¼“å†²åŒºå°¾
+        memcpy(buf, data + data_len_part, data_len - data_len_part);      // å†™å…¥ç¼“å†²åŒºå¤´
     }
     else
-        memcpy(buf + w_oft, data, data_len);    // Êı¾İĞ´Èë»º³åÇø
+        memcpy(buf + w_oft, data, data_len);    // æ•°æ®å†™å…¥ç¼“å†²åŒº
 }
 
 /**
- * @brief   ²éÑ¯Ö¡ÀàĞÍ£¨ÃüÁî£©
- * @param   *data:  Ö¡Êı¾İ
- * @param   data_len: Ö¡Êı¾İµÄ´óĞ¡
- * @return  Ö¡ÀàĞÍ£¨ÃüÁî£©.
+ * @brief   æŸ¥è¯¢å¸§ç±»å‹ï¼ˆå‘½ä»¤ï¼‰
+ * @param   *data:  å¸§æ•°æ®
+ * @param   data_len: å¸§æ•°æ®çš„å¤§å°
+ * @return  å¸§ç±»å‹ï¼ˆå‘½ä»¤ï¼‰.
  */
 static uint8_t protocol_frame_parse(uint8_t *data, uint16_t *data_len)
 {
@@ -168,36 +168,36 @@ static uint8_t protocol_frame_parse(uint8_t *data, uint16_t *data_len)
     int16_t header_oft = -1;
     uint8_t checksum = 0;
     
-    need_to_parse_len = recvbuf_get_len_to_parse(parser.frame_len, PROT_FRAME_LEN_RECV, parser.r_oft, parser.w_oft);    // µÃµ½Îª½âÎöµÄÊı¾İ³¤¶È
-    if (need_to_parse_len < 9)     // ¿Ï¶¨»¹²»ÄÜÍ¬Ê±ÕÒµ½Ö¡Í·ºÍÖ¡³¤¶È
+    need_to_parse_len = recvbuf_get_len_to_parse(parser.frame_len, PROT_FRAME_LEN_RECV, parser.r_oft, parser.w_oft);    // å¾—åˆ°ä¸ºè§£æçš„æ•°æ®é•¿åº¦
+    if (need_to_parse_len < 9)     // è‚¯å®šè¿˜ä¸èƒ½åŒæ—¶æ‰¾åˆ°å¸§å¤´å’Œå¸§é•¿åº¦
         return frame_type;
 
-    /* »¹Î´ÕÒµ½Ö¡Í·£¬ĞèÒª½øĞĞ²éÕÒ*/
+    /* è¿˜æœªæ‰¾åˆ°å¸§å¤´ï¼Œéœ€è¦è¿›è¡ŒæŸ¥æ‰¾*/
     if (0 == parser.found_frame_head)
     {
-        /* Í¬²½Í·ÎªËÄ×Ö½Ú£¬¿ÉÄÜ´æÔÚÎ´½âÎöµÄÊı¾İÖĞ×îºóÒ»¸ö×Ö½Ú¸ÕºÃÎªÍ¬²½Í·µÚÒ»¸ö×Ö½ÚµÄÇé¿ö£¬
-           Òò´Ë²éÕÒÍ¬²½Í·Ê±£¬×îºóÒ»¸ö×Ö½Ú½«²»½âÎö£¬Ò²²»»á±»¶ªÆú*/
+        /* åŒæ­¥å¤´ä¸ºå››å­—èŠ‚ï¼Œå¯èƒ½å­˜åœ¨æœªè§£æçš„æ•°æ®ä¸­æœ€åä¸€ä¸ªå­—èŠ‚åˆšå¥½ä¸ºåŒæ­¥å¤´ç¬¬ä¸€ä¸ªå­—èŠ‚çš„æƒ…å†µï¼Œ
+           å› æ­¤æŸ¥æ‰¾åŒæ­¥å¤´æ—¶ï¼Œæœ€åä¸€ä¸ªå­—èŠ‚å°†ä¸è§£æï¼Œä¹Ÿä¸ä¼šè¢«ä¸¢å¼ƒ*/
         header_oft = recvbuf_find_header(parser.recv_ptr, PROT_FRAME_LEN_RECV, parser.r_oft, need_to_parse_len);
         if (0 <= header_oft)
         {
-            /* ÒÑÕÒµ½Ö¡Í·*/
+            /* å·²æ‰¾åˆ°å¸§å¤´*/
             parser.found_frame_head = 1;
             parser.r_oft = header_oft;
           
-            /* È·ÈÏÊÇ·ñ¿ÉÒÔ¼ÆËãÖ¡³¤*/
+            /* ç¡®è®¤æ˜¯å¦å¯ä»¥è®¡ç®—å¸§é•¿*/
             if (recvbuf_get_len_to_parse(parser.frame_len, PROT_FRAME_LEN_RECV,
                     parser.r_oft, parser.w_oft) < 9)
                 return frame_type;
         }
         else 
         {
-            /* Î´½âÎöµÄÊı¾İÖĞÒÀÈ»Î´ÕÒµ½Ö¡Í·£¬¶ªµô´Ë´Î½âÎö¹ıµÄËùÓĞÊı¾İ*/
+            /* æœªè§£æçš„æ•°æ®ä¸­ä¾ç„¶æœªæ‰¾åˆ°å¸§å¤´ï¼Œä¸¢æ‰æ­¤æ¬¡è§£æè¿‡çš„æ‰€æœ‰æ•°æ®*/
             parser.r_oft = ((parser.r_oft + need_to_parse_len - 3) % PROT_FRAME_LEN_RECV);
             return frame_type;
         }
     }
     
-    /* ¼ÆËãÖ¡³¤£¬²¢È·¶¨ÊÇ·ñ¿ÉÒÔ½øĞĞÊı¾İ½âÎö*/
+    /* è®¡ç®—å¸§é•¿ï¼Œå¹¶ç¡®å®šæ˜¯å¦å¯ä»¥è¿›è¡Œæ•°æ®è§£æ*/
     if (0 == parser.frame_len) 
     {
         parser.frame_len = get_frame_len(parser.recv_ptr, parser.r_oft);
@@ -205,10 +205,10 @@ static uint8_t protocol_frame_parse(uint8_t *data, uint16_t *data_len)
             return frame_type;
     }
 
-    /* Ö¡Í·Î»ÖÃÈ·ÈÏ£¬ÇÒÎ´½âÎöµÄÊı¾İ³¬¹ıÖ¡³¤£¬¿ÉÒÔ¼ÆËãĞ£ÑéºÍ*/
+    /* å¸§å¤´ä½ç½®ç¡®è®¤ï¼Œä¸”æœªè§£æçš„æ•°æ®è¶…è¿‡å¸§é•¿ï¼Œå¯ä»¥è®¡ç®—æ ¡éªŒå’Œ*/
     if ((parser.frame_len + parser.r_oft - PROT_FRAME_LEN_CHECKSUM) > PROT_FRAME_LEN_RECV)
     {
-        /* Êı¾İÖ¡±»·ÖÎªÁ½²¿·Ö£¬Ò»²¿·ÖÔÚ»º³åÇøÎ²£¬Ò»²¿·ÖÔÚ»º³åÇøÍ· */
+        /* æ•°æ®å¸§è¢«åˆ†ä¸ºä¸¤éƒ¨åˆ†ï¼Œä¸€éƒ¨åˆ†åœ¨ç¼“å†²åŒºå°¾ï¼Œä¸€éƒ¨åˆ†åœ¨ç¼“å†²åŒºå¤´ */
         checksum = check_sum(checksum, parser.recv_ptr + parser.r_oft, 
                 PROT_FRAME_LEN_RECV - parser.r_oft);
         checksum = check_sum(checksum, parser.recv_ptr, parser.frame_len -
@@ -216,34 +216,34 @@ static uint8_t protocol_frame_parse(uint8_t *data, uint16_t *data_len)
     }
     else 
     {
-        /* Êı¾İÖ¡¿ÉÒÔÒ»´ÎĞÔÈ¡Íê*/
+        /* æ•°æ®å¸§å¯ä»¥ä¸€æ¬¡æ€§å–å®Œ*/
         checksum = check_sum(checksum, parser.recv_ptr + parser.r_oft, parser.frame_len - PROT_FRAME_LEN_CHECKSUM);
     }
 
     if (checksum == get_frame_checksum(parser.recv_ptr, parser.r_oft, parser.frame_len))
     {
-        /* Ğ£Ñé³É¹¦£¬¿½±´ÕûÖ¡Êı¾İ */
+        /* æ ¡éªŒæˆåŠŸï¼Œæ‹·è´æ•´å¸§æ•°æ® */
         if ((parser.r_oft + parser.frame_len) > PROT_FRAME_LEN_RECV) 
         {
-            /* Êı¾İÖ¡±»·ÖÎªÁ½²¿·Ö£¬Ò»²¿·ÖÔÚ»º³åÇøÎ²£¬Ò»²¿·ÖÔÚ»º³åÇøÍ·*/
+            /* æ•°æ®å¸§è¢«åˆ†ä¸ºä¸¤éƒ¨åˆ†ï¼Œä¸€éƒ¨åˆ†åœ¨ç¼“å†²åŒºå°¾ï¼Œä¸€éƒ¨åˆ†åœ¨ç¼“å†²åŒºå¤´*/
             uint16_t data_len_part = PROT_FRAME_LEN_RECV - parser.r_oft;
             memcpy(data, parser.recv_ptr + parser.r_oft, data_len_part);
             memcpy(data + data_len_part, parser.recv_ptr, parser.frame_len - data_len_part);
         }
         else 
         {
-            /* Êı¾İÖ¡¿ÉÒÔÒ»´ÎĞÔÈ¡Íê*/
+            /* æ•°æ®å¸§å¯ä»¥ä¸€æ¬¡æ€§å–å®Œ*/
             memcpy(data, parser.recv_ptr + parser.r_oft, parser.frame_len);
         }
         *data_len = parser.frame_len;
         frame_type = get_frame_type(parser.recv_ptr, parser.r_oft);
 
-        /* ¶ªÆú»º³åÇøÖĞµÄÃüÁîÖ¡*/
+        /* ä¸¢å¼ƒç¼“å†²åŒºä¸­çš„å‘½ä»¤å¸§*/
         parser.r_oft = (parser.r_oft + parser.frame_len) % PROT_FRAME_LEN_RECV;
     }
     else
     {
-        /* Ğ£Ñé´íÎó£¬ËµÃ÷Ö®Ç°ÕÒµ½µÄÖ¡Í·Ö»ÊÇÅ¼È»³öÏÖµÄ·ÏÊı¾İ*/
+        /* æ ¡éªŒé”™è¯¯ï¼Œè¯´æ˜ä¹‹å‰æ‰¾åˆ°çš„å¸§å¤´åªæ˜¯å¶ç„¶å‡ºç°çš„åºŸæ•°æ®*/
         parser.r_oft = (parser.r_oft + 1) % PROT_FRAME_LEN_RECV;
     }
     parser.frame_len = 0;
@@ -253,42 +253,42 @@ static uint8_t protocol_frame_parse(uint8_t *data, uint16_t *data_len)
 }
 
 /**
- * @brief   ½ÓÊÕÊı¾İ´¦Àí
- * @param   *data:  Òª¼ÆËãµÄÊı¾İµÄÊı×é.
- * @param   data_len: Êı¾İµÄ´óĞ¡
+ * @brief   æ¥æ”¶æ•°æ®å¤„ç†
+ * @param   *data:  è¦è®¡ç®—çš„æ•°æ®çš„æ•°ç»„.
+ * @param   data_len: æ•°æ®çš„å¤§å°
  * @return  void.
  */
 void protocol_data_recv(uint8_t *data, uint16_t data_len)
 {
-    recvbuf_put_data(parser.recv_ptr, PROT_FRAME_LEN_RECV, parser.w_oft, data, data_len);    // ½ÓÊÕÊı¾İ
-    parser.w_oft = (parser.w_oft + data_len) % PROT_FRAME_LEN_RECV;   // ¼ÆËãĞ´Æ«ÒÆ
+    recvbuf_put_data(parser.recv_ptr, PROT_FRAME_LEN_RECV, parser.w_oft, data, data_len);    // æ¥æ”¶æ•°æ®
+    parser.w_oft = (parser.w_oft + data_len) % PROT_FRAME_LEN_RECV;   // è®¡ç®—å†™åç§»
 }
 
 /**
- * @brief   ³õÊ¼»¯½ÓÊÕĞ­Òé
+ * @brief   åˆå§‹åŒ–æ¥æ”¶åè®®
  * @param   void
- * @return  ³õÊ¼»¯½á¹û.
+ * @return  åˆå§‹åŒ–ç»“æœ.
  */
 int32_t protocol_init(void)
 {
     memset(&parser, 0, sizeof(struct prot_frame_parser_t));
     
-    /* ³õÊ¼»¯·ÖÅäÊı¾İ½ÓÊÕÓë½âÎö»º³åÇø*/
+    /* åˆå§‹åŒ–åˆ†é…æ•°æ®æ¥æ”¶ä¸è§£æç¼“å†²åŒº*/
     parser.recv_ptr = recv_buf;
   
     return 0;
 }
 
 /**
- * @brief   ½ÓÊÕµÄÊı¾İ´¦Àí
+ * @brief   æ¥æ”¶çš„æ•°æ®å¤„ç†
  * @param   void
- * @return  -1£ºÃ»ÓĞÕÒµ½Ò»¸öÕıÈ·µÄÃüÁî.
+ * @return  -1ï¼šæ²¡æœ‰æ‰¾åˆ°ä¸€ä¸ªæ­£ç¡®çš„å‘½ä»¤.
  */
 int8_t receiving_process(void)
 {
-  uint8_t frame_data[128];         // ÒªÄÜ·ÅÏÂ×î³¤µÄÖ¡
-  uint16_t frame_len = 0;          // Ö¡³¤¶È
-  uint8_t cmd_type = CMD_NONE;     // ÃüÁîÀàĞÍ
+  uint8_t frame_data[128];         // è¦èƒ½æ”¾ä¸‹æœ€é•¿çš„å¸§
+  uint16_t frame_len = 0;          // å¸§é•¿åº¦
+  uint8_t cmd_type = CMD_NONE;     // å‘½ä»¤ç±»å‹
   packet_head_t packet;
   
   while(1)
@@ -313,44 +313,44 @@ int8_t receiving_process(void)
         
         if (packet.ch == CURVES_CH1)
         {
-			//set_p_i_d(&Roll_PID, temp_p.f, temp_i.f, temp_d.f);    // ÉèÖÃ P I D
+			//set_p_i_d(&Roll_PID, temp_p.f, temp_i.f, temp_d.f);    // è®¾ç½® P I D
 			//set_p_i_d(&Pitch_PID, temp_p.f, temp_i.f, temp_d.f); 
         }
         else if (packet.ch == CURVES_CH2)
         {
-			//set_p_i_d(&Pitch_PID, temp_p.f, temp_i.f, temp_d.f);    // ÉèÖÃ P I D
+			//set_p_i_d(&Pitch_PID, temp_p.f, temp_i.f, temp_d.f);    // è®¾ç½® P I D
         }
         else if (packet.ch == CURVES_CH3)
         {
-          //set_p_i_d(&pid_curr, temp_p.f, temp_i.f, temp_d.f);    // ÉèÖÃ P I D
+          //set_p_i_d(&pid_curr, temp_p.f, temp_i.f, temp_d.f);    // è®¾ç½® P I D
         }
       }
       break;
 
       case SET_TARGET_CMD:
       {
-        //int target_temp = COMPOUND_32BIT(&frame_data[13]);    // µÃµ½Êı¾İ
+        //int target_temp = COMPOUND_32BIT(&frame_data[13]);    // å¾—åˆ°æ•°æ®
         packet.ch = frame_data[CHX_INDEX_VAL];
         
-        /* Ö»ÉèÖÃÎ»ÖÃµÄÄ¿±êÖµ£¬µçÁ÷µÄÄ¿±êÖÃÊÇÓÉËÙ¶ÈpidµÄÊä³ö¾ö¶¨µÄ */
+        /* åªè®¾ç½®ä½ç½®çš„ç›®æ ‡å€¼ï¼Œç”µæµçš„ç›®æ ‡ç½®æ˜¯ç”±é€Ÿåº¦pidçš„è¾“å‡ºå†³å®šçš„ */
         if (packet.ch == CURVES_CH1)    
         {
-          //set_pid_target(&Roll_PID, target_temp);    // ÉèÖÃÄ¿±êÖµ
+          //set_pid_target(&Roll_PID, target_temp);    // è®¾ç½®ç›®æ ‡å€¼
         }
         else if (packet.ch == CURVES_CH2)
         {
-          //set_pid_target(&Pitch_PID, target_temp);    // ÉèÖÃÄ¿±êÖµ
+          //set_pid_target(&Pitch_PID, target_temp);    // è®¾ç½®ç›®æ ‡å€¼
         }
 		else if (packet.ch == CURVES_CH3)
         {
-          //set_pid_target(&pid_curr, target_temp);    // ÉèÖÃÄ¿±êÖµ
+          //set_pid_target(&pid_curr, target_temp);    // è®¾ç½®ç›®æ ‡å€¼
         }
       }
       break;
       
       case START_CMD:
       {
-		//motor_start();              // Æô¶¯µç»ú
+		//motor_start();              // å¯åŠ¨ç”µæœº
       }
       break;
       
@@ -362,16 +362,16 @@ int8_t receiving_process(void)
       
       case RESET_CMD:
       {
-        NVIC_SystemReset();          // ¸´Î»ÏµÍ³
+        NVIC_SystemReset();          // å¤ä½ç³»ç»Ÿ
       }
       break;
       
       case SET_PERIOD_CMD:
       {
-        uint32_t temp = COMPOUND_32BIT(&frame_data[13]);     // ÖÜÆÚÊı
+        uint32_t temp = COMPOUND_32BIT(&frame_data[13]);     // å‘¨æœŸæ•°
         packet.ch = frame_data[CHX_INDEX_VAL];
         
-        SET_BASIC_TIM_PERIOD(temp);                             // ÉèÖÃ¶¨Ê±Æ÷ÖÜÆÚ1~1000ms
+        SET_BASIC_TIM_PERIOD(temp);                             // è®¾ç½®å®šæ—¶å™¨å‘¨æœŸ1~1000ms
       }
       break;
 
@@ -382,31 +382,31 @@ int8_t receiving_process(void)
 }
 
 /**
-  * @brief ÉèÖÃÉÏÎ»»úµÄÖµ
-  * @param cmd£ºÃüÁî
-  * @param ch: ÇúÏßÍ¨µÀ
-  * @param data£º²ÎÊıÖ¸Õë
-  * @param num£º²ÎÊı¸öÊı
-  * @retval ÎŞ
+  * @brief è®¾ç½®ä¸Šä½æœºçš„å€¼
+  * @param cmdï¼šå‘½ä»¤
+  * @param ch: æ›²çº¿é€šé“
+  * @param dataï¼šå‚æ•°æŒ‡é’ˆ
+  * @param numï¼šå‚æ•°ä¸ªæ•°
+  * @retval æ— 
   */
 void set_computer_value(uint8_t cmd, uint8_t ch, void *data, uint8_t num)
 {
 	static packet_head_t set_packet;
 
-	uint8_t sum = 0;    // Ğ£ÑéºÍ
-	num *= 4;           // Ò»¸ö²ÎÊı 4 ¸ö×Ö½Ú
+	uint8_t sum = 0;    // æ ¡éªŒå’Œ
+	num *= 4;           // ä¸€ä¸ªå‚æ•° 4 ä¸ªå­—èŠ‚
 
-	set_packet.head = FRAME_HEADER;     // °üÍ· 0x59485A53
-	set_packet.ch   = ch;              // ÉèÖÃÍ¨µÀ
-	set_packet.len  = 0x0B + num;      // °ü³¤
-	set_packet.cmd  = cmd;             // ÉèÖÃÃüÁî
+	set_packet.head = FRAME_HEADER;     // åŒ…å¤´ 0x59485A53
+	set_packet.ch   = ch;              // è®¾ç½®é€šé“
+	set_packet.len  = 0x0B + num;      // åŒ…é•¿
+	set_packet.cmd  = cmd;             // è®¾ç½®å‘½ä»¤
 
-	sum = check_sum(0, (uint8_t *)&set_packet, sizeof(set_packet));       // ¼ÆËã°üÍ·Ğ£ÑéºÍ
-	sum = check_sum(sum, (uint8_t *)data, num);                           // ¼ÆËã²ÎÊıĞ£ÑéºÍ
+	sum = check_sum(0, (uint8_t *)&set_packet, sizeof(set_packet));       // è®¡ç®—åŒ…å¤´æ ¡éªŒå’Œ
+	sum = check_sum(sum, (uint8_t *)data, num);                           // è®¡ç®—å‚æ•°æ ¡éªŒå’Œ
 
-	usart1_send((uint8_t *)&set_packet, sizeof(set_packet));    // ·¢ËÍÊı¾İÍ·
-	usart1_send((uint8_t *)data, num);                          // ·¢ËÍ²ÎÊı
-	usart1_send((uint8_t *)&sum, sizeof(sum));                  // ·¢ËÍĞ£ÑéºÍ
+	usart1_send((uint8_t *)&set_packet, sizeof(set_packet));    // å‘é€æ•°æ®å¤´
+	usart1_send((uint8_t *)data, num);                          // å‘é€å‚æ•°
+	usart1_send((uint8_t *)&sum, sizeof(sum));                  // å‘é€æ ¡éªŒå’Œ
 }
 
 void usart1_send(u8*data, u8 len)
@@ -420,33 +420,33 @@ void usart1_send(u8*data, u8 len)
 }
 
 //=======================================
-//´®¿Ú1ÖĞ¶Ï·şÎñ³ÌĞò
+//ä¸²å£1ä¸­æ–­æœåŠ¡ç¨‹åº
 //=======================================
-uint8_t Recv1[128]={0};//´®¿Ú½ÓÊÕ»º´æ
-u8 rx_cnt=0;//½ÓÊÕÊı¾İ¸öÊı¼ÆÊı±äÁ¿
+uint8_t Recv1[128]={0};//ä¸²å£æ¥æ”¶ç¼“å­˜
+u8 rx_cnt=0;//æ¥æ”¶æ•°æ®ä¸ªæ•°è®¡æ•°å˜é‡
 int sizecopy=128;
 
 void USART1_IRQHandler(void)                	
 {
-	uint8_t data;//½ÓÊÕÊı¾İÔİ´æ±äÁ¿
-	uint8_t bufcopy[128];//×î¶àÖ»È¡Ç°64¸öÊı¾İ
+	uint8_t data;//æ¥æ”¶æ•°æ®æš‚å­˜å˜é‡
+	uint8_t bufcopy[128];//æœ€å¤šåªå–å‰64ä¸ªæ•°æ®
 
-	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  //½ÓÊÕÖĞ¶Ï
+	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  //æ¥æ”¶ä¸­æ–­
 	{
 		data = USART_ReceiveData(USART1);   			
-		Recv1[rx_cnt++]=data;//½ÓÊÕµÄÊı¾İ´æÈë½ÓÊÕÊı×é 
+		Recv1[rx_cnt++]=data;//æ¥æ”¶çš„æ•°æ®å­˜å…¥æ¥æ”¶æ•°ç»„ 
 		USART_ClearITPendingBit(USART1,USART_IT_RXNE);
 	} 
 	
-	if(USART_GetITStatus(USART1, USART_IT_IDLE) != RESET)//¿ÕÏĞÖĞ¶Ï
+	if(USART_GetITStatus(USART1, USART_IT_IDLE) != RESET)//ç©ºé—²ä¸­æ–­
 	{
 		
-		data = USART1->SR;//´®¿Ú¿ÕÏĞÖĞ¶ÏµÄÖĞ¶Ï±êÖ¾Ö»ÄÜÍ¨¹ıÏÈ¶ÁSR¼Ä´æÆ÷£¬ÔÙ¶ÁDR¼Ä´æÆ÷Çå³ı£¡
+		data = USART1->SR;//ä¸²å£ç©ºé—²ä¸­æ–­çš„ä¸­æ–­æ ‡å¿—åªèƒ½é€šè¿‡å…ˆè¯»SRå¯„å­˜å™¨ï¼Œå†è¯»DRå¯„å­˜å™¨æ¸…é™¤ï¼
 		data = USART1->DR;
 		
-		//Çå¿Õ±¾µØ½ÓÊÕÊı×é
+		//æ¸…ç©ºæœ¬åœ°æ¥æ”¶æ•°ç»„
 		memset(bufcopy,0,sizecopy);
-		memcpy(bufcopy,Recv1,rx_cnt);//ÓĞ¼¸¸ö¸´ÖÆ¼¸¸ö
+		memcpy(bufcopy,Recv1,rx_cnt);//æœ‰å‡ ä¸ªå¤åˆ¶å‡ ä¸ª
 		protocol_data_recv(bufcopy, rx_cnt);
 		memset(Recv1,0,sizecopy);
 		rx_cnt=0;

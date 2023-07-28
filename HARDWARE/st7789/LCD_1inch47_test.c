@@ -30,7 +30,7 @@ void LCD_1in47_test()
 	Paint_DrawString_EN(30, 10, "123",        &Font24,  YELLOW, RED);  
 	Paint_DrawString_EN(30, 34, "ABC",        &Font24,  BLUE,   CYAN);
   Paint_DrawFloatNum (30, 58 ,987.654321,3, &Font12,  WHITE,  BLACK);
-	Paint_DrawString_CN(30,130, "Œ¢—©µÁ◊”",   &Font24CN,WHITE,  BLUE);
+	Paint_DrawString_CN(30,130, "ÂæÆÈõ™ÁîµÂ≠ê",   &Font24CN,WHITE,  BLUE);
   Paint_DrawImage(gImage_1,30,70,60,60);
   
 	Paint_DrawRectangle(185, 10, 285, 58, RED     ,DOT_PIXEL_2X2,DRAW_FILL_EMPTY);

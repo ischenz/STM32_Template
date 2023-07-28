@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 ¸ĞÎªÖÇÄÜ¿Æ¼¼(¼ÃÄÏ)
+ * Copyright (c) 2022 æ„Ÿä¸ºæ™ºèƒ½ç§‘æŠ€(æµå—)
  *
  * This software is licensed under terms that can be found in the LICENSE file
  * in the root directory of this software component.
@@ -17,25 +17,22 @@ uint8_t digital_data;
 
 void grayscale_init(void)
 {
-	/* ´æ·ÅÉ¨Ãèµ½µÄµØÖ· */
-	volatile uint8_t count;
-
 	sw_i2c_write_byte(&i2c_interface, 0x4C << 1, GW_GRAY_DIGITAL_MODE);
-	sw_i2c_read_byte(&i2c_interface, 0x4C << 1, &digital_data); // digital_data ÓĞ1~8ºÅÌ½Í·¿ª¹ØÊı¾İ
+	sw_i2c_read_byte(&i2c_interface, 0x4C << 1, &digital_data); // digital_data æœ‰1~8å·æ¢å¤´å¼€å…³æ•°æ®
 
-	/* ¶ÁÈ¡¿ª¹ØÁ¿Êı¾İ */
-	sw_i2c_read_byte(&i2c_interface, 0x4C << 1, &digital_data); // digital_data ÓĞ1~8ºÅÌ½Í·¿ª¹ØÊı¾İ
-	/* °Ñ×Ö½ÚÀïµÄ8¸ö¿ª¹ØÁ¿´æµ½°Ë¸ö±äÁ¿Àï£¬ÕâÀïÎªgray_sensor[0] ~ gray_sensor[7], 
-	 * Ò²¿ÉÒÔÊÇ±äÁ¿val1 ~ val8, ÒòÎªÊÇºê¶¨Òå */
+	/* è¯»å–å¼€å…³é‡æ•°æ® */
+	sw_i2c_read_byte(&i2c_interface, 0x4C << 1, &digital_data); // digital_data æœ‰1~8å·æ¢å¤´å¼€å…³æ•°æ®
+	/* æŠŠå­—èŠ‚é‡Œçš„8ä¸ªå¼€å…³é‡å­˜åˆ°å…«ä¸ªå˜é‡é‡Œï¼Œè¿™é‡Œä¸ºgray_sensor[0] ~ gray_sensor[7], 
+	 * ä¹Ÿå¯ä»¥æ˜¯å˜é‡val1 ~ val8, å› ä¸ºæ˜¯å®å®šä¹‰ */
 	SEP_ALL_BIT8(digital_data, 
-		gray_sensor[0], //Ì½Í·1
-		gray_sensor[1], //Ì½Í·2
-		gray_sensor[2], //Ì½Í·3
-		gray_sensor[3], //Ì½Í·4
-		gray_sensor[4], //Ì½Í·5
-		gray_sensor[5], //Ì½Í·6
-		gray_sensor[6], //Ì½Í·7
-		gray_sensor[7]  //Ì½Í·8
+		gray_sensor[0], //æ¢å¤´1
+		gray_sensor[1], //æ¢å¤´2
+		gray_sensor[2], //æ¢å¤´3
+		gray_sensor[3], //æ¢å¤´4
+		gray_sensor[4], //æ¢å¤´5
+		gray_sensor[5], //æ¢å¤´6
+		gray_sensor[6], //æ¢å¤´7
+		gray_sensor[7]  //æ¢å¤´8
 	);
 }
 

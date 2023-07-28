@@ -473,18 +473,18 @@ void Paint_DrawChar(UWORD Xpoint, UWORD Ypoint, const char Acsii_Char,
         for (Column = 0; Column < Font->Width; Column ++ ) {
 
             //To determine whether the font background color and screen background color is consistent
-            if (FONT_BACKGROUND == Color_Background) { //this process is to speed up the scan
-                if (*ptr & (0x80 >> (Column % 8)))
-                    Paint_SetPixel(Xpoint + Column, Ypoint + Page, Color_Foreground);
+//            if (FONT_BACKGROUND == Color_Background) { //this process is to speed up the scan
+//                if (*ptr & (0x80 >> (Column % 8)))
+//                    Paint_SetPixel(Xpoint + Column, Ypoint + Page, Color_Foreground);
                     // Paint_DrawPoint(Xpoint + Column, Ypoint + Page, Color_Foreground, DOT_PIXEL_DFT, DOT_STYLE_DFT);
-            } else {
+//            } else {                      /* xiangchen delete 2023/7/25 */
                 if (*ptr & (0x80 >> (Column % 8))) {
                     Paint_SetPixel(Xpoint + Column, Ypoint + Page, Color_Foreground);
                     // Paint_DrawPoint(Xpoint + Column, Ypoint + Page, Color_Foreground, DOT_PIXEL_DFT, DOT_STYLE_DFT);
                 } else {
                     Paint_SetPixel(Xpoint + Column, Ypoint + Page, Color_Background);
                     // Paint_DrawPoint(Xpoint + Column, Ypoint + Page, Color_Background, DOT_PIXEL_DFT, DOT_STYLE_DFT);
-                }
+//                }
             }
             //One pixel is 8 bits
             if (Column % 8 == 7)
@@ -651,6 +651,7 @@ void Paint_DrawNum(UWORD Xpoint, UWORD Ypoint, int32_t Nummber,
     int16_t Num_Bit = 0, Str_Bit = 0;
     uint8_t Str_Array[ARRAY_LEN] = {0}, Num_Array[ARRAY_LEN] = {0};
     uint8_t *pStr = Str_Array;
+    uint8_t minus_flag = 0;
 
     if (Xpoint > Paint.Width || Ypoint > Paint.Height) {
         Debug("Paint_DisNum Input exceeds the normal display range\r\n");
@@ -658,11 +659,20 @@ void Paint_DrawNum(UWORD Xpoint, UWORD Ypoint, int32_t Nummber,
     }
 
     //Converts a number to a string
+    if(Nummber < 0){
+       Nummber = -Nummber;
+        minus_flag = 1;
+    }
      do{
         Num_Array[Num_Bit] = Nummber % 10 + '0';
         Num_Bit++;
         Nummber /= 10;
     }while (Nummber);
+     
+    if(minus_flag){
+       Num_Array[Num_Bit] = '-';
+       Num_Bit++;         
+    }
 
     //The string is inverted
     while (Num_Bit > 0) {
@@ -697,7 +707,7 @@ void Paint_DrawFloatNum(UWORD Xpoint, UWORD Ypoint, double Nummber,  UBYTE Decim
       *(pStr+strlen(Str)-3)='\0';
     }
     //show
-    Paint_DrawString_EN(Xpoint, Ypoint, (const char*)pStr, Font, Color_Foreground, Color_Background);
+    Paint_DrawString_EN(Xpoint, Ypoint, (const char*)pStr, Font, Color_Background, Color_Foreground);
     free(pStr);
     pStr=NULL;
 }

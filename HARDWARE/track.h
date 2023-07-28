@@ -22,7 +22,7 @@
 typedef struct{
 	uint8_t cross_num;
 	int8_t offset;
-	int8_t cross_sensitivity; //Â·¿ÚÁéÃô¶È
+	int8_t cross_sensitivity; //è·¯å£çµæ•åº¦
 	uint8_t data;
 	int8_t status;
 	int8_t mode;

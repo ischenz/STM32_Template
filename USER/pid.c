@@ -6,13 +6,13 @@ PID_TypeDef l_pid, r_pid, veer_pid;
 extern float line_P;
 
 /**
- * @brief       PID³õÊ¼»¯
- * @param       Ä¿±êÖµ
- * @retval      ÎÞ
+ * @brief       PIDåˆå§‹åŒ–
+ * @param       ç›®æ ‡å€¼
+ * @retval      æ— 
  */
 void PID_param_init(PID_TypeDef *pid)
 {
-	pid->Target = 0;//Ä¿±êÖµ
+	pid->Target = 0;//ç›®æ ‡å€¼
 	pid->PID_out = 0;
     pid->Kp = 0;
     pid->Ki= 0;
@@ -20,7 +20,7 @@ void PID_param_init(PID_TypeDef *pid)
     pid->Err = 0.0f;
     pid->LastErr = 0.0f;
 	pid->PenultErr = 0.0f;
-    pid->Integral = 0.0f;//»ý·ÖÖµ
+    pid->Integral = 0.0f;//ç§¯åˆ†å€¼
 	
 	pid->KP_polarity = 1;
 	pid->KI_polarity = 1;
@@ -28,26 +28,26 @@ void PID_param_init(PID_TypeDef *pid)
 }
 
 /**
- * @brief       pid±Õ»·¿ØÖÆ¼ÆËã
- * @param       *PID£ºPID½á¹¹Ìå±äÁ¿µØÖ·
- * @param       CurrentValue£ºµ±Ç°²âÁ¿Öµ
- * @retval      ÆÚÍûÊä³öÖµ
+ * @brief       pidé—­çŽ¯æŽ§åˆ¶è®¡ç®—
+ * @param       *PIDï¼šPIDç»“æž„ä½“å˜é‡åœ°å€
+ * @param       CurrentValueï¼šå½“å‰æµ‹é‡å€¼
+ * @retval      æœŸæœ›è¾“å‡ºå€¼
  */
 float PID_Calculate(PID_TypeDef *PID,float CurrentValue)
 {
 	PID->Integral += PID->Err;
-	/*»ý·Ö·ÖÀë*/
+	/*ç§¯åˆ†åˆ†ç¦»*/
 //	if( (PID->Err > 36) || (PID->Err < -36) ){
 //		PID->Integral = 0;
 //		//PID->PID_out += PID->IntegralConstant * PID->Integral;
 //	}
 	
     PID->Err =  PID->Target - CurrentValue;
-    PID->PID_out = PID->Kp * PID->Err 										/*±ÈÀý*/
-				 + PID->Ki * PID->Integral  								/*»ý·Ö*/
-			     + PID->Kd * (PID->Err - PID->LastErr);						/*Î¢·Ö*/
+    PID->PID_out = PID->Kp * PID->Err 										/*æ¯”ä¾‹*/
+				 + PID->Ki * PID->Integral  								/*ç§¯åˆ†*/
+			     + PID->Kd * (PID->Err - PID->LastErr);						/*å¾®åˆ†*/
 	
-	/*»ý·ÖÏÞ·ù*/
+	/*ç§¯åˆ†é™å¹…*/
 	if(PID->Integral > 3000){
 		PID->Integral = 3000;
 	}
@@ -59,19 +59,19 @@ float PID_Calculate(PID_TypeDef *PID,float CurrentValue)
 }
 
 /**
- * @brief       pid±Õ»·¿ØÖÆ¼ÆËã£¨ÔöÁ¿Ê½£©
- * @param       *PID£ºPID½á¹¹Ìå±äÁ¿µØÖ·
- * @param       CurrentValue£ºµ±Ç°²âÁ¿Öµ
- * @retval      ÆÚÍûÊä³öÖµ
+ * @brief       pidé—­çŽ¯æŽ§åˆ¶è®¡ç®—ï¼ˆå¢žé‡å¼ï¼‰
+ * @param       *PIDï¼šPIDç»“æž„ä½“å˜é‡åœ°å€
+ * @param       CurrentValueï¼šå½“å‰æµ‹é‡å€¼
+ * @retval      æœŸæœ›è¾“å‡ºå€¼
  */
 float PID_Calculate_Inc(PID_TypeDef *PID,float CurrentValue)
 {
 	float increment_val;
     PID->Err =  PID->Target - CurrentValue;
 	
-    increment_val =  PID->Kp * (PID->Err - PID->LastErr) 						/*±ÈÀý*/
-				   + PID->Ki *  PID->Err  										/*»ý·Ö*/
-			       + PID->Kd * (PID->Err - 2*PID->LastErr + PID->PenultErr);	/*Î¢·Ö*/
+    increment_val =  PID->Kp * (PID->Err - PID->LastErr) 						/*æ¯”ä¾‹*/
+				   + PID->Ki *  PID->Err  										/*ç§¯åˆ†*/
+			       + PID->Kd * (PID->Err - 2*PID->LastErr + PID->PenultErr);	/*å¾®åˆ†*/
 
 	PID->PID_out += increment_val;
 	
@@ -103,9 +103,9 @@ void PID_TimerInit(void)
 	//TIM_Cmd(TIM10,ENABLE);
 }
 
-void TIM1_UP_TIM10_IRQHandler(void)//10msÒ»´ÎpidÔËËã
+void TIM1_UP_TIM10_IRQHandler(void)//10msä¸€æ¬¡pidè¿ç®—
 {
-	if(TIM_GetITStatus(TIM10,TIM_IT_Update)==SET) //Òç³öÖÐ¶Ï
+	if(TIM_GetITStatus(TIM10,TIM_IT_Update)==SET) //æº¢å‡ºä¸­æ–­
 	{	
 //		if(RecCoorFlag){
 //			RecCoorFlag = 0;
@@ -118,18 +118,18 @@ void TIM1_UP_TIM10_IRQHandler(void)//10msÒ»´ÎpidÔËËã
 			PWM_Load(&motor_r,r_pid.PID_out );
 //		}
 	}
-	TIM_ClearITPendingBit(TIM10,TIM_IT_Update); //Çå³ýÖÐ¶Ï±êÖ¾Î»	
+	TIM_ClearITPendingBit(TIM10,TIM_IT_Update); //æ¸…é™¤ä¸­æ–­æ ‡å¿—ä½	
 }
 
 /**
-  * @brief  »ñÈ¡Ä¿±êÖµ
-  * @param  ÎÞ
-  *	@note 	ÎÞ
-  * @retval Ä¿±êÖµ
+  * @brief  èŽ·å–ç›®æ ‡å€¼
+  * @param  æ— 
+  *	@note 	æ— 
+  * @retval ç›®æ ‡å€¼
   */
 float get_pid_target(PID_TypeDef *pid)
 {
-  return pid->Target;    // ÉèÖÃµ±Ç°µÄÄ¿±êÖµ
+  return pid->Target;    // è®¾ç½®å½“å‰çš„ç›®æ ‡å€¼
 }
 
 void set_pid_target(PID_TypeDef *pid, float target)
@@ -138,18 +138,18 @@ void set_pid_target(PID_TypeDef *pid, float target)
 }
 
 /**
-  * @brief  ÉèÖÃ±ÈÀý¡¢»ý·Ö¡¢Î¢·ÖÏµÊý
-  * @param  p£º±ÈÀýÏµÊý P
-  * @param  i£º»ý·ÖÏµÊý i
-  * @param  d£ºÎ¢·ÖÏµÊý d
-  *	@note 	ÎÞ
-  * @retval ÎÞ
+  * @brief  è®¾ç½®æ¯”ä¾‹ã€ç§¯åˆ†ã€å¾®åˆ†ç³»æ•°
+  * @param  pï¼šæ¯”ä¾‹ç³»æ•° P
+  * @param  iï¼šç§¯åˆ†ç³»æ•° i
+  * @param  dï¼šå¾®åˆ†ç³»æ•° d
+  *	@note 	æ— 
+  * @retval æ— 
   */
 void set_p_i_d(PID_TypeDef *pid, float p, float i, float d)
 {
-  	pid->Kp = p * (pid->KP_polarity);    // ÉèÖÃ±ÈÀýÏµÊý P
-	pid->Ki = i * (pid->KI_polarity);    // ÉèÖÃ»ý·ÖÏµÊý I
-	pid->Kd = d * (pid->KD_polarity);    // ÉèÖÃÎ¢·ÖÏµÊý D
+  	pid->Kp = p * (pid->KP_polarity);    // è®¾ç½®æ¯”ä¾‹ç³»æ•° P
+	pid->Ki = i * (pid->KI_polarity);    // è®¾ç½®ç§¯åˆ†ç³»æ•° I
+	pid->Kd = d * (pid->KD_polarity);    // è®¾ç½®å¾®åˆ†ç³»æ•° D
 }
 
 void set_pid_polarity(PID_TypeDef *pid, int8_t p_polarity, int8_t i_polarity, int8_t d_polarity)

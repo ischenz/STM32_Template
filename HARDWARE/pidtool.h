@@ -11,106 +11,106 @@
 extern "C" {
 #endif   
 
-/* Êı¾İ½ÓÊÕ»º³åÇø´óĞ¡ */
+/* æ•°æ®æ¥æ”¶ç¼“å†²åŒºå¤§å° */
 #define PROT_FRAME_LEN_RECV  128
 
-/* Ğ£ÑéÊı¾İµÄ³¤¶È */
+/* æ ¡éªŒæ•°æ®çš„é•¿åº¦ */
 #define PROT_FRAME_LEN_CHECKSUM    1
 
-/* Êı¾İÍ·½á¹¹Ìå */
+/* æ•°æ®å¤´ç»“æ„ä½“ */
 typedef __packed struct
 {
-  uint32_t head;    // °üÍ·
-  uint8_t ch;       // Í¨µÀ
-  uint32_t len;     // °ü³¤¶È
-  uint8_t cmd;      // ÃüÁî
-//  uint8_t sum;      // Ğ£ÑéºÍ
+  uint32_t head;    // åŒ…å¤´
+  uint8_t ch;       // é€šé“
+  uint32_t len;     // åŒ…é•¿åº¦
+  uint8_t cmd;      // å‘½ä»¤
+//  uint8_t sum;      // æ ¡éªŒå’Œ
   
 }packet_head_t;
 
-/* ÁªºÏÌå£¨·½±ãÊı¾İ×ª»»£© */
+/* è”åˆä½“ï¼ˆæ–¹ä¾¿æ•°æ®è½¬æ¢ï¼‰ */
 typedef union
 {
   float f;
   int i;
 }type_cast_t;
 
-#define FRAME_HEADER     0x59485A53    // Ö¡Í·
+#define FRAME_HEADER     0x59485A53    // å¸§å¤´
 
-/* Í¨µÀºê¶¨Òå */
+/* é€šé“å®å®šä¹‰ */
 #define CURVES_CH1      0x01
 #define CURVES_CH2      0x02
 #define CURVES_CH3      0x03
 #define CURVES_CH4      0x04
 #define CURVES_CH5      0x05
 
-/* Ö¸Áî(ÏÂÎ»»ú -> ÉÏÎ»»ú) */
-#define SEND_TARGET_CMD      0x01     // ·¢ËÍÉÏÎ»»úÍ¨µÀµÄÄ¿±êÖµ
-#define SEND_FACT_CMD        0x02     // ·¢ËÍÍ¨µÀÊµ¼ÊÖµ
-#define SEND_P_I_D_CMD       0x03     // ·¢ËÍ PID Öµ£¨Í¬²½ÉÏÎ»»úÏÔÊ¾µÄÖµ£©
-#define SEND_START_CMD       0x04     // ·¢ËÍÆô¶¯Ö¸Áî£¨Í¬²½ÉÏÎ»»ú°´Å¥×´Ì¬£©
-#define SEND_STOP_CMD        0x05     // ·¢ËÍÍ£Ö¹Ö¸Áî£¨Í¬²½ÉÏÎ»»ú°´Å¥×´Ì¬£©
-#define SEND_PERIOD_CMD      0x06     // ·¢ËÍÖÜÆÚ£¨Í¬²½ÉÏÎ»»úÏÔÊ¾µÄÖµ£©
+/* æŒ‡ä»¤(ä¸‹ä½æœº -> ä¸Šä½æœº) */
+#define SEND_TARGET_CMD      0x01     // å‘é€ä¸Šä½æœºé€šé“çš„ç›®æ ‡å€¼
+#define SEND_FACT_CMD        0x02     // å‘é€é€šé“å®é™…å€¼
+#define SEND_P_I_D_CMD       0x03     // å‘é€ PID å€¼ï¼ˆåŒæ­¥ä¸Šä½æœºæ˜¾ç¤ºçš„å€¼ï¼‰
+#define SEND_START_CMD       0x04     // å‘é€å¯åŠ¨æŒ‡ä»¤ï¼ˆåŒæ­¥ä¸Šä½æœºæŒ‰é’®çŠ¶æ€ï¼‰
+#define SEND_STOP_CMD        0x05     // å‘é€åœæ­¢æŒ‡ä»¤ï¼ˆåŒæ­¥ä¸Šä½æœºæŒ‰é’®çŠ¶æ€ï¼‰
+#define SEND_PERIOD_CMD      0x06     // å‘é€å‘¨æœŸï¼ˆåŒæ­¥ä¸Šä½æœºæ˜¾ç¤ºçš„å€¼ï¼‰
 
-/* Ö¸Áî(ÉÏÎ»»ú -> ÏÂÎ»»ú) */
-#define SET_P_I_D_CMD        0x10     // ÉèÖÃ PID Öµ
-#define SET_TARGET_CMD       0x11     // ÉèÖÃÄ¿±êÖµ
-#define START_CMD            0x12     // Æô¶¯Ö¸Áî
-#define STOP_CMD             0x13     // Í£Ö¹Ö¸Áî
-#define RESET_CMD            0x14     // ¸´Î»Ö¸Áî
-#define SET_PERIOD_CMD       0x15     // ÉèÖÃÖÜÆÚ
+/* æŒ‡ä»¤(ä¸Šä½æœº -> ä¸‹ä½æœº) */
+#define SET_P_I_D_CMD        0x10     // è®¾ç½® PID å€¼
+#define SET_TARGET_CMD       0x11     // è®¾ç½®ç›®æ ‡å€¼
+#define START_CMD            0x12     // å¯åŠ¨æŒ‡ä»¤
+#define STOP_CMD             0x13     // åœæ­¢æŒ‡ä»¤
+#define RESET_CMD            0x14     // å¤ä½æŒ‡ä»¤
+#define SET_PERIOD_CMD       0x15     // è®¾ç½®å‘¨æœŸ
 
-/* ¿ÕÖ¸Áî */
-#define CMD_NONE             0xFF     // ¿ÕÖ¸Áî
+/* ç©ºæŒ‡ä»¤ */
+#define CMD_NONE             0xFF     // ç©ºæŒ‡ä»¤
 
-/* Ë÷ÒıÖµºê¶¨Òå */
-#define HEAD_INDEX_VAL       0x3u     // °üÍ·Ë÷ÒıÖµ£¨4×Ö½Ú£©
-#define CHX_INDEX_VAL        0x4u     // Í¨µÀË÷ÒıÖµ£¨1×Ö½Ú£©
-#define LEN_INDEX_VAL        0x5u     // °ü³¤Ë÷ÒıÖµ£¨4×Ö½Ú£©
-#define CMD_INDEX_VAL        0x9u     // ÃüÁîË÷ÒıÖµ£¨1×Ö½Ú£©
+/* ç´¢å¼•å€¼å®å®šä¹‰ */
+#define HEAD_INDEX_VAL       0x3u     // åŒ…å¤´ç´¢å¼•å€¼ï¼ˆ4å­—èŠ‚ï¼‰
+#define CHX_INDEX_VAL        0x4u     // é€šé“ç´¢å¼•å€¼ï¼ˆ1å­—èŠ‚ï¼‰
+#define LEN_INDEX_VAL        0x5u     // åŒ…é•¿ç´¢å¼•å€¼ï¼ˆ4å­—èŠ‚ï¼‰
+#define CMD_INDEX_VAL        0x9u     // å‘½ä»¤ç´¢å¼•å€¼ï¼ˆ1å­—èŠ‚ï¼‰
 
 #define EXCHANGE_H_L_BIT(data)      ((((data) << 24) & 0xFF000000) |\
                                      (((data) <<  8) & 0x00FF0000) |\
                                      (((data) >>  8) & 0x0000FF00) |\
-                                     (((data) >> 24) & 0x000000FF))     // ½»»»¸ßµÍ×Ö½Ú
+                                     (((data) >> 24) & 0x000000FF))     // äº¤æ¢é«˜ä½å­—èŠ‚
 
 #define COMPOUND_32BIT(data)        (((*(data-0) << 24) & 0xFF000000) |\
                                      ((*(data-1) << 16) & 0x00FF0000) |\
                                      ((*(data-2) <<  8) & 0x0000FF00) |\
-                                     ((*(data-3) <<  0) & 0x000000FF))      // ºÏ³ÉÎªÒ»¸ö×Ö
+                                     ((*(data-3) <<  0) & 0x000000FF))      // åˆæˆä¸ºä¸€ä¸ªå­—
        
 
 
 
 /**
- * @brief   ½ÓÊÕÊı¾İ´¦Àí
- * @param   *data:  Òª¼ÆËãµÄÊı¾İµÄÊı×é.
- * @param   data_len: Êı¾İµÄ´óĞ¡
+ * @brief   æ¥æ”¶æ•°æ®å¤„ç†
+ * @param   *data:  è¦è®¡ç®—çš„æ•°æ®çš„æ•°ç»„.
+ * @param   data_len: æ•°æ®çš„å¤§å°
  * @return  void.
  */
 void protocol_data_recv(uint8_t *data, uint16_t data_len);
 
 /**
- * @brief   ³õÊ¼»¯½ÓÊÕĞ­Òé
+ * @brief   åˆå§‹åŒ–æ¥æ”¶åè®®
  * @param   void
- * @return  ³õÊ¼»¯½á¹û.
+ * @return  åˆå§‹åŒ–ç»“æœ.
  */
 int32_t protocol_init(void);
 
 /**
- * @brief   ½ÓÊÕµÄÊı¾İ´¦Àí
+ * @brief   æ¥æ”¶çš„æ•°æ®å¤„ç†
  * @param   void
- * @return  -1£ºÃ»ÓĞÕÒµ½Ò»¸öÕıÈ·µÄÃüÁî.
+ * @return  -1ï¼šæ²¡æœ‰æ‰¾åˆ°ä¸€ä¸ªæ­£ç¡®çš„å‘½ä»¤.
  */
 int8_t receiving_process(void);
 
 /**
-  * @brief ÉèÖÃÉÏÎ»»úµÄÖµ
-  * @param cmd£ºÃüÁî
-  * @param ch: ÇúÏßÍ¨µÀ
-  * @param data£º²ÎÊıÖ¸Õë
-  * @param num£º²ÎÊı¸öÊı
-  * @retval ÎŞ
+  * @brief è®¾ç½®ä¸Šä½æœºçš„å€¼
+  * @param cmdï¼šå‘½ä»¤
+  * @param ch: æ›²çº¿é€šé“
+  * @param dataï¼šå‚æ•°æŒ‡é’ˆ
+  * @param numï¼šå‚æ•°ä¸ªæ•°
+  * @retval æ— 
   */
 void set_computer_value(uint8_t cmd, uint8_t ch, void *data, uint8_t num);
 

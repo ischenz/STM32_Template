@@ -20,11 +20,13 @@
 #define I2C_READ  0x1
 #define I2C_WRITE 0x0
 
-#define SW_I2C1_PIN_SCL GPIO_Pin_8
-#define SW_I2C1_PIN_SDA GPIO_Pin_7
+#define SW_I2C1_SCL_PORT    GPIOC
+#define SW_I2C1_SDA_PORT    GPIOC
+#define SW_I2C1_PIN_SCL     GPIO_Pin_8
+#define SW_I2C1_PIN_SDA     GPIO_Pin_7
 
-#define SDA_IN()  {GPIOC->MODER&=~(3<<(7*2));GPIOC->MODER|=0<<7*2;}	//PC7输入模式
-#define SDA_OUT() {GPIOC->MODER&=~(3<<(7*2));GPIOC->MODER|=1<<7*2;} //PC7输出模式
+#define SDA_IN()  {SW_I2C1_SDA_PORT->MODER&=~(3<<(7*2));SW_I2C1_SDA_PORT->MODER|=0<<7*2;}	//PC7输入模式
+#define SDA_OUT() {SW_I2C1_SDA_PORT->MODER&=~(3<<(7*2));SW_I2C1_SDA_PORT->MODER|=1<<7*2;} //PC7输出模式
 
 #define IIC_DELAY() delay_us(5);
 

@@ -5,12 +5,12 @@
 
 typedef struct 
 {
-    float Last_P;//ÉÏ´Î¹ÀËãĞ­·½²î ²»¿ÉÒÔÎª0 ! ! ! ! ! 
-    float Now_P;//µ±Ç°¹ÀËãĞ­·½²î
-    float out;//¿¨¶ûÂüÂË²¨Æ÷Êä³ö
-    float Kg;//¿¨¶ûÂüÔöÒæ
-    float Q;//¹ı³ÌÔëÉùĞ­·½²î
-    float R;//¹Û²âÔëÉùĞ­·½²î
+    float Last_P;//ä¸Šæ¬¡ä¼°ç®—åæ–¹å·® ä¸å¯ä»¥ä¸º0 ! ! ! ! ! 
+    float Now_P;//å½“å‰ä¼°ç®—åæ–¹å·®
+    float out;//å¡å°”æ›¼æ»¤æ³¢å™¨è¾“å‡º
+    float Kg;//å¡å°”æ›¼å¢ç›Š
+    float Q;//è¿‡ç¨‹å™ªå£°åæ–¹å·®
+    float R;//è§‚æµ‹å™ªå£°åæ–¹å·®
 	float source;
 	float after_kalman;
 }Kalman;

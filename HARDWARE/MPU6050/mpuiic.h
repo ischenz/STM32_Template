@@ -2,26 +2,26 @@
 #define __MPUIIC_H
 #include "sys.h"
 //////////////////////////////////////////////////////////////////////////////////	 
-//±¾³ÌÐòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßÐí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
-//ALIENTEK MiniSTM32F103¿ª·¢°å
-//MPU6050 IICÇý¶¯ ´úÂë	   
-//ÕýµãÔ­×Ó@ALIENTEK
-//¼¼ÊõÂÛÌ³:www.openedv.com
-//´´½¨ÈÕÆÚ:2015/4/18
-//°æ±¾£ºV1.0
-//°æÈ¨ËùÓÐ£¬µÁ°æ±Ø¾¿¡£
-//Copyright(C) ¹ãÖÝÊÐÐÇÒíµç×Ó¿Æ¼¼ÓÐÏÞ¹«Ë¾ 2009-2019
+//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºŽå…¶å®ƒä»»ä½•ç”¨é€”
+//ALIENTEK MiniSTM32F103å¼€å‘æ¿
+//MPU6050 IICé©±åŠ¨ ä»£ç 	   
+//æ­£ç‚¹åŽŸå­@ALIENTEK
+//æŠ€æœ¯è®ºå›:www.openedv.com
+//åˆ›å»ºæ—¥æœŸ:2015/4/18
+//ç‰ˆæœ¬ï¼šV1.0
+//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
+//Copyright(C) å¹¿å·žå¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2009-2019
 //All rights reserved									  
 //////////////////////////////////////////////////////////////////////////////////
 	   		   
-//IO·½ÏòÉèÖÃ
+//IOæ–¹å‘è®¾ç½®
 
-#define MPU_SDA_IN()  {GPIOA->MODER&=~(3<<(1*2));GPIOA->MODER|=0<<1*2;}	//PA1ÊäÈëÄ£Ê½
-#define MPU_SDA_OUT() {GPIOA->MODER&=~(3<<(1*2));GPIOA->MODER|=1<<1*2;} //PA1Êä³öÄ£Ê½
+#define MPU_SDA_IN()  {GPIOA->MODER&=~(3<<(1*2));GPIOA->MODER|=0<<1*2;}	//PA1è¾“å…¥æ¨¡å¼
+#define MPU_SDA_OUT() {GPIOA->MODER&=~(3<<(1*2));GPIOA->MODER|=1<<1*2;} //PA1è¾“å‡ºæ¨¡å¼
 
 
 
-//IO²Ù×÷º¯Êý	 
+//IOæ“ä½œå‡½æ•°	 
 #define MPU_IIC_SCL     PAout(0) //SCL
 #define MPU_IIC_SDA     PAout(1) //SDA	
 #define MPU_READ_SDA   	PAin(1) //SDA	
@@ -29,16 +29,16 @@
 
 
 
-//IICËùÓÐ²Ù×÷º¯Êý
-void MPU_IIC_Delay(void);				//MPU IICÑÓÊ±º¯Êý
-void MPU_IIC_Init(void);                //³õÊ¼»¯IICµÄIO¿Ú				 
-void MPU_IIC_Start(void);				//·¢ËÍIIC¿ªÊ¼ÐÅºÅ
-void MPU_IIC_Stop(void);	  			//·¢ËÍIICÍ£Ö¹ÐÅºÅ
-void MPU_IIC_Send_Byte(u8 txd);			//IIC·¢ËÍÒ»¸ö×Ö½Ú
-u8 MPU_IIC_Read_Byte(unsigned char ack);//IIC¶ÁÈ¡Ò»¸ö×Ö½Ú
-u8 MPU_IIC_Wait_Ack(void); 				//IICµÈ´ýACKÐÅºÅ
-void MPU_IIC_Ack(void);					//IIC·¢ËÍACKÐÅºÅ
-void MPU_IIC_NAck(void);				//IIC²»·¢ËÍACKÐÅºÅ
+//IICæ‰€æœ‰æ“ä½œå‡½æ•°
+void MPU_IIC_Delay(void);				//MPU IICå»¶æ—¶å‡½æ•°
+void MPU_IIC_Init(void);                //åˆå§‹åŒ–IICçš„IOå£				 
+void MPU_IIC_Start(void);				//å‘é€IICå¼€å§‹ä¿¡å·
+void MPU_IIC_Stop(void);	  			//å‘é€IICåœæ­¢ä¿¡å·
+void MPU_IIC_Send_Byte(u8 txd);			//IICå‘é€ä¸€ä¸ªå­—èŠ‚
+u8 MPU_IIC_Read_Byte(unsigned char ack);//IICè¯»å–ä¸€ä¸ªå­—èŠ‚
+u8 MPU_IIC_Wait_Ack(void); 				//IICç­‰å¾…ACKä¿¡å·
+void MPU_IIC_Ack(void);					//IICå‘é€ACKä¿¡å·
+void MPU_IIC_NAck(void);				//IICä¸å‘é€ACKä¿¡å·
 
 void IMPU_IC_Write_One_Byte(u8 daddr,u8 addr,u8 data);
 u8 MPU_IIC_Read_One_Byte(u8 daddr,u8 addr);	  

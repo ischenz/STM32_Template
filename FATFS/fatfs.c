@@ -16,22 +16,22 @@ uint8_t mf_scan_files(uint8_t * path)
 	fileinfo.lfname = mymalloc(SRAMIN,fileinfo.lfsize);
 #endif		  
 
-    res = f_opendir(&dir,(const TCHAR*)path); //´ò¿ªÒ»¸öÄ¿Â¼
+    res = f_opendir(&dir,(const TCHAR*)path); //æ‰“å¼€ä¸€ä¸ªç›®å½•
     if (res == FR_OK) 
 	{	
 		printf("\r\n"); 
 		while(1)
 		{
-	        res = f_readdir(&dir, &fileinfo);                   //¶ÁÈ¡Ä¿Â¼ÏÂµÄÒ»¸öÎÄ¼ş
-	        if (res != FR_OK || fileinfo.fname[0] == 0) break;  //´íÎóÁË/µ½Ä©Î²ÁË,ÍË³ö
-	        //if (fileinfo.fname[0] == '.') continue;             //ºöÂÔÉÏ¼¶Ä¿Â¼
+	        res = f_readdir(&dir, &fileinfo);                   //è¯»å–ç›®å½•ä¸‹çš„ä¸€ä¸ªæ–‡ä»¶
+	        if (res != FR_OK || fileinfo.fname[0] == 0) break;  //é”™è¯¯äº†/åˆ°æœ«å°¾äº†,é€€å‡º
+	        //if (fileinfo.fname[0] == '.') continue;             //å¿½ç•¥ä¸Šçº§ç›®å½•
 #if _USE_LFN
         	fn = *fileinfo.lfname ? fileinfo.lfname : fileinfo.fname;
 #else							   
         	fn = fileinfo.fname;
 #endif	                                              /* It is a file. */
-			printf("%s/", path);//´òÓ¡Â·¾¶	
-			printf("%s\r\n",  fn);//´òÓ¡ÎÄ¼şÃû	  
+			printf("%s/", path);//æ‰“å°è·¯å¾„	
+			printf("%s\r\n",  fn);//æ‰“å°æ–‡ä»¶å	  
 		} 
 		printf("\r\n");
     }	  
@@ -43,28 +43,28 @@ void fatfs_init()
 	int res;
 	printf("Fatfs Init Start.......\r\n");
 	res = f_mount(&fs_flash,"1:",1);
-	if(!res)//¹ÒÔØÍâ²¿FLASH)
+	if(!res)//æŒ‚è½½å¤–éƒ¨FLASH)
 	{
 		printf("mount FLASH success!\r\n");
 	}
 	else printf("mount FLASH failure:%d\r\n",res);
 	
 	res = f_mount(&fs_sd,"0:",1);
-	if(!res)//¹ÒÔØÍâ²¿FLASH)
+	if(!res)//æŒ‚è½½å¤–éƒ¨FLASH)
 	{
 		printf("mount SD success!\r\n");
 	}
 	else printf("mount SD failure:%d\r\n",res);
-	if(res==0X0D)//FLASH´ÅÅÌ,FATÎÄ¼şÏµÍ³´íÎó,ÖØĞÂ¸ñÊ½»¯FLASH
+	if(res==0X0D)//FLASHç£ç›˜,FATæ–‡ä»¶ç³»ç»Ÿé”™è¯¯,é‡æ–°æ ¼å¼åŒ–FLASH
 	{
 		BYTE work[1024];
-		printf("Flash Disk Formatting...\r\n");	//¸ñÊ½»¯FLASH
-		res=f_mkfs("1:", 0, work,sizeof work);//¸ñÊ½»¯FLASH,1,ÅÌ·û;1,²»ĞèÒªÒıµ¼Çø,8¸öÉÈÇøÎª1¸ö´Ø
+		printf("Flash Disk Formatting...\r\n");	//æ ¼å¼åŒ–FLASH
+		res=f_mkfs("1:", 0, work,sizeof work);//æ ¼å¼åŒ–FLASH,1,ç›˜ç¬¦;1,ä¸éœ€è¦å¼•å¯¼åŒº,8ä¸ªæ‰‡åŒºä¸º1ä¸ªç°‡
 		if(res==0)
 		{
-			f_setlabel((const TCHAR *)"1:ALIENTEK");	//ÉèÖÃFlash´ÅÅÌµÄÃû×ÖÎª£ºALIENTEK
-			printf("Flash Disk Format Finish \r\n");	//¸ñÊ½»¯Íê³É
-		}else printf("Flash Disk Format Error: %d\r\n",res);	//¸ñÊ½»¯Ê§°Ü
+			f_setlabel((const TCHAR *)"1:ALIENTEK");	//è®¾ç½®Flashç£ç›˜çš„åå­—ä¸ºï¼šALIENTEK
+			printf("Flash Disk Format Finish \r\n");	//æ ¼å¼åŒ–å®Œæˆ
+		}else printf("Flash Disk Format Error: %d\r\n",res);	//æ ¼å¼åŒ–å¤±è´¥
 		delay_ms(1000);
 	}
 	

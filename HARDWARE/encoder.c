@@ -4,15 +4,15 @@
 
 void Encoder_TIM3_Init(void)
 {
-	//µç»ú1±àÂëÆ÷   PA6,PA7   TIM3
+	//ç”µæœº1ç¼–ç å™¨   PA6,PA7   TIM3
 	GPIO_InitTypeDef GPIO_InitStructure;
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStruct;
 	TIM_ICInitTypeDef TIM_ICInitStruct;
 	
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE);//¿ªÆôÊ±ÖÓ
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE);//å¼€å¯æ—¶é’Ÿ
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3,ENABLE);
 	
-	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_6|GPIO_Pin_7;//¶Ë¿ÚÅäÖÃ
+	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_6|GPIO_Pin_7;//ç«¯å£é…ç½®
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_OType=GPIO_OType_PP;
@@ -22,24 +22,24 @@ void Encoder_TIM3_Init(void)
 	GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_TIM3);
 	GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_TIM3);
 	
-	TIM_TimeBaseStructInit(&TIM_TimeBaseInitStruct);//³õÊ¼»¯¶¨Ê±Æ÷¡£
+	TIM_TimeBaseStructInit(&TIM_TimeBaseInitStruct);//åˆå§‹åŒ–å®šæ—¶å™¨ã€‚
 	TIM_TimeBaseInitStruct.TIM_ClockDivision=TIM_CKD_DIV1;
 	TIM_TimeBaseInitStruct.TIM_CounterMode=TIM_CounterMode_Up;
 	TIM_TimeBaseInitStruct.TIM_Period=65535;
 	TIM_TimeBaseInitStruct.TIM_Prescaler=0;
 	TIM_TimeBaseInit(TIM3,&TIM_TimeBaseInitStruct);
 	
-	TIM_EncoderInterfaceConfig(TIM3,TIM_EncoderMode_TI12,TIM_ICPolarity_Rising,TIM_ICPolarity_Rising);//ÅäÖÃ±àÂëÆ÷Ä£Ê½
+	TIM_EncoderInterfaceConfig(TIM3,TIM_EncoderMode_TI12,TIM_ICPolarity_Rising,TIM_ICPolarity_Rising);//é…ç½®ç¼–ç å™¨æ¨¡å¼
 	
-	TIM_ICStructInit(&TIM_ICInitStruct);//³õÊ¼»¯ÊäÈë²¶»ñ
+	TIM_ICStructInit(&TIM_ICInitStruct);//åˆå§‹åŒ–è¾“å…¥æ•è·
 	TIM_ICInitStruct.TIM_ICFilter=10;
 	TIM_ICInit(TIM3,&TIM_ICInitStruct);
 	
-	TIM_ITConfig(TIM3,TIM_IT_Update,ENABLE);//ÅäÖÃÒç³ö¸üĞÂÖĞ¶Ï±êÖ¾Î»
+	TIM_ITConfig(TIM3,TIM_IT_Update,ENABLE);//é…ç½®æº¢å‡ºæ›´æ–°ä¸­æ–­æ ‡å¿—ä½
 	
-	TIM_SetCounter(TIM3,0);//ÇåÁã¶¨Ê±Æ÷¼ÆÊıÖµ
+	TIM_SetCounter(TIM3,0);//æ¸…é›¶å®šæ—¶å™¨è®¡æ•°å€¼
 	
-	TIM_Cmd(TIM3,ENABLE);//¿ªÆô¶¨Ê±Æ÷
+	TIM_Cmd(TIM3,ENABLE);//å¼€å¯å®šæ—¶å™¨
 }
 
 
@@ -84,16 +84,16 @@ void Encoder_TIM4_Init(void)
 }
 
 /**********************
-±àÂëÆ÷
-ËÙ¶È¶ÁÈ¡º¯Êı
-Èë¿Ú²ÎÊı£º¶¨Ê±Æ÷
+ç¼–ç å™¨
+é€Ÿåº¦è¯»å–å‡½æ•°
+å…¥å£å‚æ•°ï¼šå®šæ—¶å™¨
 **********************/
 int Read_Speed(int TIMx)
 {
 	int value_1;
 	switch(TIMx)
 	{
-		case 2:value_1=(short)TIM_GetCounter(TIM3);TIM_SetCounter(TIM3,0);break;//IFÊÇ¶¨Ê±Æ÷2£¬1.²É¼¯±àÂëÆ÷µÄ¼ÆÊıÖµ²¢±£´æ¡£2.½«¶¨Ê±Æ÷µÄ¼ÆÊıÖµÇåÁã¡£
+		case 2:value_1=(short)TIM_GetCounter(TIM3);TIM_SetCounter(TIM3,0);break;//IFæ˜¯å®šæ—¶å™¨2ï¼Œ1.é‡‡é›†ç¼–ç å™¨çš„è®¡æ•°å€¼å¹¶ä¿å­˜ã€‚2.å°†å®šæ—¶å™¨çš„è®¡æ•°å€¼æ¸…é›¶ã€‚
 		case 4:value_1=(short)TIM_GetCounter(TIM4);TIM_SetCounter(TIM4,0);break;
 		default:value_1=0;
 	}

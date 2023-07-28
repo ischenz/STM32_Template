@@ -19,13 +19,13 @@
 typedef void (*BtnCallback)(void*);
 
 typedef enum {
-	PRESS_DOWN = 0,//°´¼ü°´ÏÂ£¬Ã¿´Î°´ÏÂ¶¼´¥·¢
-	PRESS_UP,//°´¼üµ¯Æð£¬Ã¿´ÎËÉ¿ª¶¼´¥·¢
-	PRESS_REPEAT,//ÖØ¸´°´ÏÂ´¥·¢£¬±äÁ¿repeat¼ÆÊýÁ¬»÷´ÎÊý
-	SINGLE_CLICK,//µ¥»÷°´¼üÊÂ¼þ
-	DOUBLE_CLICK,//Ë«»÷°´¼üÊÂ¼þ
-	LONG_PRESS_START,//´ïµ½³¤°´Ê±¼äãÐÖµÊ±´¥·¢Ò»´Î
-	LONG_PRESS_HOLD,//³¤°´ÆÚ¼äÒ»Ö±´¥·¢
+	PRESS_DOWN = 0,//æŒ‰é”®æŒ‰ä¸‹ï¼Œæ¯æ¬¡æŒ‰ä¸‹éƒ½è§¦å‘
+	PRESS_UP,//æŒ‰é”®å¼¹èµ·ï¼Œæ¯æ¬¡æ¾å¼€éƒ½è§¦å‘
+	PRESS_REPEAT,//é‡å¤æŒ‰ä¸‹è§¦å‘ï¼Œå˜é‡repeatè®¡æ•°è¿žå‡»æ¬¡æ•°
+	SINGLE_CLICK,//å•å‡»æŒ‰é”®äº‹ä»¶
+	DOUBLE_CLICK,//åŒå‡»æŒ‰é”®äº‹ä»¶
+	LONG_PRESS_START,//è¾¾åˆ°é•¿æŒ‰æ—¶é—´é˜ˆå€¼æ—¶è§¦å‘ä¸€æ¬¡
+	LONG_PRESS_HOLD,//é•¿æŒ‰æœŸé—´ä¸€ç›´è§¦å‘
 	number_of_event,//
 	NONE_PRESS
 }PressEvent;

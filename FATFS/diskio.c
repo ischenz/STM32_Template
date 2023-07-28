@@ -12,9 +12,9 @@
 #include "w25qxx.h"
 #include "sdio_sdcard.h"
 
-#define FLASH_SECTOR_SIZE 	512		 //µ¥¸öÉÈÇø´óĞ¡
-#define FLASH_BLOCK_SIZE 	8		 //Ã¿¸öblockÓĞ8¸öÉÈÇø
-//#define FLASH_SECTOR_COUNT  2048*1  //Ö¸ÉÈÇøµÄÊıÁ¿-->FATFS¿ÉÓÃ´óĞ¡Îª2M
+#define FLASH_SECTOR_SIZE 	512		 //å•ä¸ªæ‰‡åŒºå¤§å°
+#define FLASH_BLOCK_SIZE 	8		 //æ¯ä¸ªblockæœ‰8ä¸ªæ‰‡åŒº
+//#define FLASH_SECTOR_COUNT  2048*1  //æŒ‡æ‰‡åŒºçš„æ•°é‡-->FATFSå¯ç”¨å¤§å°ä¸º2M
 uint16_t FLASH_SECTOR_COUNT = 2048*2;
 /* Definitions of physical drive number for each drive */
 //#define DEV_RAM		  0	/* Example: Map Ramdisk to physical drive 0 */
@@ -48,18 +48,18 @@ DSTATUS disk_initialize (
 	u8 res=0;	    
 	switch(pdrv)
 	{
-		case SD_CARD://SD¿¨
-			res=SD_Init();//SD¿¨³õÊ¼»¯ 
+		case SD_CARD://SDå¡
+			res=SD_Init();//SDå¡åˆå§‹åŒ– 
   			break;
-		case DEV_SPI_FLASH://Íâ²¿flash
+		case DEV_SPI_FLASH://å¤–éƒ¨flash
 			W25QXX_Init();
-			FLASH_SECTOR_COUNT=2048*2;//W25Q1218,Ç°2M×Ö½Ú¸øFATFSÕ¼ÓÃ 
+			FLASH_SECTOR_COUNT=2048*2;//W25Q1218,å‰2Må­—èŠ‚ç»™FATFSå ç”¨ 
  			break;
 		default:
 			res=1; 
 	}		 
 	if(res)return  STA_NOINIT;
-	else return 0; //³õÊ¼»¯³É¹¦
+	else return 0; //åˆå§‹åŒ–æˆåŠŸ
 }
 
 
@@ -76,19 +76,19 @@ DRESULT disk_read (
 )
 {
 	u8 res=0; 
-    if (!count)return RES_PARERR;//count²»ÄÜµÈÓÚ0£¬·ñÔò·µ»Ø²ÎÊı´íÎó		 	 
+    if (!count)return RES_PARERR;//countä¸èƒ½ç­‰äº0ï¼Œå¦åˆ™è¿”å›å‚æ•°é”™è¯¯		 	 
 	switch(pdrv)
 	{
-		case SD_CARD://SD¿¨
+		case SD_CARD://SDå¡
 			res=SD_ReadDisk(buff,sector,count);	 
-			while(res)//¶Á³ö´í
+			while(res)//è¯»å‡ºé”™
 			{
-				SD_Init();	//ÖØĞÂ³õÊ¼»¯SD¿¨
+				SD_Init();	//é‡æ–°åˆå§‹åŒ–SDå¡
 				res=SD_ReadDisk(buff,sector,count);	
 				//printf("sd rd error:%d\r\n",res);
 			}
 			break;
-		case DEV_SPI_FLASH://Íâ²¿flash
+		case DEV_SPI_FLASH://å¤–éƒ¨flash
 			for(;count>0;count--)
 			{
 				W25QXX_Read(buff,sector*FLASH_SECTOR_SIZE,FLASH_SECTOR_SIZE);
@@ -100,7 +100,7 @@ DRESULT disk_read (
 		default:
 			res=1; 
 	}
-   //´¦Àí·µ»ØÖµ£¬½«SPI_SD_driver.cµÄ·µ»ØÖµ×ª³Éff.cµÄ·µ»ØÖµ
+   //å¤„ç†è¿”å›å€¼ï¼Œå°†SPI_SD_driver.cçš„è¿”å›å€¼è½¬æˆff.cçš„è¿”å›å€¼
     if(res==0x00)return RES_OK;	 
     else return RES_ERROR;	
 }
@@ -121,19 +121,19 @@ DRESULT disk_write (
 )
 {
 	u8 res=0;  
-    if (!count)return RES_PARERR;//count²»ÄÜµÈÓÚ0£¬·ñÔò·µ»Ø²ÎÊı´íÎó		 	 
+    if (!count)return RES_PARERR;//countä¸èƒ½ç­‰äº0ï¼Œå¦åˆ™è¿”å›å‚æ•°é”™è¯¯		 	 
 	switch(pdrv)
 	{
-		case SD_CARD://SD¿¨
+		case SD_CARD://SDå¡
 			res=SD_WriteDisk((u8*)buff,sector,count);
-			while(res)//Ğ´³ö´í
+			while(res)//å†™å‡ºé”™
 			{
-				SD_Init();	//ÖØĞÂ³õÊ¼»¯SD¿¨
+				SD_Init();	//é‡æ–°åˆå§‹åŒ–SDå¡
 				res=SD_WriteDisk((u8*)buff,sector,count);	
 				//printf("sd wr error:%d\r\n",res);
 			}
 			break;
-		case DEV_SPI_FLASH://Íâ²¿flash
+		case DEV_SPI_FLASH://å¤–éƒ¨flash
 			for(;count>0;count--)
 			{										    
 				W25QXX_Write((u8*)buff,sector*FLASH_SECTOR_SIZE,FLASH_SECTOR_SIZE);
@@ -145,7 +145,7 @@ DRESULT disk_write (
 		default:
 			res=1; 
 	}
-    //´¦Àí·µ»ØÖµ£¬½«SPI_SD_driver.cµÄ·µ»ØÖµ×ª³Éff.cµÄ·µ»ØÖµ
+    //å¤„ç†è¿”å›å€¼ï¼Œå°†SPI_SD_driver.cçš„è¿”å›å€¼è½¬æˆff.cçš„è¿”å›å€¼
     if(res == 0x00)return RES_OK;	 
     else return RES_ERROR;	
 }
@@ -164,7 +164,7 @@ DRESULT disk_ioctl (
 )
 {
 	DRESULT res;						  			     
-	if(pdrv==SD_CARD)//SD¿¨
+	if(pdrv==SD_CARD)//SDå¡
 	{
 	    switch(cmd)
 	    {
@@ -187,7 +187,7 @@ DRESULT disk_ioctl (
 		        res = RES_PARERR;
 		        break;
 	    }
-	}else if(pdrv==DEV_SPI_FLASH)	//Íâ²¿FLASH  
+	}else if(pdrv==DEV_SPI_FLASH)	//å¤–éƒ¨FLASH  
 	{
 	    switch(cmd)
 	    {
@@ -210,7 +210,7 @@ DRESULT disk_ioctl (
 		        res = RES_PARERR;
 		        break;
 	    }
-	}else res=RES_ERROR;//ÆäËûµÄ²»Ö§³Ö
+	}else res=RES_ERROR;//å…¶ä»–çš„ä¸æ”¯æŒ
     return res;
 }
 

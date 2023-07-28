@@ -3,10 +3,10 @@
 
 #include "sys.h"
 
-//LED¶Ë¿Ú¶¨Òå
+//LEDç«¯å£å®šä¹‰
 #define LED1 PFout(9)
 #define LED2 PFout(10)
 
-void LED_Init(void);//³õÊ¼»¯		 
+void LED_Init(void);//åˆå§‹åŒ–		 
 
 #endif

@@ -12,7 +12,7 @@ typedef struct{
     float Err;
     float LastErr;
 	float PenultErr;
-    float Integral;//»ý·ÖºÍ
+    float Integral;//ç§¯åˆ†å’Œ
     float Target;
 	float PID_out;
 	

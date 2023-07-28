@@ -3,36 +3,36 @@
 #include "delay.h"
 #include "usart.h"
 
-/* ÉèÖÃÈí¼şIICÇı¶¯ */
+/* è®¾ç½®è½¯ä»¶IICé©±åŠ¨ */
 sw_i2c_interface_t i2c_interface = 
 {
 	.sda_in = sda_in,
 	.scl_out = scl_out,
 	.sda_out = sda_out,
-	.user_data = 0, //ÓÃ»§Êı¾İ£¬¿ÉÔÚÊäÈëÊä³öº¯ÊıÀïµÃµ½
+	.user_data = 0, //ç”¨æˆ·æ•°æ®ï¼Œå¯åœ¨è¾“å…¥è¾“å‡ºå‡½æ•°é‡Œå¾—åˆ°
 };
 void Laser_ranging_init(void)
 {
-	/* ´æ·ÅÉ¨Ãèµ½µÄµØÖ· */
+	/* å­˜æ”¾æ‰«æåˆ°çš„åœ°å€ */
 	uint8_t scan_addr[128] = {0};
 	volatile uint8_t count;
 	uint8_t ping_response;
-	/* ³õÊ¼»¯IIC */
+	/* åˆå§‹åŒ–IIC */
 	sw_i2c_init();
-	/* ps: Èí¼şIIC³õÊ¼»¯µÄÊ±ºò»á³ö·¢Ò»´ÎIIC start£¬»áµ¼ÖÂµÚÒ»´ÎIICÍ¨Ñ¶»áÊ§°Ü */
+	/* ps: è½¯ä»¶IICåˆå§‹åŒ–çš„æ—¶å€™ä¼šå‡ºå‘ä¸€æ¬¡IIC startï¼Œä¼šå¯¼è‡´ç¬¬ä¸€æ¬¡IICé€šè®¯ä¼šå¤±è´¥ */
 	
-	/* µÚÒ»´ÎIICÍ¨Ñ¶»áÊ§°Ü£¨ÒòÎªÈí¼şIIC´¥·¢ÁËstart£©£¬ÊÖ¶¯·¢¸östopÒ²ÄÜÏû³ı */
+	/* ç¬¬ä¸€æ¬¡IICé€šè®¯ä¼šå¤±è´¥ï¼ˆå› ä¸ºè½¯ä»¶IICè§¦å‘äº†startï¼‰ï¼Œæ‰‹åŠ¨å‘ä¸ªstopä¹Ÿèƒ½æ¶ˆé™¤ */
 	sw_i2c_mem_read(&i2c_interface, 0x4C << 1, 0x55, &ping_response, 1);
-	/* ºóÃæIICÍ¨Ñ¶ÊÇÕı³£µÄ */
+	/* åé¢IICé€šè®¯æ˜¯æ­£å¸¸çš„ */
 	sw_i2c_mem_read(&i2c_interface, 0x4C << 1, 0x55, &ping_response, 1);
 
 	count = i2c_scan(&i2c_interface, scan_addr);
 	printf("count=%d, addr=%#X\r\n", count, scan_addr[0]);
 	
 	//sw_i2c_write_byte(&i2c_interface, 0x4C << 1, GW_GRAY_DIGITAL_MODE);
-	/* ¶ÁÈ¡¿ª¹ØÁ¿Êı¾İ */
-	//sw_i2c_read_byte(&i2c_interface, 0x4C << 1, &digital_data); // digital_data ÓĞ1~8ºÅÌ½Í·¿ª¹ØÊı¾İ
-	//* °Ñ×Ö½ÚÀïµÄ8¸ö¿ª¹ØÁ¿´æµ½°Ë¸ö±äÁ¿Àï£¬ÕâÀïÎªgray_sensor[0] ~ gray_sensor[7], 
+	/* è¯»å–å¼€å…³é‡æ•°æ® */
+	//sw_i2c_read_byte(&i2c_interface, 0x4C << 1, &digital_data); // digital_data æœ‰1~8å·æ¢å¤´å¼€å…³æ•°æ®
+	//* æŠŠå­—èŠ‚é‡Œçš„8ä¸ªå¼€å…³é‡å­˜åˆ°å…«ä¸ªå˜é‡é‡Œï¼Œè¿™é‡Œä¸ºgray_sensor[0] ~ gray_sensor[7], 
 }
 
 void Laser_ranging_getdistance(uint16_t *__dis)
@@ -46,7 +46,7 @@ void Laser_ranging_getdistance(uint16_t *__dis)
 }
 
 /**
- * ³õÊ¼»¯i2c
+ * åˆå§‹åŒ–i2c
  */
 void sw_i2c_init()
 {
@@ -63,41 +63,41 @@ void sw_i2c_init()
 	GPIO_SetBits(GPIOC, SW_I2C1_PIN_SCL | SW_I2C1_PIN_SDA);
 }
 
-/* ¶¨ÒåsdaÊä³öº¯Êı bit=0ÎªµÍµçÆ½ bit=1Îª¸ßµçÆ½ */
+/* å®šä¹‰sdaè¾“å‡ºå‡½æ•° bit=0ä¸ºä½ç”µå¹³ bit=1ä¸ºé«˜ç”µå¹³ */
 void sda_out(uint8_t bit, void *user_data)
 {
 	SDA_OUT();
 	GPIO_WriteBit(GPIOC, SW_I2C1_PIN_SDA, (BitAction)bit);
 	
-	/* IICÈí¼şÑÓ³Ù */
+	/* IICè½¯ä»¶å»¶è¿Ÿ */
 	delay_us(10);
 }
 
-/* ¶¨Òåsda¶ÁÈ¡º¯Êı bit Îª·µ»ØµÄµçÆ½Öµ */
+/* å®šä¹‰sdaè¯»å–å‡½æ•° bit ä¸ºè¿”å›çš„ç”µå¹³å€¼ */
 uint8_t sda_in(void *user_data)
 {
 	uint8_t bit;
 	SDA_IN();
 	bit = (uint8_t)GPIO_ReadInputDataBit(GPIOC, SW_I2C1_PIN_SDA);
 	
-	/* IICÈí¼şÑÓ³Ù */
+	/* IICè½¯ä»¶å»¶è¿Ÿ */
 	delay_us(10);
 	return bit;
 }
 
-/* ¶¨ÒåsclÊ±ÖÓÊä³öº¯Êı bit=0ÎªµÍµçÆ½ bit=1Îª¸ßµçÆ½ */
+/* å®šä¹‰sclæ—¶é’Ÿè¾“å‡ºå‡½æ•° bit=0ä¸ºä½ç”µå¹³ bit=1ä¸ºé«˜ç”µå¹³ */
 void scl_out(uint8_t bit, void *user_data)
 {
 	GPIO_WriteBit(GPIOC, SW_I2C1_PIN_SCL, (BitAction)bit);
 	
-	/* IICÈí¼şÑÓ³Ù */
+	/* IICè½¯ä»¶å»¶è¿Ÿ */
 	delay_us(10);
 }
 
 /**
- * i2cµØÖ·É¨Ãè
- * @param scan_addr É¨Ãè³öÀ´µÄµØÖ·´æ·Å,ÊıÖµ²»Îª0µÄÎªÉ¨Ãèµ½µÄµØÖ·£¬É¨µ½µÄµØÖ·»á°¤¸ö·ÅÔÚÊı×éµÄ×îÇ°Ãæ
- * @return ·µ»ØÉ¨Ãèµ½µÄÉè±¸ÊıÁ¿, 0ÎªÎŞÉè±¸·¢ÏÖ
+ * i2cåœ°å€æ‰«æ
+ * @param scan_addr æ‰«æå‡ºæ¥çš„åœ°å€å­˜æ”¾,æ•°å€¼ä¸ä¸º0çš„ä¸ºæ‰«æåˆ°çš„åœ°å€ï¼Œæ‰«åˆ°çš„åœ°å€ä¼šæŒ¨ä¸ªæ”¾åœ¨æ•°ç»„çš„æœ€å‰é¢
+ * @return è¿”å›æ‰«æåˆ°çš„è®¾å¤‡æ•°é‡, 0ä¸ºæ— è®¾å¤‡å‘ç°
  */
 uint8_t i2c_scan(sw_i2c_interface_t *i2c_interface, uint8_t *scan_addr)
 {

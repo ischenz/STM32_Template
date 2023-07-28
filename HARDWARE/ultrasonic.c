@@ -60,7 +60,7 @@ static void Ultrasound_GPIO_Conf(void)//端口配置
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN ;                     //下拉
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;                      //推挽输出
     GPIO_Init(ULTRASOUND_GPIO_PORT, &GPIO_InitStructure);               
-    
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//使能SYSCFG时钟
     SYSCFG_EXTILineConfig(ULTRASOUND_GPIOSourceGPIO, ULTRASOUND_PINSOURCE);       //连接到中断线
 
     EXTI_InitStructure.EXTI_Line = ULTRASOUND_EXTI_LINE;                //配置中断线
@@ -69,7 +69,7 @@ static void Ultrasound_GPIO_Conf(void)//端口配置
     EXTI_InitStructure.EXTI_LineCmd = ENABLE;
     EXTI_Init(&EXTI_InitStructure);
 
-    NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn;                    //配置中断
+    NVIC_InitStructure.NVIC_IRQChannel = ULTRASOUND_EXTI_NVIC_IRQChannel;//配置中断
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
@@ -84,7 +84,7 @@ static void Ultrasound_TIM_Conf(void)//定时器配置
 	ULTRASOUND_TIM_CLK_ENABLE;//打开ULTRASOUND_TIM时钟
 	
 	//计算分频系数（每计一次为1us）
-	TIM_TimeBaseStruct.TIM_Period = 0xFDE8;//重载寄存器的值，定时周期
+	TIM_TimeBaseStruct.TIM_Period = 0xFDE8;//重载寄存器的值，定时周期64ms
 	TIM_TimeBaseStruct.TIM_Prescaler = 168-1;//预分频
 	TIM_TimeBaseStruct.TIM_ClockDivision = TIM_CKD_DIV1;//时钟切割
 	TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;//向上计数
@@ -99,7 +99,7 @@ static void Ultrasound_TIM_Conf(void)//定时器配置
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);	
 
-	TIM_Cmd(ULTRASOUND_TIM,ENABLE);	//开启计数器
+	TIM_Cmd(ULTRASOUND_TIM,DISABLE);	
 }
 
 void Ultrasound_Init(void)//超声波模块初始化
@@ -151,19 +151,18 @@ float Ultrasound_GetDistance(void)//获取距离数据
 
 void ULTRASOUND_EXTI_IRQHandler(void)	//超声波ECHO引脚所用中断服务函数
 {
-	if(EXTI_GetITStatus(EXTI_Line0)!=0)	//判断是否真是触发中断
+	if(EXTI_GetITStatus(ULTRASOUND_EXTI_LINE)!=0)	//判断是否真是触发中断
 	{
-		
 		TIM_ITConfig(ULTRASOUND_TIM, TIM_IT_Update, DISABLE);//关闭计数器中断
 		TIM_Cmd(ULTRASOUND_TIM,DISABLE);	//关闭计数器
-		if(GPIO_ReadInputDataBit(ULTRASOUND_GPIO, ULTRASOUND_ECHO) == 1)	//检测到返回信号
+		if(GPIO_ReadInputDataBit(ULTRASOUND_GPIO_PORT, ULTRASOUND_GPIO_ECHO_PIN) == 1)	//检测到返回信号
 		{
 			ULTRASOUND_TIM->CNT = 0x0000;	//清空计数器计数寄存器值
 			ULTRASOUND_TIM->ARR = 0xffff;//重载值重设为计数最大值
 			TIM_Cmd(ULTRASOUND_TIM,ENABLE);	//开启计数器
 		}
 		
-		if(GPIO_ReadInputDataBit(ULTRASOUND_GPIO, ULTRASOUND_ECHO) == 0 )	//返回信号结束
+		if(GPIO_ReadInputDataBit(ULTRASOUND_GPIO_PORT, ULTRASOUND_GPIO_ECHO_PIN) == 0 )	//返回信号结束
 		{
 			if(ULTRASOUND_TIM->ARR == 0xffff) //需要确定计数器当前是不是在计数返回信号时间
 			{
@@ -175,15 +174,16 @@ void ULTRASOUND_EXTI_IRQHandler(void)	//超声波ECHO引脚所用中断服务函
 				else
 				{
 					ultrasound_flag = 0;	//清空超声波标志位
-					ultrasound_data[d_count] = (float)(ULTRASOUND_TIM->CNT*34000)/1000000/2;	//计算距离，单位cm。并将数据存入待处理数据数组
+					ultrasound_data[d_count] = (float)(ULTRASOUND_TIM->CNT) / 58;	//计算距离，单位cm。并将数据存入待处理数据数组
 					d_count++;	//次数计数值自增
 				}
 			}
+            ULTRASOUND_TIM->CNT = 0x00;
 			ULTRASOUND_TIM->ARR = 0xFDE8;//重载值为计数64ms
 			TIM_ITConfig(ULTRASOUND_TIM, TIM_IT_Update, ENABLE);//开启计数器中断
 			TIM_Cmd(ULTRASOUND_TIM,ENABLE);	//开启计数器
 		}
-		EXTI_ClearITPendingBit(EXTI_Line0);	//清除LINE上的中断标志位
+		EXTI_ClearITPendingBit(ULTRASOUND_EXTI_LINE);	//清除LINE上的中断标志位
 	}
 }
 
@@ -197,3 +197,4 @@ void ULTRASOUND_TIM_IRQHandler(void)//超声波所用TIM中断服务函数
 }
 
 #endif
+

@@ -4,9 +4,9 @@
 #include "stm32f4xx_conf.h"
 #include "sys.h" 
 
-#define EN_USART1_RX 			1		//Ê¹ÄÜ£¨1£©/½ûÖ¹£¨0£©´®¿Ú1½ÓÊÕ
+#define EN_USART1_RX 			1		//ä½¿èƒ½ï¼ˆ1ï¼‰/ç¦æ­¢ï¼ˆ0ï¼‰ä¸²å£1æ¥æ”¶
 	  	
-#define  RINGBUFF_LEN          (100)     //¶¨Òå×î´ó½ÓÊÕ×Ö½ÚÊı
+#define  RINGBUFF_LEN          (100)     //å®šä¹‰æœ€å¤§æ¥æ”¶å­—èŠ‚æ•°
 #define  RINGBUFF_OK           1     
 #define  RINGBUFF_ERR          0   
 

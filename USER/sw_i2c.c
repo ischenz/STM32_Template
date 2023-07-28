@@ -284,7 +284,6 @@ uint8_t i2c_scan(sw_i2c_interface_t *i2c_interface, uint8_t *scan_addr)
 			++count;
 		}
 	}
-	
 	return count;
 }
 
@@ -301,21 +300,27 @@ void sw_i2c_init()
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
-	GPIO_InitStructure.GPIO_Pin = SW_I2C1_PIN_SCL | SW_I2C1_PIN_SDA;
+	GPIO_InitStructure.GPIO_Pin = SW_I2C1_PIN_SCL;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
-	
-	GPIO_SetBits(GPIOC, SW_I2C1_PIN_SCL | SW_I2C1_PIN_SDA);
+	GPIO_Init(SW_I2C1_SCL_PORT, &GPIO_InitStructure);
     
+	GPIO_InitStructure.GPIO_Pin = SW_I2C1_PIN_SDA;
+	GPIO_Init(SW_I2C1_SDA_PORT, &GPIO_InitStructure);
+	
+	GPIO_SetBits(SW_I2C1_SDA_PORT, SW_I2C1_PIN_SDA);
+    GPIO_SetBits(SW_I2C1_SCL_PORT, SW_I2C1_PIN_SCL);
 
-    //初始化后从机会有3个stop中断
+    /* 初始化后 从机会有3个stop中断 */
 	/* ps: 软件IIC初始化的时候会出发一次IIC start，会导致第一次IIC通讯会失败 */
 	/* 第一次IIC通讯会失败（因为软件IIC触发了start），手动发个stop也能消除 */
 	sw_i2c_mem_read(&i2c_interface, 0x4C << 1, 0xff, &ping_response, 1);
 	/* 后面IIC通讯是正常的 */
-	sw_i2c_mem_read(&i2c_interface, 0x4C << 1, 0xff, &ping_response, 1);
-
+	/* sw_i2c_mem_read(&i2c_interface, 0x4C << 1, 0xff, &ping_response, 1); */
 	count = i2c_scan(&i2c_interface, scan_addr);
-	printf("count=%d, addr=%#X\r\n", count, scan_addr[0]);
+    printf("IIC count=%d\r\n", count); 
+    for(uint8_t i = 0; i < count; i++){
+        printf("%#X ", scan_addr[i]);        
+    }
+    printf("\r\n");
 }

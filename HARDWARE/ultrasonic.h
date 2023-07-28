@@ -3,7 +3,7 @@
 
 #include "sys.h"
 
-//#define	USART_ULTRASONIC
+#define	USART_ULTRASONIC
 
 /*usart模式*/
 #ifdef 	USART_ULTRASONIC
@@ -16,8 +16,8 @@ void ultrasonic_init(void);
 /*电平模式*/
 #else
 //超声波模块引脚配置
-#define ULTRASOUND_GPIO_PORT				GPIOA
-#define ULTRASOUND_GPIO_CLK 				RCC_AHB1Periph_GPIOA
+#define ULTRASOUND_GPIO_PORT				GPIOE
+#define ULTRASOUND_GPIO_CLK 				RCC_AHB1Periph_GPIOE
 #define ULTRASOUND_GPIO_TRIG_PIN 			GPIO_Pin_1
 #define ULTRASOUND_GPIO_ECHO_PIN			GPIO_Pin_0
 
@@ -26,12 +26,14 @@ void ultrasonic_init(void);
 #define ULTRASOUND_PINSOURCE        		GPIO_PinSource0
 #define ULTRASOUND_EXTI_LINE				EXTI_Line0
 #define ULTRASOUND_EXTI_IRQHandler  		EXTI0_IRQHandler	//ECHO引脚中断服务函数
+#define ULTRASOUND_EXTI_NVIC_IRQChannel     EXTI0_IRQn
 
 //超声波模块定时器配置
-#define ULTRASOUND_TIM 						TIM10
-#define ULTRASOUND_TIM_CLK_ENABLE			RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM10, ENABLE)
-#define ULTRASOUND_TIM_IRQ      			TIM1_UP_TIM10_IRQn
-#define ULTRASOUND_TIM_IRQHandler			TIM1_UP_TIM10_IRQHandler	//TIM2中断服务函数
+#define ULTRASOUND_TIM 						TIM11
+#define ULTRASOUND_TIM_CLK_ENABLE			RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM11, ENABLE)
+#define ULTRASOUND_TIM_IRQ      			TIM1_TRG_COM_TIM11_IRQn
+#define ULTRASOUND_TIM_IRQHandler			TIM1_TRG_COM_TIM11_IRQHandler	//TIM11中断服务函数
+
 
 #define ULTRASOUND_DIS_INDEX 				10
 

@@ -1,54 +1,54 @@
 #include "adc.h"		
 #include "usart.h"
 
-//³õÊ¼»¯ADC															   
+//åˆå§‹åŒ–ADC															   
 void  Adc_Init(void)
 {    
 	GPIO_InitTypeDef  GPIO_InitStructure;
 	ADC_CommonInitTypeDef ADC_CommonInitStructure;
 	ADC_InitTypeDef       ADC_InitStructure;
 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);//Ê¹ÄÜGPIOAÊ±ÖÓ
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE); //Ê¹ÄÜADC1Ê±ÖÓ
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);//ä½¿èƒ½GPIOAæ—¶é’Ÿ
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE); //ä½¿èƒ½ADC1æ—¶é’Ÿ
 	ADC_VBATCmd(ENABLE);
 
-	//ÏÈ³õÊ¼»¯ADC1Í¨µÀ5 IO¿Ú
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;	//PA5 Í¨µÀ5
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;//Ä£ÄâÊäÈë
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;//²»´øÉÏÏÂÀ­
-	GPIO_Init(GPIOA, &GPIO_InitStructure);//³õÊ¼»¯  
+	//å…ˆåˆå§‹åŒ–ADC1é€šé“5 IOå£
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;	//PA5 é€šé“5
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;//æ¨¡æ‹Ÿè¾“å…¥
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;//ä¸å¸¦ä¸Šä¸‹æ‹‰
+	GPIO_Init(GPIOA, &GPIO_InitStructure);//åˆå§‹åŒ–  
 
-	RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,ENABLE);	  	//ADC1¸´Î»
-	RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,DISABLE);	//¸´Î»½áÊø	 
+	RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,ENABLE);	  	//ADC1å¤ä½
+	RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,DISABLE);	//å¤ä½ç»“æŸ	 
 
-	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;//¶ÀÁ¢Ä£Ê½
-	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;//Á½¸ö²ÉÑù½×¶ÎÖ®¼äµÄÑÓ³Ù5¸öÊ±ÖÓ
-	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled; //DMAÊ§ÄÜ
-	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div4;//Ô¤·ÖÆµ4·ÖÆµ¡£ADCCLK=PCLK2/4=84/4=21Mhz,ADCÊ±ÖÓ×îºÃ²»Òª³¬¹ı36Mhz 
-	ADC_CommonInit(&ADC_CommonInitStructure);//³õÊ¼»¯
+	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;//ç‹¬ç«‹æ¨¡å¼
+	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;//ä¸¤ä¸ªé‡‡æ ·é˜¶æ®µä¹‹é—´çš„å»¶è¿Ÿ5ä¸ªæ—¶é’Ÿ
+	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled; //DMAå¤±èƒ½
+	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div4;//é¢„åˆ†é¢‘4åˆ†é¢‘ã€‚ADCCLK=PCLK2/4=84/4=21Mhz,ADCæ—¶é’Ÿæœ€å¥½ä¸è¦è¶…è¿‡36Mhz 
+	ADC_CommonInit(&ADC_CommonInitStructure);//åˆå§‹åŒ–
 
-	ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;//12Î»Ä£Ê½
-	ADC_InitStructure.ADC_ScanConvMode = DISABLE;//·ÇÉ¨ÃèÄ£Ê½	
-	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;//Á¬Ğø×ª»»
-	ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;//½ûÖ¹´¥·¢¼ì²â£¬Ê¹ÓÃÈí¼ş´¥·¢
-	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;//ÓÒ¶ÔÆë	
-	ADC_InitStructure.ADC_NbrOfConversion = 1;//1¸ö×ª»»ÔÚ¹æÔòĞòÁĞÖĞ Ò²¾ÍÊÇÖ»×ª»»¹æÔòĞòÁĞ1 
-	ADC_Init(ADC1, &ADC_InitStructure);//ADC³õÊ¼»¯
+	ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;//12ä½æ¨¡å¼
+	ADC_InitStructure.ADC_ScanConvMode = DISABLE;//éæ‰«ææ¨¡å¼	
+	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;//è¿ç»­è½¬æ¢
+	ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;//ç¦æ­¢è§¦å‘æ£€æµ‹ï¼Œä½¿ç”¨è½¯ä»¶è§¦å‘
+	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;//å³å¯¹é½	
+	ADC_InitStructure.ADC_NbrOfConversion = 1;//1ä¸ªè½¬æ¢åœ¨è§„åˆ™åºåˆ—ä¸­ ä¹Ÿå°±æ˜¯åªè½¬æ¢è§„åˆ™åºåˆ—1 
+	ADC_Init(ADC1, &ADC_InitStructure);//ADCåˆå§‹åŒ–
 	
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 1, ADC_SampleTime_480Cycles );	//ADC1,ADCÍ¨µÀ,480¸öÖÜÆÚ,Ìá¸ß²ÉÑùÊ±¼ä¿ÉÒÔÌá¸ß¾«È·¶È
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 1, ADC_SampleTime_480Cycles );	//ADC1,ADCé€šé“,480ä¸ªå‘¨æœŸ,æé«˜é‡‡æ ·æ—¶é—´å¯ä»¥æé«˜ç²¾ç¡®åº¦
 
-	NVIC_InitTypeDef nvic;//¶¨ÒåÖĞ¶Ï½á¹¹Ìå
-	nvic.NVIC_IRQChannel = ADC_IRQn;//ÖÆ¶¨×¨¶ÏÍ¨µÀ
-	nvic.NVIC_IRQChannelCmd = ENABLE;//Ê¹ÄÜÖĞ¶Ï
-	nvic.NVIC_IRQChannelPreemptionPriority = 1;//ÇÀÕ¼ÓÅÏÈ¼¶
-	nvic.NVIC_IRQChannelSubPriority = 0;//×ÓÓÅÏÈ¼¶
-	NVIC_Init(&nvic);//³õÊ¼»¯
+	NVIC_InitTypeDef nvic;//å®šä¹‰ä¸­æ–­ç»“æ„ä½“
+	nvic.NVIC_IRQChannel = ADC_IRQn;//åˆ¶å®šä¸“æ–­é€šé“
+	nvic.NVIC_IRQChannelCmd = ENABLE;//ä½¿èƒ½ä¸­æ–­
+	nvic.NVIC_IRQChannelPreemptionPriority = 1;//æŠ¢å ä¼˜å…ˆçº§
+	nvic.NVIC_IRQChannelSubPriority = 0;//å­ä¼˜å…ˆçº§
+	NVIC_Init(&nvic);//åˆå§‹åŒ–
 
 	ADC_ITConfig(ADC1, ADC_IT_EOC, ENABLE);
 
-	ADC_Cmd(ADC1, ENABLE);//¿ªÆôAD×ª»»Æ÷	
+	ADC_Cmd(ADC1, ENABLE);//å¼€å¯ADè½¬æ¢å™¨	
 	
-	ADC_SoftwareStartConv(ADC1);		//Ê¹ÄÜÖ¸¶¨µÄADC1µÄÈí¼ş×ª»»Æô¶¯¹¦ÄÜ	
+	ADC_SoftwareStartConv(ADC1);		//ä½¿èƒ½æŒ‡å®šçš„ADC1çš„è½¯ä»¶è½¬æ¢å¯åŠ¨åŠŸèƒ½	
 }	
 
 void ADC_IRQHandler(void)

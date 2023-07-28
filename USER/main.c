@@ -1,16 +1,3 @@
-/*
- ******************************************************
- STM32F407ZG KEIL例程 大越创新开发板
-
- 202207081915	创建例程
- 202305281734	改进
- 202305302021	添加版本管理
- 202306051313	移植u8g2,cJSON
- 202306061142	在spiflash中存取pid参数
-
- 作者：			ischenz						V2.0
- ******************************************************
- */
 #include "oled.h"
 #include "key.h"
 #include "usart.h"
@@ -18,8 +5,6 @@
 #include "led.h"
 #include "timer.h"
 #include "motor.h"
-#include "u8g2.h"
-#include "u8g2_init.h"
 #include "fatfs.h"
 #include "datasave.h"
 #include "ch451key.h"
@@ -29,6 +14,9 @@
 #include "inv_mpu.h"
 #include "LCD_1in47.h"
 #include "GUI_Paint.h"
+#include "ultrasonic.h"
+#include "gw_grayscale_sensor.h"
+#include "servo.h"
 
 int main(void)
 {
@@ -36,15 +24,26 @@ int main(void)
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); 
 	delay_init(168);
 	uart_init(115200);
-	LED_Init();
-	KEY_Init();//weak不能使用 与定时器通道冲突
-	OLED_Init();
+    servo_init();    
+	//LED_Init();
+	//KEY_Init();//weak 涓庡畾鏃跺櫒閫氶亾鍐茬獊
+	//OLED_Init();
     LCD_1IN47_Module_Init();
+    
+    sw_i2c_init();
+    grayscale_init();
+
+    servo_ctr(&Xserv, 1500);
     Paint_DrawString_EN(0, 10, "Hello World", &Font24, WHITE, RED);
-    Paint_DrawFloatNum(0, 40, 12.999354, 7, &Font24, WHITE, BLUE);
+    OLED_ShowString(0, 10, "Hello World", 12, 1);
+    OLED_Refresh();
 	printf("Hello Chen!!!\r\n");
 	while(1)
 	{
+        sw_i2c_read_byte(&i2c_interface, 0x4C << 1, &digital_data); 
+        //printf("%#X\r\n", digital_data);
+        Paint_DrawNum(10, 30, digital_data, &Font24, WHITE, BLUE);
+//        delay_ms(20);
 #ifdef DEBUG		
 		printf("data=%d\r\n", track.offset);
 		printf("%3d %3d %3d %3d %3d %3d %3d %3d\r\n",num_dir[0],num_dir[1],num_dir[2],num_dir[3],num_dir[4],num_dir[5],num_dir[6],num_dir[7]);
@@ -60,7 +59,7 @@ int main(void)
 			printf("Rec:\r\n%s \r\n", str);
 			OLED_Clear();
 			if(read_json_pid(str, "L_PID", &l_p, &l_i, &l_d) == 0 || read_json_pid(str, "R_PID", &r_p, &r_i, &r_d) == 0){
-				pid_flash_root_init(ADDR_FLASH_SECTOR_11);//使用扇区11,先擦除flash，后一次性写入全部pid参数
+				pid_flash_root_init(ADDR_FLASH_SECTOR_11);//浣跨敤鎵囧尯11,鍏堟摝闄lash锛屽悗涓�娆℃�у啓鍏ュ叏閮╬id鍙傛暟
 				write_pid_to_flash(L_PID_FLASH_ADDR, "L_PID", l_p, l_i, l_d);
 				write_pid_to_flash(R_PID_FLASH_ADDR, "R_PID", r_p, r_i, r_d);
 				set_p_i_d(&l_pid, l_p, l_i, l_d);
@@ -79,10 +78,10 @@ int main(void)
 		}	
 #endif
 		heartbeat++;
-		if(heartbeat%10 == 0){
+		if(heartbeat%1000000 == 0){
 			LED1 = !LED1;
-            OLED_ShowChar(0, 0, 'c', 12, 1);
-			OLED_Refresh();
+            //OLED_ShowChar(0, 0, 'c', 12, 1);
+			//OLED_Refresh();
 		}
 	}
 }

@@ -6,7 +6,6 @@
 #include "usart.h"
 #include "gw_grayscale_sensor.h"
 
-
 int8_t key_value = 0;
 enum Button_IDs {
 	btn1_id,
@@ -29,37 +28,37 @@ uint8_t read_button_GPIO(uint8_t button_id)
 			return 0;
 	}
 }
-//°´¼ü³õÊ¼»¯º¯Êı
-void KEY_Init(void)//PA0Óë¶¨Ê±Æ÷2Í¨µÀ1³åÍ»
+//æŒ‰é”®åˆå§‹åŒ–å‡½æ•°
+void KEY_Init(void)//PA0ä¸å®šæ—¶å™¨2é€šé“1å†²çª
 {
 	GPIO_InitTypeDef  GPIO_InitStructure;
 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA|RCC_AHB1Periph_GPIOE, ENABLE);//Ê¹ÄÜGPIOA,GPIOEÊ±ÖÓ
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA|RCC_AHB1Periph_GPIOE, ENABLE);//ä½¿èƒ½GPIOA,GPIOEæ—¶é’Ÿ
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_3; //KEY0 ¶ÔÓ¦Òı½Å
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//ÆÕÍ¨ÊäÈëÄ£Ê½
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_3; //KEY0 å¯¹åº”å¼•è„š
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//æ™®é€šè¾“å…¥æ¨¡å¼
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100M
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;//ÉÏÀ­
-	GPIO_Init(GPIOE, &GPIO_InitStructure);//³õÊ¼»¯GPIOE
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;//ä¸Šæ‹‰
+	GPIO_Init(GPIOE, &GPIO_InitStructure);//åˆå§‹åŒ–GPIOE
 	
 //	PWR_WakeUpPinCmd(DISABLE); 
-//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;//WK_UP¶ÔÓ¦Òı½ÅPA0
-//	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN ;//ÏÂÀ­
-//	GPIO_Init(GPIOA, &GPIO_InitStructure);//³õÊ¼»¯GPIOA0
+//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;//WK_UPå¯¹åº”å¼•è„šPA0
+//	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN ;//ä¸‹æ‹‰
+//	GPIO_Init(GPIOA, &GPIO_InitStructure);//åˆå§‹åŒ–GPIOA0
 	button_init(&btn1, read_button_GPIO, 0, btn1_id);
 	button_init(&btn2, read_button_GPIO, 0, btn2_id);
 
-	button_attach(&btn1, PRESS_DOWN,       BTN1_PRESS_DOWN_Handler);
-	button_attach(&btn1, PRESS_UP,         BTN1_PRESS_UP_Handler);
-	button_attach(&btn1, PRESS_REPEAT,     BTN1_PRESS_REPEAT_Handler);
+//	button_attach(&btn1, PRESS_DOWN,       BTN1_PRESS_DOWN_Handler);
+//	button_attach(&btn1, PRESS_UP,         BTN1_PRESS_UP_Handler);
+//	button_attach(&btn1, PRESS_REPEAT,     BTN1_PRESS_REPEAT_Handler);
 	button_attach(&btn1, SINGLE_CLICK,     BTN1_SINGLE_Click_Handler);
 	button_attach(&btn1, DOUBLE_CLICK,     BTN1_DOUBLE_Click_Handler);
-	button_attach(&btn1, LONG_PRESS_START, BTN1_LONG_PRESS_START_Handler);
+//	button_attach(&btn1, LONG_PRESS_START, BTN1_LONG_PRESS_START_Handler);
 	button_attach(&btn1, LONG_PRESS_HOLD,  BTN1_LONG_PRESS_HOLD_Handler);
 
-	button_attach(&btn2, PRESS_DOWN,       BTN2_PRESS_DOWN_Handler);
-	button_attach(&btn2, PRESS_UP,         BTN2_PRESS_UP_Handler);
-	button_attach(&btn2, PRESS_REPEAT,     BTN2_PRESS_REPEAT_Handler);
+//	button_attach(&btn2, PRESS_DOWN,       BTN2_PRESS_DOWN_Handler);
+//	button_attach(&btn2, PRESS_UP,         BTN2_PRESS_UP_Handler);
+//	button_attach(&btn2, PRESS_REPEAT,     BTN2_PRESS_REPEAT_Handler);
 	button_attach(&btn2, SINGLE_CLICK,     BTN2_SINGLE_Click_Handler);
 	button_attach(&btn2, DOUBLE_CLICK,     BTN2_DOUBLE_Click_Handler);
 	button_attach(&btn2, LONG_PRESS_START, BTN2_LONG_PRESS_START_Handler);
@@ -70,17 +69,17 @@ void KEY_Init(void)//PA0Óë¶¨Ê±Æ÷2Í¨µÀ1³åÍ»
 	Timer9_init();
 } 
 
-void BTN1_PRESS_DOWN_Handler(void* btn)
-{
-}
+//void BTN1_PRESS_DOWN_Handler(void* btn)
+//{
+//}
 
-void BTN1_PRESS_UP_Handler(void* btn)
-{
-}
-void BTN1_PRESS_REPEAT_Handler(void* btn)
-{
-	//struct Button* button = (Button*)btn;
-}
+//void BTN1_PRESS_UP_Handler(void* btn)
+//{
+//}
+//void BTN1_PRESS_REPEAT_Handler(void* btn)
+//{
+//	struct Button* button = (Button*)btn;
+//}
 
 void BTN1_SINGLE_Click_Handler(void* btn)
 {
@@ -96,17 +95,17 @@ void BTN1_LONG_PRESS_HOLD_Handler(void* btn)
 {
 }
 
-void BTN2_PRESS_DOWN_Handler(void* btn)
-{
-}
+//void BTN2_PRESS_DOWN_Handler(void* btn)
+//{
+//}
 
-void BTN2_PRESS_UP_Handler(void* btn)
-{
-}
-void BTN2_PRESS_REPEAT_Handler(void* btn)
-{
-	//struct Button* button = (Button*)btn;
-}
+//void BTN2_PRESS_UP_Handler(void* btn)
+//{
+//}
+//void BTN2_PRESS_REPEAT_Handler(void* btn)
+//{
+//	struct Button* button = (Button*)btn;
+//}
 
 void BTN2_SINGLE_Click_Handler(void* btn)
 {
@@ -122,15 +121,15 @@ void BTN2_LONG_PRESS_HOLD_Handler(void* btn)
 {
 }
 
-//°´¼ü´¦Àíº¯Êı
+//æŒ‰é”®å¤„ç†å‡½æ•°
 
 //uint8_t KEY_Scan(void)
 //{	
 //	volatile uint8_t ret = 0;
-//	static uint8_t release=1;//°´¼ü°´ËÉ¿ª±êÖ¾	  
+//	static uint8_t release=1;//æŒ‰é”®æŒ‰æ¾å¼€æ ‡å¿—	  
 //	if( release && (KEY0==0||KEY1==0||WK_UP==1))
 //	{
-//		delay_ms(10);//È¥¶¶¶¯ 
+//		delay_ms(10);//å»æŠ–åŠ¨ 
 //		release = 0;
 //		if(KEY0==0)				ret = KEY0_PRES;
 //		else if(KEY1 == 0)		ret = KEY1_PRES;
@@ -140,41 +139,41 @@ void BTN2_LONG_PRESS_HOLD_Handler(void* btn)
 //		release = 1;
 //		ret = 0;
 //	}
-// 	return ret;// ÎŞ°´¼ü°´ÏÂ
+// 	return ret;// æ— æŒ‰é”®æŒ‰ä¸‹
 //}
 
-uint8_t KEY_Scan(void)
-{	
-	volatile uint8_t ret = 0;
-	static uint8_t release=1;//°´¼ü°´ËÉ¿ª±êÖ¾	  
-	if( release && (KEY0==0||KEY1==0))
-	{
-		delay_ms(10);//È¥¶¶¶¯ 
-		release = 0;
-		if(KEY0==0)				ret = KEY0_PRES;
-		else if(KEY1 == 0)		ret = KEY1_PRES;
-	}
-	else if( KEY0==1 && KEY1==1 ){
-		release = 1;
-		ret = 0;
-	}
- 	return ret;// ÎŞ°´¼ü°´ÏÂ
-}
+//uint8_t KEY_Scan(void)
+//{	
+//	volatile uint8_t ret = 0;
+//	static uint8_t release=1;//æŒ‰é”®æŒ‰æ¾å¼€æ ‡å¿—	  
+//	if( release && (KEY0==0||KEY1==0))
+//	{
+//		delay_ms(10);//å»æŠ–åŠ¨ 
+//		release = 0;
+//		if(KEY0==0)				ret = KEY0_PRES;
+//		else if(KEY1 == 0)		ret = KEY1_PRES;
+//	}
+//	else if( KEY0==1 && KEY1==1 ){
+//		release = 1;
+//		ret = 0;
+//	}
+// 	return ret;// æ— æŒ‰é”®æŒ‰ä¸‹
+//}
 
-void KeyAction(void)
-{
-	uint8_t KEY_Val = 0;
-	KEY_Val = KEY_Scan();
-	if(KEY_Val)
-	{
-		if(KEY_Val == WKUP_PRES){
-			//LED2 = 0;
-		}
-		if(KEY_Val == KEY1_PRES){
-			LED2 = !LED2;
-		}		
-	}
-}
+//void KeyAction(void)
+//{
+//	uint8_t KEY_Val = 0;
+//	KEY_Val = KEY_Scan();
+//	if(KEY_Val)
+//	{
+//		if(KEY_Val == WKUP_PRES){
+//			//LED2 = 0;
+//		}
+//		if(KEY_Val == KEY1_PRES){
+//			LED2 = !LED2;
+//		}		
+//	}
+//}
 
 
 

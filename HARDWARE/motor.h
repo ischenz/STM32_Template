@@ -3,26 +3,24 @@
 
 #include "sys.h" 
 
-#define Xin1  PDout(0)
-#define Xin2  PDout(1)
+#define Lin1  PDout(0)
+#define Lin2  PDout(1)
 			   
-#define Yin1  PDout(2)
-#define Yin2  PDout(3)
+#define Rin1  PDout(2)
+#define Rin2  PDout(3)
 
 typedef enum
 { 
-	MOTOR_STATUS_STOP 	= 0x00,
-	MOTOR_STATUS_ACTIVE = 0x01,
-	MOTOR_STATUS_FREE   = 0x02
+	MOTOR_STATUS_ACTIVE = 0x00,
+	MOTOR_STATUS_FREE   = 0x01
 }MOTOR_STATUS_TypeDef;
 
 typedef struct{
 	int16_t pwm;
 	int16_t coder_v;
 	const int16_t PWM_MAX;
-	uint8_t status;
+	MOTOR_STATUS_TypeDef status;
 }motor;
-
 extern motor motor_l, motor_r;
 
 void Motor_Gpio_Init(void);

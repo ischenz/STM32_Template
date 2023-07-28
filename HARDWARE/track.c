@@ -23,8 +23,8 @@ SENSOR_TypeDef track = {
 void track_io_init(void)
 {
 	GPIO_InitTypeDef  GPIO_InitStructure;
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);//Ê¹ÄÜPORTDÊ±ÖÓ
-	//GPIO³õÊ¼»¯ÉèÖÃ
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);//ä½¿èƒ½PORTDæ—¶é’Ÿ
+	//GPIOåˆå§‹åŒ–è®¾ç½®
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11|GPIO_Pin_12| \
 								  GPIO_Pin_13|GPIO_Pin_14| \
 								  GPIO_Pin_15;
@@ -53,11 +53,11 @@ static int8_t get_offset(void)
 	
 	while (n) {
 		n = n & (n << 1);
-		count++; //¶àÉÙ¸öÁ¬ĞøµÄbit1
+		count++; //å¤šå°‘ä¸ªè¿ç»­çš„bit1
 	}
 	if (line_sum() == count)
 	{
-		if(count == 1 || count == 2){//1/2¸öÁ¬ĞøµÄ1
+		if(count == 1 || count == 2){//1/2ä¸ªè¿ç»­çš„1
 			count = 0;
 			n = ~(track.data);
 			while (n != 0) {
@@ -65,7 +65,7 @@ static int8_t get_offset(void)
 				count++;
 			}
 
-			if(count == 1 || count == 2 ){//×î¶àÁ½¸ö1
+			if(count == 1 || count == 2 ){//æœ€å¤šä¸¤ä¸ª1
 				for(i = 0; i < 8; i++){
 					if(GET_NTH_BIT(~(track.data), i+1) == 1){
 						offset = i;
@@ -85,8 +85,8 @@ static int8_t get_offset(void)
 }
 
 /*	int8_t get_line(uint8_t mode)
- *  mode 0:  ²»¼ì²âÍ£Ö¹Ïß
- *  mode 1:  ¼ì²âÍ£Ö¹Ïß
+ *  mode 0:  ä¸æ£€æµ‹åœæ­¢çº¿
+ *  mode 1:  æ£€æµ‹åœæ­¢çº¿
  * 
  */
 int8_t get_line(uint8_t mode)
@@ -119,9 +119,9 @@ int8_t get_line(uint8_t mode)
 		if(track.mode == 1){
 			if(linebit == 0x1F){
 				stop_flag ++;
-				if(stop_flag == track.cross_sensitivity){//¼ì²âÍ£Ö¹ÏßÁéÃô¶È
+				if(stop_flag == track.cross_sensitivity){//æ£€æµ‹åœæ­¢çº¿çµæ•åº¦
 					stop_flag = 0;
-					track.mode = 0;//  <----------------------------------/Ö»ÄÜÊ¶±ğÒ»´ÎÂ·¿Ú
+					track.mode = 0;//  <----------------------------------/åªèƒ½è¯†åˆ«ä¸€æ¬¡è·¯å£
 					ret = 100;
 					track.cross_num++;
 				}
@@ -138,18 +138,18 @@ int8_t get_line(uint8_t mode)
 	int8_t offset = 0;
 	
 	track.mode = mode;
-	sw_i2c_read_byte(&i2c_interface, 0x4C << 1, &linebit); // digital_data ÓĞ1~8ºÅÌ½Í·¿ª¹ØÊı¾İ
-	/* °Ñ×Ö½ÚÀïµÄ8¸ö¿ª¹ØÁ¿´æµ½°Ë¸ö±äÁ¿Àï£¬ÕâÀïÎªgray_sensor[0] ~ gray_sensor[7], 
-	 * Ò²¿ÉÒÔÊÇ±äÁ¿val1 ~ val8, ÒòÎªÊÇºê¶¨Òå */
+	sw_i2c_read_byte(&i2c_interface, 0x4C << 1, &linebit); // digital_data æœ‰1~8å·æ¢å¤´å¼€å…³æ•°æ®
+	/* æŠŠå­—èŠ‚é‡Œçš„8ä¸ªå¼€å…³é‡å­˜åˆ°å…«ä¸ªå˜é‡é‡Œï¼Œè¿™é‡Œä¸ºgray_sensor[0] ~ gray_sensor[7], 
+	 * ä¹Ÿå¯ä»¥æ˜¯å˜é‡val1 ~ val8, å› ä¸ºæ˜¯å®å®šä¹‰ */
 	SEP_ALL_BIT8(linebit, 
-		gray_sensor[0], //Ì½Í·1
-		gray_sensor[1], //Ì½Í·2
-		gray_sensor[2], //Ì½Í·3
-		gray_sensor[3], //Ì½Í·4
-		gray_sensor[4], //Ì½Í·5
-		gray_sensor[5], //Ì½Í·6
-		gray_sensor[6], //Ì½Í·7
-		gray_sensor[7]  //Ì½Í·8
+		gray_sensor[0], //æ¢å¤´1
+		gray_sensor[1], //æ¢å¤´2
+		gray_sensor[2], //æ¢å¤´3
+		gray_sensor[3], //æ¢å¤´4
+		gray_sensor[4], //æ¢å¤´5
+		gray_sensor[5], //æ¢å¤´6
+		gray_sensor[6], //æ¢å¤´7
+		gray_sensor[7]  //æ¢å¤´8
 	);
 	track.data = linebit;
 	
@@ -157,11 +157,11 @@ int8_t get_line(uint8_t mode)
 		offset = get_offset();
 		track.offset = offset;
 		
-		if(track.mode == 1){//Í£Ö¹ÏßÄ£Ê½
+		if(track.mode == 1){//åœæ­¢çº¿æ¨¡å¼
 			if(stop_flag == 0){
 				if(linebit == 0x00 || linebit == 0x0F || linebit == 0xF0 || linebit == 0x07 || linebit == 0xE0){
 					stop_count ++;
-					if(stop_count >= track.cross_sensitivity){//¼ì²âÍ£Ö¹ÏßÁéÃô¶È
+					if(stop_count >= track.cross_sensitivity){//æ£€æµ‹åœæ­¢çº¿çµæ•åº¦
 						stop_count = 0;
 						track.cross_num++;
 						stop_flag = 1;
@@ -169,7 +169,7 @@ int8_t get_line(uint8_t mode)
 				}if(linebit != 0xff){
 					track.mode = 1;
 				}					
-			}else if(stop_flag == 1){//¶ÁÈ¡µ½Í£Ö¹ÏßÖ®ºó
+			}else if(stop_flag == 1){//è¯»å–åˆ°åœæ­¢çº¿ä¹‹å
 				if(linebit != 0x00 && linebit != 0x0F && linebit != 0xF0 && linebit != 0x07 && linebit != 0xE0){
 					stop_flag = 0;
 				}
@@ -227,10 +227,10 @@ void track_cmd(int8_t newstatus)
 //}
 
 static int calc_min_angle_direction(int now, int targ) {
-    // ¼ÆËãË³Ê±ÕëĞı×ªµÄ½Ç¶ÈºÍÄæÊ±ÕëĞı×ªµÄ½Ç¶È
+    // è®¡ç®—é¡ºæ—¶é’ˆæ—‹è½¬çš„è§’åº¦å’Œé€†æ—¶é’ˆæ—‹è½¬çš„è§’åº¦
     int cw_angle = (targ - now +360) % 360;
     int ccw_angle = (now - targ + 360) % 360;
-    // ÅĞ¶Ï×îĞ¡½Ç¶ÈºÍĞı×ª·½Ïò
+    // åˆ¤æ–­æœ€å°è§’åº¦å’Œæ—‹è½¬æ–¹å‘
     if (cw_angle <= ccw_angle) {
         return -cw_angle;
     } else {
@@ -240,7 +240,7 @@ static int calc_min_angle_direction(int now, int targ) {
 
 static int get_targ(int now, int angle)
 {
-    //# ¸ù¾İĞı×ª½Ç¶È¼ÆËãÄ¿±ê½Ç¶È
+    //# æ ¹æ®æ—‹è½¬è§’åº¦è®¡ç®—ç›®æ ‡è§’åº¦
     int targ = (now + angle + 360) % 360;
     return targ;
 }

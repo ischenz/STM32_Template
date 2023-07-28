@@ -12,46 +12,46 @@ void MPU6050_EXTI_Init(void)
 	EXTI_InitTypeDef EXTI_InitStructure;
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);//Ê¹ÄÜGPIOEÊ±ÖÓ
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);//ä½¿èƒ½GPIOEæ—¶é’Ÿ
 
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//ÆÕÍ¨ÊäÈëÄ£Ê½	 
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//æ™®é€šè¾“å…¥æ¨¡å¼	 
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;//ÉÏÀ­
-	GPIO_Init(GPIOE, &GPIO_InitStructure);//³õÊ¼»¯GPIOE2
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//Ê¹ÄÜSYSCFGÊ±ÖÓ
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;//ä¸Šæ‹‰
+	GPIO_Init(GPIOE, &GPIO_InitStructure);//åˆå§‹åŒ–GPIOE2
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//ä½¿èƒ½SYSCFGæ—¶é’Ÿ
 
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOE, EXTI_PinSource2);//PE2 Á¬½Óµ½ÖĞ¶ÏÏß2
+	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOE, EXTI_PinSource2);//PE2 è¿æ¥åˆ°ä¸­æ–­çº¿2
 
 	EXTI_InitStructure.EXTI_Line = EXTI_Line2;
-	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;//ÖĞ¶ÏÊÂ¼ş
-	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; //ÏÂ½µÑØ´¥·¢
-	EXTI_InitStructure.EXTI_LineCmd = ENABLE;//ÖĞ¶ÏÏßÊ¹ÄÜ
-	EXTI_Init(&EXTI_InitStructure);//ÅäÖÃ
+	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;//ä¸­æ–­äº‹ä»¶
+	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; //ä¸‹é™æ²¿è§¦å‘
+	EXTI_InitStructure.EXTI_LineCmd = ENABLE;//ä¸­æ–­çº¿ä½¿èƒ½
+	EXTI_Init(&EXTI_InitStructure);//é…ç½®
 	 
 	NVIC_InitTypeDef NVIC_InitStructure;
-	NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;//Íâ²¿ÖĞ¶Ï2
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;//ÇÀÕ¼ÓÅÏÈ¼¶3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;//×ÓÓÅÏÈ¼¶2
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;//Ê¹ÄÜÍâ²¿ÖĞ¶ÏÍ¨µÀ
-	NVIC_Init(&NVIC_InitStructure);//ÅäÖÃ	
+	NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;//å¤–éƒ¨ä¸­æ–­2
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;//æŠ¢å ä¼˜å…ˆçº§3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;//å­ä¼˜å…ˆçº§2
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;//ä½¿èƒ½å¤–éƒ¨ä¸­æ–­é€šé“
+	NVIC_Init(&NVIC_InitStructure);//é…ç½®	
 }
 
 void EXTI2_IRQHandler(void)
 {
-	if(EXTI_GetITStatus(EXTI_Line2)!=0)//Ò»¼¶ÅĞ¶¨
+	if(EXTI_GetITStatus(EXTI_Line2)!=0)//ä¸€çº§åˆ¤å®š
 	{
-		if(PEin(2)==0)//¶ş¼¶ÅĞ¶¨
+		if(PEin(2)==0)//äºŒçº§åˆ¤å®š
 		{
-			EXTI_ClearITPendingBit(EXTI_Line2);//Çå³ıÖĞ¶Ï±êÖ¾Î»
-			mpu_dmp_get_data(&Pitch,&Roll,&Yaw);		//½Ç¶È
+			EXTI_ClearITPendingBit(EXTI_Line2);//æ¸…é™¤ä¸­æ–­æ ‡å¿—ä½
+			mpu_dmp_get_data(&Pitch,&Roll,&Yaw);		//è§’åº¦
 			Pitch += mechanical_error_Pitch;
 			Roll  += mechanical_error_Roll;
 			kalmanFilter_Roll = kalmanFilter_A(Roll);
 			kalmanFilter_Pitch = kalmanFilter_A(Pitch);
 			kalmanFilter_Roll = Roll;
 			kalmanFilter_Pitch = Pitch;
-			MPU_Get_Gyroscope(&gyrox,&gyroy,&gyroz);	//ÍÓÂİÒÇ
-			MPU_Get_Accelerometer(&aacx,&aacy,&aacz);	//¼ÓËÙ¶È
+			MPU_Get_Gyroscope(&gyrox,&gyroy,&gyroz);	//é™€èºä»ª
+			MPU_Get_Accelerometer(&aacx,&aacy,&aacz);	//åŠ é€Ÿåº¦
 		}
 	}
 }
