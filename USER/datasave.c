@@ -1,37 +1,49 @@
+/**
+  * @file    datasave.c
+  * @brief   Save PID or other param to flash or spiflash.The data format is json.
+  * @version V1.0
+  * @author  xiangchen
+  * @date    2023/7/31
+  */
 #include "datasave.h"
 #include "cJSON.h"
 #include "fatfs.h"
 #include "usart.h"
 #include "stmflash.h"
 
-/***********************************************
-while(1)
-{
-	if(receiveJson(&Uart1_RingBuff, str)){
-		printf("Rec:\r\n%s \r\n", str);
-		u8g2_ClearBuffer(&u8g2);
-		
-		if(read_json_pid(str, "L_PID", &l_p, &l_i, &l_d) == 0 || read_json_pid(str, "R_PID", &r_p, &r_i, &r_d) == 0){
-			pid_flash_root_init(ADDR_FLASH_SECTOR_11);//使用扇区11,先擦除flash，后一次性写入全部pid参数
-			write_pid_to_flash(L_PID_FLASH_ADDR, "L_PID", l_p, l_i, l_d);
-			write_pid_to_flash(R_PID_FLASH_ADDR, "R_PID", r_p, r_i, r_d);
-		}else{
-			u8g2_DrawStr(&u8g2, 0, 25, "Not this PID");
-			u8g2_SendBuffer(&u8g2);
-		}
-		sprintf(showstr, "L_P:%5.2f  R_P:%5.2f",l_p, r_p);
-		u8g2_DrawStr(&u8g2, 0, 25, showstr);
-		sprintf(showstr, "L_I:%5.2f  R_I:%5.2f",l_i, r_i);
-		u8g2_DrawStr(&u8g2, 0, 40, showstr);
-		sprintf(showstr, "L_D:%5.2f  R_D:%5.2f",l_d, r_d);
-		u8g2_DrawStr(&u8g2, 0, 55, showstr);
-		u8g2_SendBuffer(&u8g2);
-	}	
-}
+/*****************Usage*********************
+  * while(1)
+  * {
+  * 	if(receiveJson(&Uart1_RingBuff, str)){
+  * 		printf("Rec:\r\n%s \r\n", str);
+  * 		u8g2_ClearBuffer(&u8g2);
+  * 		
+  * 		if(read_json_pid(str, "L_PID", &l_p, &l_i, &l_d) == 0 || read_json_pid(str, "R_PID", &r_p, &r_i, &r_d) == 0){
+  * 			pid_flash_root_init(ADDR_FLASH_SECTOR_11);//使用扇区11,先擦除flash，后一次性写入全部pid参数
+  * 			write_pid_to_flash(L_PID_FLASH_ADDR, "L_PID", l_p, l_i, l_d);
+  * 			write_pid_to_flash(R_PID_FLASH_ADDR, "R_PID", r_p, r_i, r_d);
+  * 		}else{
+  * 			u8g2_DrawStr(&u8g2, 0, 25, "Not this PID");
+  * 			u8g2_SendBuffer(&u8g2);
+  * 		}
+  * 		sprintf(showstr, "L_P:%5.2f  R_P:%5.2f",l_p, r_p);
+  * 		u8g2_DrawStr(&u8g2, 0, 25, showstr);
+  * 		sprintf(showstr, "L_I:%5.2f  R_I:%5.2f",l_i, r_i);
+  * 		u8g2_DrawStr(&u8g2, 0, 40, showstr);
+  * 		sprintf(showstr, "L_D:%5.2f  R_D:%5.2f",l_d, r_d);
+  * 		u8g2_DrawStr(&u8g2, 0, 55, showstr);
+  * 		u8g2_SendBuffer(&u8g2);
+  * 	}	
+  * }
 ************************************************/
 
 
-//读取
+/**
+  * @brief  Read pid param form spiflash.
+  * @param  pid: pid name.
+  * @param  p i d: pid param point.
+  * @retval None
+  */
 //void read_pid_from_spiflash(const char *pid, double *p, double *i, double *d)
 //{
 //	cJSON *cjson,*l_pid,*pid_item;
@@ -66,6 +78,13 @@ while(1)
 //	cJSON_Delete(cjson);
 //}
 
+/**
+  * @brief  Read pid param form json string.
+  * @param  str: json string.
+  * @param  pid: pid name.
+  * @param  p i d: pid param.
+  * @retval 0: Read OK. 1: Read Err, not have input pid.
+  */
 int8_t read_json_pid(const char *str, const char *pid, double *p, double *i, double *d)
 {
 	int8_t ret = 0;
@@ -85,9 +104,16 @@ int8_t read_json_pid(const char *str, const char *pid, double *p, double *i, dou
 		ret = 1;
 	}
 	cJSON_Delete(cjson);
+    printf("%s: P=%f\tI=%f\tD=%f\r\n", pid, *p, *i, *d);
 	return ret;
 }
 
+/**
+  * @brief  Write pid param to spiflash.
+  * @param  pid: pid name.
+  * @param  p i d: pid param.
+  * @retval None
+  */
 //void write_pid_to_spiflash(const char *pid, double p, double i, double d)
 //{
 //	char buffer[80],filename[12];
@@ -119,6 +145,12 @@ int8_t read_json_pid(const char *str, const char *pid, double *p, double *i, dou
 //	}
 //}
 
+/**
+  * @brief  Erase a sector to store the pid param.
+  *         Avoid losing data by erasing entire sectors during storage.
+  * @param  addr: Flash sector addr.
+  * @retval None
+  */
 void pid_flash_root_init(uint32_t addr)
 {
 	uint32_t writebuff = 0xffffffff;
@@ -127,6 +159,13 @@ void pid_flash_root_init(uint32_t addr)
 	}	
 }
 
+/**
+  * @brief  Write pid param to flash.
+  * @param  addr: Flash sector addr.
+  * @param  pid: pid name.
+  * @param  p i d: pid param.
+  * @retval None
+  */
 void write_pid_to_flash(uint32_t addr, const char *pid, double p, double i, double d)
 {
 	char buffer[80] = {0};
@@ -136,12 +175,19 @@ void write_pid_to_flash(uint32_t addr, const char *pid, double p, double i, doub
 	STMFLASH_Write(addr, (uint32_t *)buffer, size);
 }
 
+/**
+  * @brief  Read pid param from flash.
+  * @param  addr: Flash sector addr.
+  * @param  pid: pid name.
+  * @param  p i d: pid param point.
+  * @retval None
+  */
 void read_pid_from_flash(uint32_t addr, const char *pid, double *p, double *i, double *d)
 {
 	char readbuff[80] = {0};
 	STMFLASH_Read(addr,(uint32_t *)readbuff,sizeof(readbuff)/4);
 	if(read_json_pid(readbuff, pid, p, i, d) == 0){
-		printf("Read from flash OK!\r\n\t%s: P=%f, I=%f, D=%f\r\n", pid, *p, *i, *d);
+		printf("Read pid from flash OK!\r\n\r\n");
 	}else{
 		printf("Read pid json err\r\n");
 	}

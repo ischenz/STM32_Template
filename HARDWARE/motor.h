@@ -23,9 +23,9 @@ typedef struct{
 }motor;
 extern motor motor_l, motor_r;
 
-void Motor_Gpio_Init(void);
+void motor_gpio_and_timer_init(void);
 int My_abs(int x);
-void PWM_Load(motor* moto, int16_t pwmin);
+void pwm_load(motor* moto, int16_t pwmin);
 void motor_set_status(motor* moto, MOTOR_STATUS_TypeDef status);
 void motor_stop(void);
 void motor_start(void);

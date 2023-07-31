@@ -10,7 +10,7 @@
 #include "gw_grayscale_sensor.h"
 #include "sw_i2c.h"
 
-SENSOR_TypeDef track = {
+Sensor_TypeDef track = {
 	.cross_num = 0,
 	.offset = 0,
 	.cross_sensitivity = 4,
@@ -225,7 +225,7 @@ void track_cmd(int8_t newstatus)
 //	set_pid_target(&r_pid, 0);
 //	delay_ms(500);
 //}
-
+/* 
 static int calc_min_angle_direction(int now, int targ) {
     // 计算顺时针旋转的角度和逆时针旋转的角度
     int cw_angle = (targ - now +360) % 360;
@@ -288,5 +288,6 @@ void turn_pid(int16_t __dir, int8_t __v)
 	set_pid_target(&r_pid, 0);
 	delay_ms(500);
 }
+*/ 
 
 

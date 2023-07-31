@@ -22,13 +22,13 @@ typedef struct{
 }PID_TypeDef;
 
 
-float PID_Calculate(PID_TypeDef *PID,float CurrentValue);
-float PID_Calculate_Inc(PID_TypeDef *PID,float CurrentValue);
+float pid_calculate(PID_TypeDef *PID,float CurrentValue);
+float pid_calculate_inc(PID_TypeDef *PID,float CurrentValue);
 void set_pid_target(PID_TypeDef *pid, float target);
 float get_pid_target(PID_TypeDef *pid);
-void set_p_i_d(PID_TypeDef *pid, float p, float i, float d);
-void PID_TimerInit(void);
-void PID_param_init(PID_TypeDef *pid);
+void set_pid_param(PID_TypeDef *pid, float p, float i, float d);
+void pid_timer_init(void);
+void pid_param_init(PID_TypeDef *pid);
 void set_pid_polarity(PID_TypeDef *pid, int8_t p_polarity, int8_t i_polarity, int8_t d_polarity);
 
 extern PID_TypeDef l_pid, r_pid, veer_pid;

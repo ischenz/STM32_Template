@@ -10,12 +10,11 @@
 #include "delay.h"
 #include "led.h"
 
-PID_TypeDef x_pid,y_pid;
-uint8_t RecCoorFlag = 0; //接收成功标志
 uint8_t mode = NO_SELECT_MODE;
-//static uint8_t SetFlag;
 
 void (*mode_task)(void) = mode_0;
+
+int8_t target_speed = 30;
 
 void mode_0(void)
 {
@@ -37,7 +36,6 @@ void mode_3(void)
 
 }
 
-
 void mode_4(void)
 {
 
@@ -58,32 +56,14 @@ void mode_pro_3(void)
 
 }
 
-void set_target(int8_t target_x, int8_t target_y)
-{
-	set_pid_target(&x_pid, target_x);
-	set_pid_target(&y_pid, target_y);
-}
-
-void stop(void)
-{
-
-}
-
-void start(void)
-{
-	TIM_Cmd(TIM10, ENABLE);
-}
-
 void analyse(uint8_t *lable, uint8_t *load)
 {
 	switch(*lable){
 		case CMD:{
 			switch(*load){
 				case START:
-					start();
 					break;
 				case STOP:
-					stop();
 					break;
 				case REBOOT:
 					NVIC_SystemReset();
@@ -96,7 +76,6 @@ void analyse(uint8_t *lable, uint8_t *load)
 		}
 		case CHANGEMODE:{
 			mode = *load;
-			//SetFlag = 0;
 			switch(mode){
 				case MODE_1:{
 					mode_task = mode_1;
@@ -128,20 +107,8 @@ void analyse(uint8_t *lable, uint8_t *load)
 					mode_task = mode_pro_3;
 					break;
 			}
-			start();
 			break;
-		}
-		case SETPID:{
-			switch(*load){
-				case P_ADD01: break;
-				case I_ADD01: break;
-				case D_ADD01: break;
-				case P_SUB01: break;
-				case I_SUB01: break;
-				case D_SUB01: break;
-			}        
-			break;   
-		}            
+		}           
 	}                
 }                    
 

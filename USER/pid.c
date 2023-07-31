@@ -1,16 +1,16 @@
 #include "pid.h"
 #include "control.h"
 #include "motor.h"
+#include "track.h"
 
 PID_TypeDef l_pid, r_pid, veer_pid;
-extern float line_P;
 
 /**
  * @brief       PID初始化
  * @param       目标值
  * @retval      无
  */
-void PID_param_init(PID_TypeDef *pid)
+void pid_param_init(PID_TypeDef *pid)
 {
 	pid->Target = 0;//目标值
 	pid->PID_out = 0;
@@ -33,27 +33,27 @@ void PID_param_init(PID_TypeDef *pid)
  * @param       CurrentValue：当前测量值
  * @retval      期望输出值
  */
-float PID_Calculate(PID_TypeDef *PID,float CurrentValue)
+float pid_calculate(PID_TypeDef *PID,float CurrentValue)
 {
-	PID->Integral += PID->Err;
-	/*积分分离*/
-//	if( (PID->Err > 36) || (PID->Err < -36) ){
-//		PID->Integral = 0;
-//		//PID->PID_out += PID->IntegralConstant * PID->Integral;
-//	}
-	
     PID->Err =  PID->Target - CurrentValue;
-    PID->PID_out = PID->Kp * PID->Err 										/*比例*/
-				 + PID->Ki * PID->Integral  								/*积分*/
-			     + PID->Kd * (PID->Err - PID->LastErr);						/*微分*/
-	
+	PID->Integral += PID->Err;  
+/*	积分分离
+    if( (PID->Err > 36) || (PID->Err < -36) ){
+		PID->Integral = 0;
+		//PID->PID_out += PID->IntegralConstant * PID->Integral;
+	} 
+*/    
 	/*积分限幅*/
 	if(PID->Integral > 3000){
 		PID->Integral = 3000;
 	}
 	if(PID->Integral < -3000){
 		PID->Integral = -3000;
-	}
+	}    
+    PID->PID_out = PID->Kp * PID->Err 										/*比例*/
+				 + PID->Ki * PID->Integral  								/*积分*/
+			     + PID->Kd * (PID->Err - PID->LastErr);						/*微分*/
+	
 	PID->LastErr = PID->Err;
     return PID->PID_out;
 }
@@ -64,7 +64,7 @@ float PID_Calculate(PID_TypeDef *PID,float CurrentValue)
  * @param       CurrentValue：当前测量值
  * @retval      期望输出值
  */
-float PID_Calculate_Inc(PID_TypeDef *PID,float CurrentValue)
+float pid_calculate_inc(PID_TypeDef *PID,float CurrentValue)
 {
 	float increment_val;
     PID->Err =  PID->Target - CurrentValue;
@@ -80,7 +80,7 @@ float PID_Calculate_Inc(PID_TypeDef *PID,float CurrentValue)
     return PID->PID_out;
 }
 
-void PID_TimerInit(void)
+void pid_timer_init(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM10,ENABLE);
 	
@@ -100,32 +100,29 @@ void PID_TimerInit(void)
 	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStruct);
 	
-	//TIM_Cmd(TIM10,ENABLE);
+	TIM_Cmd(TIM10,ENABLE);
 }
 
-void TIM1_UP_TIM10_IRQHandler(void)//10ms一次pid运算
+void TIM1_UP_TIM10_IRQHandler(void)/* 10ms一次pid运算 */
 {
-	if(TIM_GetITStatus(TIM10,TIM_IT_Update)==SET) //溢出中断
+	if(TIM_GetITStatus(TIM10,TIM_IT_Update)==SET) 
 	{	
-//		if(RecCoorFlag){
-//			RecCoorFlag = 0;
-//			//mode_task();
-			//PID_Calculate(&veer_pid, line_P);
-			PID_Calculate_Inc(&r_pid, motor_r.coder_v);
-			PID_Calculate_Inc(&l_pid, motor_l.coder_v);
-			
-			PWM_Load(&motor_l,l_pid.PID_out );
-			PWM_Load(&motor_r,r_pid.PID_out );
-//		}
+			pid_calculate(&veer_pid, track.offset);
+            r_pid.Target = target_speed + veer_pid.PID_out;
+            l_pid.Target = target_speed - veer_pid.PID_out;
+			pid_calculate_inc(&r_pid, motor_r.coder_v);
+			pid_calculate_inc(&l_pid, motor_l.coder_v);
+			pwm_load(&motor_l,l_pid.PID_out);
+			pwm_load(&motor_r,r_pid.PID_out);
 	}
-	TIM_ClearITPendingBit(TIM10,TIM_IT_Update); //清除中断标志位	
+	TIM_ClearITPendingBit(TIM10,TIM_IT_Update);
 }
 
 /**
   * @brief  获取目标值
-  * @param  无
+  * @param  PID_TypeDef *pid
   *	@note 	无
-  * @retval 目标值
+  * @retval pid->Target
   */
 float get_pid_target(PID_TypeDef *pid)
 {
@@ -145,7 +142,7 @@ void set_pid_target(PID_TypeDef *pid, float target)
   *	@note 	无
   * @retval 无
   */
-void set_p_i_d(PID_TypeDef *pid, float p, float i, float d)
+void set_pid_param(PID_TypeDef *pid, float p, float i, float d)
 {
   	pid->Kp = p * (pid->KP_polarity);    // 设置比例系数 P
 	pid->Ki = i * (pid->KI_polarity);    // 设置积分系数 I

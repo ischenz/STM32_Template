@@ -302,7 +302,7 @@ void sw_i2c_init()
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
 	GPIO_InitStructure.GPIO_Pin = SW_I2C1_PIN_SCL;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
 	GPIO_Init(SW_I2C1_SCL_PORT, &GPIO_InitStructure);
     
 	GPIO_InitStructure.GPIO_Pin = SW_I2C1_PIN_SDA;

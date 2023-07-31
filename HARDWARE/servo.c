@@ -1,12 +1,35 @@
+/**
+  * @file    servo.c
+  * @brief   servo controller
+  * @version V1.0
+  * @author  xiangchen
+  * @date    2023/7/28
+  */
 #include "servo.h"
-#include "delay.h"
 #include "usart.h"
 #include "pid.h"
 
-ServTyp Xserv = {1500,1800,1200,1500};
-ServTyp Yserv = {1500,1800,1200,1500};//1490
+ServTypdef Xserv = {
+    .pwm = 1500,
+	.MAXPWM = 2000,
+	.MINPWM = 1000,
+	.MIDPWM = 1500
+};
 
-void servo_ctr(ServTyp *servo, int PidInput)
+ServTypdef Yserv = {
+    .pwm = 1500,
+	.MAXPWM = 2000,
+	.MINPWM = 1000,
+	.MIDPWM = 1500
+};
+
+/*
+ * @Description: 函数描述，描述本函数的基本功能9
+ * @param 1 – 参数 1.
+ * @param 2 – 参数 2
+ * @return – 返回值
+ */
+void servo_ctr(ServTypdef *servo, int PidInput)
 {
 	uint16_t CompSet = servo->MIDPWM + PidInput;
 	if( CompSet > servo->MAXPWM ){
@@ -26,29 +49,6 @@ void servo_ctr(ServTyp *servo, int PidInput)
 		TIM_SetCompare2(TIM2, servo->pwm);
 		//printf("comp:%d \t y:%.2f \t pid:%d \r\n", servo->pwm, after_kalman_y-120, PidInput);
 	}
-	
-//	if( CompSet > servo->pwm ){
-//		servo->pwm += 3;
-//	}
-//	else if( CompSet < servo->pwm ){
-//		servo->pwm -= 3;
-//	}
-//	
-//	if( servo->pwm > servo->MAXPWM ){
-//		servo->pwm = servo->MAXPWM;
-//	}
-//	else if( servo->pwm < servo->MINPWM  ){
-//		servo->pwm = servo->MINPWM;
-//	}
-//	
-//	if( servo == &Xserv ){
-//		TIM_SetCompare1(TIM2, servo->pwm);
-//	}
-//	else if( servo == &Yserv ){
-//		TIM_SetCompare2(TIM2, servo->pwm);
-//		printf("Y:%d, %f ,%d\n", servo->pwm, after_kalman_y-120, PidInput);
-//	}
-	
 }
 
 void servo_init(void)
@@ -77,7 +77,7 @@ GPIO_InitTypeDef GPIO_InitStructure;
 
 	/* Configure TIM2 */
 	TIM_TimeBaseStructure.TIM_Period = 3100 - 1;  // PWM period
-	TIM_TimeBaseStructure.TIM_Prescaler = 84 - 1;       // 84MHz clock, 1kHz PWM frequency
+	TIM_TimeBaseStructure.TIM_Prescaler = 84 - 1; // 84MHz clock, 1kHz PWM frequency
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
@@ -112,7 +112,7 @@ GPIO_InitTypeDef GPIO_InitStructure;
 	TIM_Cmd(TIM2, ENABLE);
 }
 
-/*  
+/*  若启用定时器溢出中断，则溢出时可以改变通道比较值(pwm占空比)
  *  void TIM2_IRQHandler(void)
  *  {
  *  	if(TIM_GetITStatus(TIM2,TIM_IT_Update)==SET) //溢出中断

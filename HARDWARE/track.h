@@ -20,15 +20,15 @@
 #define BACK	 (180)
 
 typedef struct{
-	uint8_t cross_num;
-	int8_t offset;
-	int8_t cross_sensitivity; //路口灵敏度
-	uint8_t data;
-	int8_t status;
-	int8_t mode;
-}SENSOR_TypeDef;
+	uint8_t cross_num;          /* 路口数量     */
+	int8_t offset;              /* 偏移量       */
+	int8_t cross_sensitivity;   /* 路口灵敏度   */
+	uint8_t data;               /* 传感器原始值 */
+	int8_t status;              /* 传感器状态   */
+	int8_t mode;                /* 传感器模式   */
+}Sensor_TypeDef;
 
-extern SENSOR_TypeDef track;
+extern Sensor_TypeDef track;
 
 void track_io_init(void);
 int8_t get_line(uint8_t mode);

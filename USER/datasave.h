@@ -3,8 +3,8 @@
 
 #include "sys.h"
 
-#define L_PID_FLASH_ADDR	(ADDR_FLASH_SECTOR_11)
-#define R_PID_FLASH_ADDR	(ADDR_FLASH_SECTOR_11 + 1024)
+#define PID_FLASH_ADDR_0	(ADDR_FLASH_SECTOR_11)
+#define PID_FLASH_ADDR_1	(ADDR_FLASH_SECTOR_11 + 1024)
 
 void read_pid_from_spiflash(const char *pid, double *p, double *i, double *d);
 void write_pid_to_spiflash(const char *pid, double p, double i, double d);

@@ -1,3 +1,14 @@
+/**
+  ************************************************
+  * @file     servo.h
+  * @author   xiangchen
+  * @version  V1.0
+  * @date     2023/7/28
+  * @brief    Servo Controller
+  * @Log
+  ************************************************
+  */
+
 #ifndef __SERVO_H
 #define __SERVO_H
 
@@ -8,12 +19,11 @@ typedef struct {
 	const uint16_t MAXPWM;
 	const uint16_t MINPWM;
 	const uint16_t MIDPWM;
-}ServTyp;
-
-extern ServTyp Xserv,Yserv;
+}ServTypdef;
+extern ServTypdef Xserv,Yserv;
 
 void servo_init(void);
-void servo_ctr(ServTyp *servo, int PidInput);
+void servo_ctr(ServTypdef *servo, int PidInput);
 
 #endif /* __SERVO_H */
 

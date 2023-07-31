@@ -391,11 +391,6 @@
               <FilePath>..\USER\system_stm32f4xx.c</FilePath>
             </File>
             <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\USER\main.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USER\stm32f4xx_it.c</FilePath>
@@ -429,6 +424,11 @@
               <FileName>sw_i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USER\sw_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\main.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -571,11 +571,6 @@
               <FilePath>..\HARDWARE\MPU6050\eMPL\inv_mpu_dmp_motion_driver.c</FilePath>
             </File>
             <File>
-              <FileName>motor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\motor.c</FilePath>
-            </File>
-            <File>
               <FileName>multi_button.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\multi_button.c</FilePath>
@@ -594,6 +589,16 @@
               <FileName>servo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\servo.c</FilePath>
+            </File>
+            <File>
+              <FileName>motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>track.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\track.c</FilePath>
             </File>
           </Files>
         </Group>
